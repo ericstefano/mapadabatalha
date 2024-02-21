@@ -23,7 +23,6 @@ const { resume, pause, isActive } = useRafFn(() => {
 }, { immediate: false })
 
 map.value?.on('rotate', (event) => {
-  console.log(bearing.value)
   bearing.value = event.target.getBearing()
 })
 
@@ -37,19 +36,10 @@ map.value?.on('touchstart', () => {
     pause()
 })
 
-// map.value?.on('dragstart', () => {
-//   if (!isActive.value)
-//     pause()
-// })
-
 map.value?.on('zoomstart', () => {
   if (isActive.value)
     pause()
 })
-// map.value?.on('pitchstart', () => {
-//   if (isActive.value)
-//     pause()
-// })
 
 onMounted(() => {
   initializeMarker({ latAndLong })
