@@ -10,16 +10,12 @@ const { latAndLong } = defineProps<MarkerProps>()
 const { map, loaded } = useMap()
 const { initializeMarker, terminateMarker, markerRef, markers } = useMarker()
 
-const bearing = ref(map.value?.getBearing())
-const timestamp = ref(0)
+const speed = 0.12
 const direction = -1 // 1 = left, -1 = right
-const speed = 12
+const bearing = ref(map.value?.getBearing())
 const { resume, pause, isActive } = useRafFn(() => {
-  if (!map.value?.isMoving()) {
-    const calc = (((timestamp.value * speed) / 100) % 360) - 180
-    map.value?.rotateTo(calc * direction, { duration: 0 })
-    timestamp.value++
-  }
+  if (!map.value?.isMoving())
+    map.value?.rotateTo(bearing.value + (speed) * direction, { duration: 0 })
 }, { immediate: false })
 
 map.value?.on('rotate', (event) => {
