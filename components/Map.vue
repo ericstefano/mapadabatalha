@@ -11,15 +11,12 @@ const { mapRef, initializeMap, terminateMap, loaded, setLanguage } = useMap()
 const language = ref(`name:${short.value}`)
 
 onMounted(() => {
-  initializeMap({ language: language.value, center: [-43.93420430483323, -19.91665382890247], onLoad, onMove })
+  initializeMap({ language: language.value, onLoad, onMove })
 })
 onUnmounted(() => {
   terminateMap()
 })
-// watchOnce(coords, () => {
-//   setCenter([coords.value.longitude, coords.value.latitude])
-//   pause()
-// })
+
 </script>
 
 <template>

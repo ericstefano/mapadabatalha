@@ -7,7 +7,7 @@ interface BattleMarkerProps {
 
 const { latAndLong } = defineProps<BattleMarkerProps>()
 
-const { map, loaded } = useMap()
+const { map, flyTo, loaded } = useMap()
 const markerRef = shallowRef<HTMLElement | null>(null)
 const { initializeMarker, terminateMarker, markers } = useMarker()
 
@@ -55,10 +55,10 @@ onUnmounted(() => {
       const maxZoom = 17.5;
 
       if (currentZoom < maxZoom) {
-        map?.flyTo({ center: latAndLong, zoom: maxZoom, speed: 1.5, pitch: 85 })
+        flyTo({ center: latAndLong, zoom: maxZoom, speed: 1.5, pitch: 85 })
       }
       else {
-        map?.flyTo({ center: latAndLong, speed: 1.5, pitch: 85 })
+        flyTo({ center: latAndLong, speed: 1.5, pitch: 85 })
       }
 
       resume();

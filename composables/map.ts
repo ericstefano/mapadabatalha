@@ -1,5 +1,5 @@
 import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
-import type { LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
+import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
 
 // Languages:
 // https://github.com/maptiler/maptiler-sdk-js/blob/main/src/language.ts#L4
@@ -59,8 +59,13 @@ export function useMap() {
       marker.addTo(map.value)
   }
 
+  function flyTo(options: FlyToOptions) {
+    if (map.value)
+      map.value.flyTo(options)
+  }
+
   function initializeMap(options: initializeMapOptions) {
-    const { onLoad, onMove, center = [54.36905 - 14.7394], language = 'visitor', maxBounds = [
+    const { onLoad, onMove, center = [-43.93420430483323, -19.91665382890247], language = 'visitor', maxBounds = [
       [-76, -36],
       [-23.60, 8],
     ] } = options
@@ -102,5 +107,5 @@ export function useMap() {
     map.value?.remove()
   }
 
-  return { map, mapRef, initializeMap, terminateMap, loaded, setLanguage, setCenter, addMarker }
+  return { map, mapRef, initializeMap, terminateMap, loaded, setLanguage, setCenter, addMarker, flyTo }
 }
