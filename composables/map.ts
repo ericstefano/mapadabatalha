@@ -1,5 +1,6 @@
 import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
-import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
+import type { EaseToOptions, FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
+import type { ShallowRef } from 'nuxt/dist/app/compat/capi'
 
 // Languages:
 // https://github.com/maptiler/maptiler-sdk-js/blob/main/src/language.ts#L4
@@ -12,12 +13,23 @@ export interface initializeMapOptions {
   language?: string
   center?: LngLatLike
   maxBounds?: LngLatBoundsLike
+  ref: ShallowRef<HTMLElement | null> | Ref<HTMLElement | null>
 }
 
 export function useMap() {
   const map = useState(() => shallowRef<Map | null>(null))
-  const mapRef = useState(() => shallowRef<HTMLElement | null>(null))
   const loaded = useState(() => false)
+  const bearing = ref(map.value?.getBearing() ?? 0)
+  const isMoving = ref(false)
+  const speed = ref(0.08)
+  const direction = ref(-1)
+  const rotateAroundBearing = computed(() => bearing.value + (speed.value) * direction.value)
+
+  const { resume, pause, isActive } = useRafFn(() => {
+    if (map.value?.isMoving())
+      return
+    map.value?.rotateTo(rotateAroundBearing.value, { duration: 0 })
+  }, { immediate: false })
 
   function setLanguage(value: string) {
     const layers = map?.value?.getStyle().layers
@@ -44,14 +56,7 @@ export function useMap() {
   }
 
   function setCenter(value: LngLatLike) {
-    if (map.value)
-      map.value.setCenter(value)
-  }
-
-  function handleMapLoad(language: string) {
-    return () => {
-      setLanguage(language)
-    }
+    map.value?.setCenter(value)
   }
 
   function addMarker(marker: Marker) {
@@ -60,23 +65,44 @@ export function useMap() {
   }
 
   function flyTo(options: FlyToOptions) {
-    if (map.value)
-      map.value.flyTo(options)
+    map.value?.flyTo(options)
+  }
+
+  function getZoom() {
+    return map.value?.getZoom()
+  }
+
+  function startRotateAround(options: { speed?: number, direction?: 1 | -1 } = {}) {
+    if (options.direction)
+      direction.value = options.direction
+
+    if (options.speed)
+      speed.value = options.speed
+
+    resume()
+  }
+
+  function stopRotateAround() {
+    pause()
+  }
+
+  function handleMapLoad(language: string) {
+    return () => {
+      setLanguage(language)
+    }
   }
 
   function initializeMap(options: initializeMapOptions) {
-    const { onLoad, onMove, center = [-43.93420430483323, -19.91665382890247], language = 'visitor', maxBounds = [
+    const { ref, onLoad, onMove, center = [-43.93420430483323, -19.91665382890247], language = 'visitor', maxBounds = [
       [-76, -36],
       [-23.60, 8],
     ] } = options
+
     map.value = markRaw(new Map({
-      container: mapRef.value!,
-      // style: 'https://api.maptiler.com/maps/527155c9-29bf-4a29-b0f6-7f7d31386352/style.json?key=U2r8rW378rl0OijWPkJB',
+      container: ref.value!,
       style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=U2r8rW378rl0OijWPkJB',
       center,
-      // zoom: 4.5,
       zoom: 1,
-      // pitch: 85,
       antialias: true,
       maxBounds,
     }))
@@ -94,7 +120,7 @@ export function useMap() {
       map.value.on('move', onMove)
 
     map.value.addControl(new FullscreenControl())
-    map.value.addControl(new NavigationControl(), 'top-right')
+    map.value.addControl(new NavigationControl())
     map.value.addControl(new GeolocateControl({
       trackUserLocation: true,
       positionOptions: {
@@ -107,5 +133,24 @@ export function useMap() {
     map.value?.remove()
   }
 
-  return { map, mapRef, initializeMap, terminateMap, loaded, setLanguage, setCenter, addMarker, flyTo }
+  map.value?.on('rotate', (event) => {
+    bearing.value = event.target.getBearing()
+  })
+
+  map.value?.on('mousedown', (event) => {
+    if (isActive.value && event.originalEvent.button === 0 || event.originalEvent.button === 2)
+      pause()
+  })
+
+  map.value?.on('touchstart', () => {
+    if (isActive.value)
+      pause()
+  })
+
+  map.value?.on('zoomstart', () => {
+    if (isActive.value)
+      pause()
+  })
+
+  return { map, initializeMap, terminateMap, loaded, setLanguage, setCenter, addMarker, flyTo, startRotateAround, stopRotateAround, getZoom }
 }

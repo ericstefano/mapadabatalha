@@ -2,21 +2,19 @@
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { initializeMapOptions } from '~/composables/map'
 
-const { onMove, onLoad } = defineProps<initializeMapOptions>()
+const { onMove, onLoad } = defineProps<Pick<initializeMapOptions, 'onMove' | 'onLoad'>>()
 
 const { short } = useLanguage()
-// const { coords, pause } = useGeolocation({ immediate: false, enableHighAccuracy: true })
-
-const { mapRef, initializeMap, terminateMap, loaded, setLanguage } = useMap()
+const mapRef = shallowRef<HTMLElement | null>(null)
+const { initializeMap, terminateMap, loaded, setLanguage } = useMap()
 const language = ref(`name:${short.value}`)
 
 onMounted(() => {
-  initializeMap({ language: language.value, onLoad, onMove })
+  initializeMap({ language: language.value, onLoad, onMove, ref: mapRef })
 })
 onUnmounted(() => {
   terminateMap()
 })
-
 </script>
 
 <template>
@@ -28,7 +26,6 @@ onUnmounted(() => {
         const _lan = language === 'name:pt' ? 'name:ja' : 'name:pt'
         language = _lan;
         setLanguage(_lan);
-        // console.log(language);
       }"
     >
       test

@@ -6,41 +6,37 @@ interface BattleMarkerProps {
 }
 
 const { latAndLong } = defineProps<BattleMarkerProps>()
-
-const { map, flyTo, loaded } = useMap()
 const markerRef = shallowRef<HTMLElement | null>(null)
-const { initializeMarker, terminateMarker, markers } = useMarker()
+const active = ref(false)
+const { getZoom, flyTo, startRotateAround, stopRotateAround, loaded } = useMap()
+const { initializeMarker, terminateMarker } = useMarker()
 
-const speed = 0.12
-const direction = -1 // 1 = left, -1 = right
-const bearing = ref(map.value?.getBearing() ?? 0)
-const { resume, pause, isActive } = useRafFn(() => {
-  if (!map.value?.isMoving())
-    map.value?.rotateTo(bearing.value + (speed) * direction, { duration: 0 })
-}, { immediate: false })
+function toggleActive() {
+  active.value = !active.value
+}
 
-map.value?.on('rotate', (event) => {
-  bearing.value = event.target.getBearing()
-})
+function handleClick() {
+  toggleActive()
+  const maxZoom = 17.5
+  const currentZoom = getZoom() ?? maxZoom
 
-map.value?.on('mousedown', (event) => {
-  if (isActive.value && event.originalEvent.button === 0 || event.originalEvent.button === 2)
-    pause()
-})
+  if (currentZoom < maxZoom)
+    flyTo({ center: latAndLong, zoom: maxZoom, speed: 1.5, pitch: 85 })
+  else
+    flyTo({ center: latAndLong, speed: 1.5 })
 
-map.value?.on('touchstart', () => {
-  if (isActive.value)
-    pause()
-})
-
-map.value?.on('zoomstart', () => {
-  if (isActive.value)
-    pause()
-})
+  // prototype
+  if (active.value)
+    startRotateAround()
+  else
+    stopRotateAround()
+  // end of prototype
+}
 
 onMounted(() => {
   initializeMarker({ latAndLong, ref: markerRef })
 })
+
 onUnmounted(() => {
   terminateMarker()
 })
@@ -49,20 +45,6 @@ onUnmounted(() => {
 <template>
   <div
     v-show="loaded && latAndLong"
-    ref="markerRef" z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg @click="() => {
-
-      const currentZoom = map?.getZoom();
-      const maxZoom = 17.5;
-
-      if (currentZoom < maxZoom) {
-        flyTo({ center: latAndLong, zoom: maxZoom, speed: 1.5, pitch: 85 })
-      }
-      else {
-        flyTo({ center: latAndLong, speed: 1.5, pitch: 85 })
-      }
-
-      resume();
-
-    }"
+    ref="markerRef" z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg @click="handleClick"
   />
 </template>
