@@ -22,7 +22,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    ref="markerRef" h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-red-600 text-lg shadow-lg
+    ref="markerRef" z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-red-600 text-lg shadow-lg
     @click="() => flyTo({ zoom, center: latAndLong, speed: 3 })"
   >
     {{ count }}

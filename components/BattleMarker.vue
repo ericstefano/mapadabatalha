@@ -49,7 +49,7 @@ onUnmounted(() => {
 <template>
   <div
     v-show="loaded && latAndLong"
-    ref="markerRef" h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg @click="() => {
+    ref="markerRef" z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg @click="() => {
 
       const currentZoom = map?.getZoom();
       const maxZoom = 17.5;
