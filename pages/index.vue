@@ -1,20 +1,25 @@
 <script lang="ts" setup>
+import type { LngLatLike } from 'maplibre-gl'
 import type { AnyProps, PointFeature } from 'supercluster'
 
-const { data: points, pending } = await useFetch<PointFeature<AnyProps>[]>('http://localhost:3001/points')
-const { clusters, calculateClusters, supercluster } = useCluster({ points: points.value })
+const { data: points, pending, status } = await useFetch<PointFeature<AnyProps>[]>('http://localhost:3001/points', { server: true })
+const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
+
+watchEffect(() => {
+  if (status.value === 'success')
+    loadPoints(points.value)
+})
 </script>
 
 <template>
-  <Map :on-move="calculateClusters" :on-load="calculateClusters" />
-  <template v-if="!pending && clusters && clusters.length">
+  <div v-if="!pending">
+    <Map :on-move="calculateClusters" :on-load="calculateClusters" />
     <template v-for="cluster in clusters" :key="cluster.id">
-      <Marker
+      <BattleMarker
         v-if="!cluster.properties.cluster"
-        :lat-and-long="cluster.geometry.coordinates"
+        :lat-and-long="cluster.geometry.coordinates as LngLatLike"
       />
-      <ClusterMarker v-if="cluster.properties.cluster" :lat-and-long="cluster.geometry.coordinates" :count="cluster.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(cluster.id)" />
+      <ClusterMarker v-if="cluster.properties.cluster" :lat-and-long="cluster.geometry.coordinates as LngLatLike" :count="cluster.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(cluster.id)" />
     </template>
-  </template>
-  <!-- <div class="fixed left-1/2 top-0 h-full w-px transform bg-sky-600 -translate-x-1/2" /> -->
+  </div>
 </template>

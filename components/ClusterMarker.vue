@@ -6,14 +6,14 @@ interface ClusterMarkerProps {
   count: number
   zoom: number
 }
-
 const { latAndLong } = defineProps<ClusterMarkerProps>()
 
 const { map } = useMap()
-const { initializeMarker, terminateMarker, markerRef } = useMarker()
+const markerRef = shallowRef<HTMLElement | null>(null)
+const { initializeMarker, terminateMarker } = useMarker()
 
 onMounted(() => {
-  initializeMarker({ latAndLong })
+  initializeMarker({ latAndLong, ref: markerRef })
 })
 onUnmounted(() => {
   terminateMarker()
@@ -23,7 +23,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="markerRef" h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-red-600 text-lg shadow-lg
-    @click="() => map?.flyTo({ zoom, center: latAndLong, speed: 3 })"
+    @click="() => map.flyTo({ zoom, center: latAndLong, speed: 3 })"
   >
     {{ count }}
   </div>

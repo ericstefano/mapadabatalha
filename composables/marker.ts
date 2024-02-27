@@ -1,17 +1,17 @@
 import { Marker } from 'maplibre-gl'
 import type { LngLatLike } from 'maplibre-gl'
+import type { ShallowRef } from 'nuxt/dist/app/compat/capi'
 
 export function useMarker() {
   const { addMarker: addMarkerToMap } = useMap()
   const marker = shallowRef<Marker | null>(null)
-  const markerRef = shallowRef<HTMLElement | null>(null)
   const markers = useState(() => shallowRef<Marker[]>([]))
 
-  function initializeMarker({ latAndLong }: { latAndLong: LngLatLike }) {
-    if (!markerRef.value)
+  function initializeMarker({ latAndLong, ref }: { ref: ShallowRef<HTMLElement | null> | Ref<HTMLElement | null>, latAndLong: LngLatLike }) {
+    if (!ref.value)
       throw new Error('\'markerRef\' must be a HTMLElement')
 
-    const instance = new Marker({ element: markerRef.value })
+    const instance = new Marker({ element: ref.value })
     instance.setLngLat(latAndLong)
     addMarkerToMap(instance)
     marker.value = markRaw(instance)
@@ -26,5 +26,5 @@ export function useMarker() {
     marker.value.remove()
   }
 
-  return { marker, markers, markerRef, initializeMarker, terminateMarker }
+  return { marker, markers, initializeMarker, terminateMarker }
 }

@@ -51,7 +51,6 @@ export function useMap() {
   function handleMapLoad(language: string) {
     return () => {
       setLanguage(language)
-      loaded.value = true
     }
   }
 
@@ -76,7 +75,12 @@ export function useMap() {
       antialias: true,
       maxBounds,
     }))
-    map.value.on('load', handleMapLoad(language))
+
+    map.value.once('load', handleMapLoad(language))
+
+    map.value.once('idle', () => {
+      loaded.value = true
+    })
 
     if (onLoad)
       map.value.on('load', onLoad)

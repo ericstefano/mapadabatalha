@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import type { LngLatLike } from 'maplibre-gl'
 
-interface MarkerProps {
+interface BattleMarkerProps {
   latAndLong: LngLatLike
 }
 
-const { latAndLong } = defineProps<MarkerProps>()
+const { latAndLong } = defineProps<BattleMarkerProps>()
 
 const { map, loaded } = useMap()
-const { initializeMarker, terminateMarker, markerRef, markers } = useMarker()
+const markerRef = shallowRef<HTMLElement | null>(null)
+const { initializeMarker, terminateMarker, markers } = useMarker()
 
 const speed = 0.12
 const direction = -1 // 1 = left, -1 = right
-const bearing = ref(map.value?.getBearing())
+const bearing = ref(map.value?.getBearing() ?? 0)
 const { resume, pause, isActive } = useRafFn(() => {
   if (!map.value?.isMoving())
     map.value?.rotateTo(bearing.value + (speed) * direction, { duration: 0 })
@@ -38,7 +39,7 @@ map.value?.on('zoomstart', () => {
 })
 
 onMounted(() => {
-  initializeMarker({ latAndLong })
+  initializeMarker({ latAndLong, ref: markerRef })
 })
 onUnmounted(() => {
   terminateMarker()
@@ -61,9 +62,6 @@ onUnmounted(() => {
       }
 
       resume();
-
-      // Request the next frame of the animation.
-      // requestAnimationFrame(rotateCamera);
 
     }"
   />

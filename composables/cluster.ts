@@ -2,10 +2,9 @@ import type { MapLibreEvent } from 'maplibre-gl'
 import Supercluster, { type AnyProps, type ClusterFeature, type PointFeature } from 'supercluster'
 import type { BBox } from 'geojson'
 
-const supercluster = new Supercluster({ radius: 50, maxZoom: 20 })
-export function useCluster({ points }: { points: PointFeature<AnyProps>[] | null }) {
+const supercluster = new Supercluster({ radius: 50, maxZoom: 16 })
+export function useCluster() {
   const clusters = useState(() => shallowRef<(PointFeature<AnyProps> | ClusterFeature<AnyProps>)[]>([]))
-  supercluster.load(points!)
 
   function calculateClusters(event: MapLibreEvent<MouseEvent | TouchEvent | WheelEvent | unknown | undefined>) {
     const bounds = event.target.getBounds().toArray().flat() as BBox
@@ -13,5 +12,9 @@ export function useCluster({ points }: { points: PointFeature<AnyProps>[] | null
     clusters.value = supercluster.getClusters(bounds, zoom)
   }
 
-  return { clusters, supercluster, calculateClusters }
+  function loadPoints(points: PointFeature<AnyProps>[] | null) {
+    supercluster.load(points!)
+  }
+
+  return { clusters, supercluster, calculateClusters, loadPoints }
 }
