@@ -2,12 +2,35 @@
 import type { LngLatLike } from 'maplibre-gl'
 import type { AnyProps, PointFeature } from 'supercluster'
 
-const { data: points, pending, status } = await useFetch<PointFeature<AnyProps>[]>('http://localhost:3001/points', { server: true })
+interface Battle {
+  name: string
+  instagram: string
+  id: string
+  lat: number
+  lon: number
+}
+
+const { data: battles, status, pending } = await useFetch<Battle[]>('http://localhost:3030/battles', { server: true })
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
 
 watchEffect(() => {
-  if (status.value === 'success')
-    loadPoints(points.value)
+  if (status.value === 'success' && battles.value) {
+    const fromBattlesToPoints: PointFeature<AnyProps>[] = battles.value.map(value => ({
+      type: 'Feature',
+      properties: {
+        cluster: false,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          value.lon,
+          value.lat,
+        ],
+      },
+      id: value.id,
+    }))
+    loadPoints(fromBattlesToPoints)
+  }
 })
 </script>
 
