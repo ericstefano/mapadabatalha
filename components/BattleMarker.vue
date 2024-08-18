@@ -45,6 +45,5 @@ onUnmounted(() => {
 <template>
   <div
     v-show="loaded && latAndLong"
-    ref="markerRef" z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg @click="handleClick"
-  />
+    ref="markerRef" class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg" @click="handleClick"></div>
 </template>

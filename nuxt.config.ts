@@ -1,30 +1,64 @@
-import { pwa } from './config/pwa'
-import { appDescription } from './constants/index'
-
+import { APP_DESCRIPTION } from './constants/index'
 export default defineNuxtConfig({
   modules: [
-    '@vueuse/nuxt',
-    '@unocss/nuxt',
-    '@pinia/nuxt',
+    '@nuxt/icon',
+    "@nuxt/image",
+    "@nuxt/fonts",
+    '@nuxt/eslint',
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt',
+    '@nuxt/test-utils/module',
+    '@vueuse/nuxt',
+    '@pinia/nuxt',
   ],
+
+  fonts: {
+    defaults: {
+      weights: [300, 400, 500, 600, 700],
+      styles: ['normal', 'italic'],
+      subsets: [
+        'latin-ext',
+        'latin',
+      ]
+    },
+    families: [
+      { name: 'Inter', provider: 'google' },
+    ]
+  },
+
+  runtimeConfig: {
+    googleClientId: process.env.NUXT_GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
+    public: {
+      baseUrl: process.env.NUXT_BASE_URL,
+    }
+  },
+
+  app: {
+    rootId: 'app', // Hide __nuxt id
+    rootTag: 'main',
+
+    head: {
+      viewport: 'width=device-width,initial-scale=1',
+      link: [
+        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+        { rel: 'icon', href: '/nuxt.svg', type: 'image/svg+xml' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: APP_DESCRIPTION },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      ],
+    },
+  },
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
     payloadExtraction: false,
-    inlineSSRStyles: false,
     renderJsonPayloads: true,
     typedPages: true,
-  },
-
-  css: [
-    '@unocss/reset/tailwind.css',
-  ],
-
-  colorMode: {
-    classSuffix: '',
   },
 
   nitro: {
@@ -32,33 +66,45 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext',
       },
-    },
-    prerender: {
-      crawlLinks: false,
-      routes: ['/'],
-      ignore: ['/hi'],
+    }
+  },
+
+  colorMode: {
+    preference: 'system',
+    classSuffix: '',
+  },
+
+  routeRules: {
+    '/**': {
+      headers: {
+        // 'Content-Security-Policy': 'base-uri \'none\'; default-src \'none\'; connect-src \'self\' https:; font-src \'self\' https: data:; form-action \'self\'; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\' data:; manifest-src \'self\'; media-src \'self\'; object-src \'none\'; script-src-attr \'none\'; style-src \'self\' https: \'unsafe-inline\'; script-src \'self\' https: \'unsafe-inline\' \'strict-dynamic\' \'nonce-{{nonce}}\'; upgrade-insecure-requests; worker-src \'self\';',
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        // 'Cross-Origin-Embedder-Policy': 'require-corp',
+        'Cross-Origin-Resource-Policy': 'same-origin',
+        'Referrer-Policy': 'no-referrer',
+        'Strict-Transport-Security': 'max-age=15552000; includeSubDomains;',
+        'X-Content-Type-Options': 'nosniff',
+        'X-XSS-Protection': '0',
+        // 'X-Powered-By': undefined, //
+      },
     },
   },
 
-  app: {
-    head: {
-      viewport: 'width=device-width,initial-scale=1',
-      link: [
-        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
-        { rel: 'icon', type: 'image/svg+xml', href: '/nuxt.svg' },
-        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-      ],
-      meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: appDescription },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-      ],
-    },
-  },
-
-  pwa,
+  components: true,
 
   devtools: {
     enabled: true,
   },
+
+  eslint: {
+    config: {
+      standalone: false,
+    },
+  },
+
+  icon: {
+    mode: 'svg'
+  },
+
+  compatibilityDate: '2024-08-17',
 })

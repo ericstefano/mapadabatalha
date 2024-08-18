@@ -10,7 +10,8 @@ interface Battle {
   lon: number
 }
 
-const { data: battles, status, pending } = await useFetch<Battle[]>('http://localhost:3030/battles', { server: true })
+const { data: battles, status } = await useFetch<Battle[]>('http://localhost:3001/points', { server: true })
+
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
 
 watchEffect(() => {
@@ -35,14 +36,13 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div v-if="!pending">
-    <Map :on-move="calculateClusters" :on-load="calculateClusters" />
+  <div v-if="status !== 'pending'" class="h-screen">
+    <Map :on-move="calculateClusters" :on-load="calculateClusters"></Map>
     <template v-for="cluster in clusters" :key="cluster.id">
       <BattleMarker
         v-if="!cluster.properties.cluster"
-        :lat-and-long="cluster.geometry.coordinates as LngLatLike"
-      />
-      <ClusterMarker v-if="cluster.properties.cluster" :lat-and-long="cluster.geometry.coordinates as LngLatLike" :count="cluster.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(cluster.id)" />
+        :lat-and-long="cluster.geometry.coordinates"/>
+      <ClusterMarker v-if="cluster.properties.cluster" :lat-and-long="cluster.geometry.coordinates" :count="cluster.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(cluster.id)" />
     </template>
   </div>
 </template>
