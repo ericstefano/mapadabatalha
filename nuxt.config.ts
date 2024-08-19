@@ -27,11 +27,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    googleClientId: process.env.NUXT_GOOGLE_CLIENT_ID,
-    googleClientSecret: process.env.NUXT_GOOGLE_CLIENT_SECRET,
-    public: {
-      baseUrl: process.env.NUXT_BASE_URL,
-    }
+    dbConnectionString: process.env.NUXT_DB_CONNECTION_STRING,
+    public: {}
   },
 
   app: {
