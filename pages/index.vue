@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import type { LngLatLike } from 'maplibre-gl'
-import type { AnyProps, PointFeature } from 'supercluster'
-
+import type { AnyProps, PointFeature } from 'supercluster';
 interface Battle {
   name: string
   instagram: string

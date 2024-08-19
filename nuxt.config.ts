@@ -26,11 +26,6 @@ export default defineNuxtConfig({
     ]
   },
 
-  runtimeConfig: {
-    dbConnectionString: process.env.NUXT_DB_CONNECTION_STRING,
-    public: {}
-  },
-
   app: {
     rootId: 'app', // Hide __nuxt id
     rootTag: 'main',
@@ -82,7 +77,7 @@ export default defineNuxtConfig({
         'Strict-Transport-Security': 'max-age=15552000; includeSubDomains;',
         'X-Content-Type-Options': 'nosniff',
         'X-XSS-Protection': '0',
-        // 'X-Powered-By': undefined, //
+        'X-Powered-By': undefined
       },
     },
   },
