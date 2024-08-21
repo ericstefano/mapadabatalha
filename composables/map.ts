@@ -1,6 +1,6 @@
+import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
 import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
-import type { EaseToOptions, FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
-import type { ShallowRef } from 'nuxt/dist/app/compat/capi'
+import type { ShallowRef } from 'vue'
 
 // Languages:
 // https://github.com/maptiler/maptiler-sdk-js/blob/main/src/language.ts#L4
@@ -26,8 +26,7 @@ export function useMap() {
   const rotateAroundBearing = computed(() => bearing.value + (speed.value) * direction.value)
 
   const { resume, pause, isActive } = useRafFn(() => {
-    if (map.value?.isMoving())
-      return
+    if (map.value?.isMoving()) return
     map.value?.rotateTo(rotateAroundBearing.value, { duration: 0 })
   }, { immediate: false })
 
