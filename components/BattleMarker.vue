@@ -1,29 +1,25 @@
 <script setup lang="ts">
-import type { LngLatLike } from 'maplibre-gl'
+import type { LngLatLike } from 'maplibre-gl';
 
 interface BattleMarkerProps {
-  latAndLong: LngLatLike
+  coordinates: LngLatLike
 }
 
-const { latAndLong } = defineProps<BattleMarkerProps>()
+const { coordinates } = defineProps<BattleMarkerProps>()
 const markerRef = shallowRef<HTMLElement | null>(null)
 const active = ref(false)
 const { getZoom, flyTo, startRotateAround, stopRotateAround, loaded } = useMap()
 const { initializeMarker, terminateMarker } = useMarker()
 
-function toggleActive() {
-  active.value = !active.value
-}
-
 function handleClick() {
-  toggleActive()
+  active.value = !active.value
   const maxZoom = 17.5
   const currentZoom = getZoom() ?? maxZoom
 
   if (currentZoom < maxZoom)
-    flyTo({ center: latAndLong, zoom: maxZoom, speed: 1.5, pitch: 85 })
+    flyTo({ center: coordinates, zoom: maxZoom, speed: 1.5, pitch: 85 })
   else
-    flyTo({ center: latAndLong, speed: 1.5 })
+    flyTo({ center: coordinates, speed: 1.5 })
 
   // prototype
   if (active.value)
@@ -34,7 +30,7 @@ function handleClick() {
 }
 
 onMounted(() => {
-  initializeMarker({ latAndLong, ref: markerRef })
+  initializeMarker({ latAndLong: coordinates, ref: markerRef })
 })
 
 onUnmounted(() => {
@@ -43,7 +39,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    v-show="loaded && latAndLong"
-    ref="markerRef" class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg" @click="handleClick"></div>
+  <div v-show="loaded && coordinates" ref="markerRef"
+    class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg"
+    @click="handleClick"></div>
 </template>

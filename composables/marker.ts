@@ -1,6 +1,6 @@
-import { Marker } from 'maplibre-gl'
 import type { LngLatLike } from 'maplibre-gl'
-import type { ShallowRef } from 'nuxt/dist/app/compat/capi'
+import { Marker } from 'maplibre-gl'
+import type { ShallowRef } from 'vue'
 
 interface initializeMarkerOptions {
   ref: ShallowRef<HTMLElement | null> | Ref<HTMLElement | null>

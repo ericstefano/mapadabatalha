@@ -1,9 +1,7 @@
 <script setup lang='ts'>
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { initializeMapOptions } from '~/composables/map'
-
 const { onMove, onLoad } = defineProps<Pick<initializeMapOptions, 'onMove' | 'onLoad'>>()
-
 const { short } = useLanguage()
 const mapRef = shallowRef<HTMLElement | null>(null)
 const { initializeMap, terminateMap, loaded, setLanguage } = useMap()
