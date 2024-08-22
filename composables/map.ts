@@ -1,6 +1,11 @@
 import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
 import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
 import type { ShallowRef } from 'vue'
+const BRAZIL_CENTER_COORDINATES: LngLatLike = [-43.93420430483323, -19.91665382890247]
+const BRAZIL_MAX_BOUNDS : LngLatBoundsLike = [
+  [-76, -36],
+  [-23.60, 8],
+]
 
 // Languages:
 // https://github.com/maptiler/maptiler-sdk-js/blob/main/src/language.ts#L4
@@ -20,7 +25,6 @@ export function useMap() {
   const map = useState(() => shallowRef<Map | null>(null))
   const loaded = useState(() => false)
   const bearing = ref(map.value?.getBearing() ?? 0)
-  const isMoving = ref(false)
   const speed = ref(0.08)
   const direction = ref(-1)
   const rotateAroundBearing = computed(() => bearing.value + (speed.value) * direction.value)
@@ -92,10 +96,7 @@ export function useMap() {
   }
 
   function initializeMap(options: initializeMapOptions) {
-    const { ref, onLoad, onMove, center = [-43.93420430483323, -19.91665382890247], language = 'visitor', maxBounds = [
-      [-76, -36],
-      [-23.60, 8],
-    ] } = options
+    const { ref, onLoad, onMove, center = BRAZIL_CENTER_COORDINATES, language = 'visitor', maxBounds = BRAZIL_MAX_BOUNDS } = options
 
     map.value = markRaw(new Map({
       container: ref.value!,

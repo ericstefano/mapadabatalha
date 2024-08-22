@@ -10,6 +10,7 @@ interface Battle {
 
 const { data: battles, status } = await useFetch<Battle[]>('http://localhost:3000/battles', { server: true })
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
+const active = ref<string | null>(null)
 
 watchEffect(() => {
   if (status.value === 'success' && battles.value) {
@@ -34,15 +35,20 @@ watchEffect(() => {
     loadPoints([])
   }
 })
+
 </script>
 
 <template>
-  <div v-if="status !== 'pending'" class="h-screen">
+  <div v-if="status !== 'pending'" class="h-screen" :class="{ 'grid grid-rows-2': active !== null }">
     <Map :on-move="calculateClusters" :on-load="calculateClusters"></Map>
-    <template v-for="cluster in clusters" :key="cluster.id">
-      <BattleMarker v-if="!cluster.properties.cluster" :coordinates="cluster.geometry.coordinates" />
-      <ClusterMarker v-if="cluster.properties.cluster" :coordinates="cluster.geometry.coordinates"
-        :count="cluster.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(cluster.id)" />
+    <template v-for="point in clusters" :key="point.id">
+      <BattleMarker v-if="!point.properties?.cluster" :id="point.id" :coordinates="point.geometry.coordinates" v-model:active="active" />
+      <ClusterMarker v-if="point.properties?.cluster" :coordinates="point.geometry.coordinates"
+        :count="point.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(point.id)" />
     </template>
+    <div class="flex justify-center items-center text-lg px-12  flex-col" v-if="active !== null">
+      <button class="mb-4 rounded-lg font-sans bg-red-500 py-2 px-4 text-white" @click="() => active = null">Fechar</button>
+      <p class="font-mono">{{ battles?.find((battle) => battle.id === active) }}</p>
+    </div>
   </div>
 </template>

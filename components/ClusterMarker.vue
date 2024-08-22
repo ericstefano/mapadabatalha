@@ -7,19 +7,19 @@ interface ClusterMarkerProps {
   zoom: number
 
 }
-const { coordinates, zoom } = defineProps<ClusterMarkerProps>()
-
-const { flyTo } = useMap()
+const props = defineProps<ClusterMarkerProps>()
 const markerRef = shallowRef<HTMLElement | null>(null)
+const { flyTo } = useMap()
 const { initializeMarker, terminateMarker } = useMarker()
 
 function handleClick() {
-  flyTo({ zoom, center: coordinates, speed: 3 })
+  flyTo({ zoom: props.zoom, center: props.coordinates, speed: 3 })
 }
 
 onMounted(() => {
-  initializeMarker({ latAndLong: coordinates, ref: markerRef })
+  initializeMarker({ latAndLong: props.coordinates, ref: markerRef })
 })
+
 onUnmounted(() => {
   terminateMarker()
 })

@@ -1,36 +1,48 @@
 <script setup lang="ts">
+const RENDER_ANIMATION_DELAY_MS = 50;
+const MAX_ZOOM = 17.5
 import type { LngLatLike } from 'maplibre-gl';
 
 interface BattleMarkerProps {
   coordinates: LngLatLike
+  id: string;
 }
 
-const { coordinates } = defineProps<BattleMarkerProps>()
+const props = defineProps<BattleMarkerProps>()
+const active = defineModel<string | null>('active', {
+  required: true
+})
 const markerRef = shallowRef<HTMLElement | null>(null)
-const active = ref(false)
+
 const { getZoom, flyTo, startRotateAround, stopRotateAround, loaded } = useMap()
 const { initializeMarker, terminateMarker } = useMarker()
 
-function handleClick() {
-  active.value = !active.value
-  const maxZoom = 17.5
-  const currentZoom = getZoom() ?? maxZoom
-
-  if (currentZoom < maxZoom)
-    flyTo({ center: coordinates, zoom: maxZoom, speed: 1.5, pitch: 85 })
-  else
-    flyTo({ center: coordinates, speed: 1.5 })
-
-  // prototype
-  if (active.value)
-    startRotateAround()
-  else
-    stopRotateAround()
-  // end of prototype
+async function setActive() {
+  active.value === props.id ? active.value = null : active.value = props.id
 }
 
+async function handleClick() {
+  await setActive()
+  if (active.value) {
+    setTimeout(() => {
+      const currentZoom = getZoom() ?? MAX_ZOOM
+      if (currentZoom < MAX_ZOOM)
+        flyTo({ center: props.coordinates, zoom: MAX_ZOOM, speed: 1.5, pitch: 85 })
+      else
+        flyTo({ center: props.coordinates, speed: 1.5 })
+      startRotateAround()
+    }, RENDER_ANIMATION_DELAY_MS)
+  }
+}
+
+watchEffect(() => {
+  if (active.value !== props.id) {
+    stopRotateAround();
+  }
+})
+
 onMounted(() => {
-  initializeMarker({ latAndLong: coordinates, ref: markerRef })
+  initializeMarker({ latAndLong: props.coordinates, ref: markerRef })
 })
 
 onUnmounted(() => {
