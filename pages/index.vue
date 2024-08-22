@@ -47,8 +47,8 @@ watchEffect(() => {
         :count="point.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(point.id)" />
     </template>
     <div class="flex justify-center items-center text-lg px-12  flex-col" v-if="active !== null">
-      <button class="mb-4 rounded-lg font-sans bg-red-500 py-2 px-4 text-white" @click="() => active = null">Fechar</button>
       <p class="font-mono">{{ battles?.find((battle) => battle.id === active) }}</p>
+      <button class="mt-4 rounded-lg font-sans bg-red-500 py-2 px-4 text-white" @click="() => active = null">Fechar</button>
     </div>
   </div>
 </template>
