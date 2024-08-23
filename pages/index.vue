@@ -42,7 +42,7 @@ watchEffect(() => {
   <div v-if="status !== 'pending'" class="h-screen" :class="{ 'grid grid-rows-2': active !== null }">
     <Map :on-move="calculateClusters" :on-load="calculateClusters"></Map>
     <template v-for="point in clusters" :key="point.id">
-      <BattleMarker v-if="!point.properties?.cluster" :id="point.id" :coordinates="point.geometry.coordinates" v-model:active="active" />
+      <EntityMarker v-if="!point.properties?.cluster" :id="point.id" :coordinates="point.geometry.coordinates" v-model:active="active" />
       <ClusterMarker v-if="point.properties?.cluster" :coordinates="point.geometry.coordinates"
         :count="point.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(point.id)" />
     </template>

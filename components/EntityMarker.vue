@@ -3,12 +3,12 @@ const RENDER_ANIMATION_DELAY_MS = 50;
 const MAX_ZOOM = 17.5
 import type { LngLatLike } from 'maplibre-gl';
 
-interface BattleMarkerProps {
+interface EntityMarkerProps {
   coordinates: LngLatLike
   id: string;
 }
 
-const props = defineProps<BattleMarkerProps>()
+const props = defineProps<EntityMarkerProps>()
 const active = defineModel<string | null>('active', {
   required: true
 })

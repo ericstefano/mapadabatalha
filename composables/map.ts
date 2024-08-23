@@ -126,10 +126,11 @@ export function useMap() {
       positionOptions: {
         enableHighAccuracy: true,
       },
+      showAccuracyCircle: false, 
     }))
   }
 
-  function terminateMap() {
+  function terminateMap() { 
     map.value?.remove()
   }
 
