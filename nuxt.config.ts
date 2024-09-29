@@ -8,11 +8,17 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
+    'shadcn-nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/test-utils/module',
     '@vueuse/nuxt',
     '@pinia/nuxt',
   ],
+
+  shadcn: {
+    prefix: '',
+    componentDir: './components/Shadcn',
+  },
 
   fonts: {
     defaults: {

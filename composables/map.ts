@@ -1,6 +1,6 @@
 import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
 import type { ShallowRef } from 'vue'
-import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
+import { GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
 
 const BRAZIL_CENTER_COORDINATES: LngLatLike = [-43.93420430483323, -19.91665382890247]
 const BRAZIL_MAX_BOUNDS: LngLatBoundsLike = [
@@ -121,7 +121,7 @@ export function useMap() {
     if (onMove)
       map.value.on('move', onMove)
 
-    map.value.addControl(new FullscreenControl())
+    // map.value.addControl(new FullscreenControl())
     map.value.addControl(new NavigationControl())
     map.value.addControl(new GeolocateControl({
       trackUserLocation: true,
