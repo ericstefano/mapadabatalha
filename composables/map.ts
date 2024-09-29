@@ -1,8 +1,9 @@
 import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
-import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
 import type { ShallowRef } from 'vue'
+import { FullscreenControl, GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
+
 const BRAZIL_CENTER_COORDINATES: LngLatLike = [-43.93420430483323, -19.91665382890247]
-const BRAZIL_MAX_BOUNDS : LngLatBoundsLike = [
+const BRAZIL_MAX_BOUNDS: LngLatBoundsLike = [
   [-76, -36],
   [-23.60, 8],
 ]
@@ -30,7 +31,8 @@ export function useMap() {
   const rotateAroundBearing = computed(() => bearing.value + (speed.value) * direction.value)
 
   const { resume, pause, isActive } = useRafFn(() => {
-    if (map.value?.isMoving()) return
+    if (map.value?.isMoving())
+      return
     map.value?.rotateTo(rotateAroundBearing.value, { duration: 0 })
   }, { immediate: false })
 
@@ -126,11 +128,11 @@ export function useMap() {
       positionOptions: {
         enableHighAccuracy: true,
       },
-      showAccuracyCircle: false, 
+      showAccuracyCircle: false,
     }))
   }
 
-  function terminateMap() { 
+  function terminateMap() {
     map.value?.remove()
   }
 
@@ -139,7 +141,7 @@ export function useMap() {
   })
 
   map.value?.on('mousedown', (event) => {
-    if (isActive.value && event.originalEvent.button === 0 || event.originalEvent.button === 2)
+    if (isActive.value && (event.originalEvent.button === 0 || event.originalEvent.button === 2))
       pause()
   })
 

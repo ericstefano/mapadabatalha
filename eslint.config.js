@@ -4,6 +4,6 @@ import nuxt from './.nuxt/eslint.config.mjs'
 
 export default nuxt(
   await antfu({
-    formatters: true
+    formatters: true,
   }),
 )

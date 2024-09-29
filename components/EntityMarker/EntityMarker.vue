@@ -1,16 +1,17 @@
 <script setup lang="ts">
-const RENDER_ANIMATION_DELAY_MS = 50;
+import type { LngLatLike } from 'maplibre-gl'
+
+const props = defineProps<EntityMarkerProps>()
+const RENDER_ANIMATION_DELAY_MS = 50
 const MAX_ZOOM = 17.5
-import type { LngLatLike } from 'maplibre-gl';
 
 interface EntityMarkerProps {
   coordinates: LngLatLike
-  id: string;
+  id: string
 }
 
-const props = defineProps<EntityMarkerProps>()
 const active = defineModel<string | null>('active', {
-  required: true
+  required: true,
 })
 const markerRef = shallowRef<HTMLElement | null>(null)
 
@@ -37,7 +38,7 @@ async function handleClick() {
 
 watchEffect(() => {
   if (active.value !== props.id) {
-    stopRotateAround();
+    stopRotateAround()
   }
 })
 
@@ -51,7 +52,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-show="loaded && coordinates" ref="markerRef"
+  <div
+    v-show="loaded && coordinates" ref="markerRef"
     class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-sky-600 text-lg shadow-lg"
-    @click="handleClick"></div>
+    @click="handleClick"
+  />
 </template>

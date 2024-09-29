@@ -1,6 +1,6 @@
 import type { LngLatLike } from 'maplibre-gl'
-import { Marker } from 'maplibre-gl'
 import type { ShallowRef } from 'vue'
+import { Marker } from 'maplibre-gl'
 
 interface initializeMarkerOptions {
   ref: ShallowRef<HTMLElement | null> | Ref<HTMLElement | null>
