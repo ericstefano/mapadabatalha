@@ -8,7 +8,10 @@
   "editor.formatOnSave": false,
 
   // Auto fix
-  "editor.codeActionsOnSave": ["source.organizeImports"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
 
   // Silent the stylistic rules in you IDE, but still auto fix them
   "eslint.rules.customizations": [
@@ -36,5 +39,7 @@
     "jsonc",
     "yaml"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "interline-translate.knownPopularWordCount": 6000,
+  "iconify.annotations": true,
+  "iconify.inplace": true
 }

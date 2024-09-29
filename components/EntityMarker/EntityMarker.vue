@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LngLatLike } from 'maplibre-gl'
 
-const props = defineProps<EntityMarkerProps>()
+const { coordinates, id } = defineProps<EntityMarkerProps>()
 const RENDER_ANIMATION_DELAY_MS = 50
 const MAX_ZOOM = 17.5
 
@@ -19,7 +19,7 @@ const { getZoom, flyTo, startRotateAround, stopRotateAround, loaded } = useMap()
 const { initializeMarker, terminateMarker } = useMarker()
 
 async function setActive() {
-  active.value === props.id ? active.value = null : active.value = props.id
+  active.value === id ? active.value = null : active.value = id
 }
 
 async function handleClick() {
@@ -28,22 +28,22 @@ async function handleClick() {
     setTimeout(() => {
       const currentZoom = getZoom() ?? MAX_ZOOM
       if (currentZoom < MAX_ZOOM)
-        flyTo({ center: props.coordinates, zoom: MAX_ZOOM, speed: 1.5, pitch: 85 })
+        flyTo({ center: coordinates, zoom: MAX_ZOOM, speed: 1.5, pitch: 85 })
       else
-        flyTo({ center: props.coordinates, speed: 1.5 })
+        flyTo({ center: coordinates, speed: 1.5 })
       startRotateAround()
     }, RENDER_ANIMATION_DELAY_MS)
   }
 }
 
 watchEffect(() => {
-  if (active.value !== props.id) {
+  if (active.value !== id) {
     stopRotateAround()
   }
 })
 
 onMounted(() => {
-  initializeMarker({ latAndLong: props.coordinates, ref: markerRef })
+  initializeMarker({ latAndLong: coordinates, ref: markerRef })
 })
 
 onUnmounted(() => {
