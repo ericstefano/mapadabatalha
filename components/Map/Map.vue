@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import type { initializeMapOptions } from '~/composables/map'
+import type { initializeMapOptions } from '~/composables/useMap'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 const { onMove, onLoad } = defineProps<Pick<initializeMapOptions, 'onMove' | 'onLoad'>>()
