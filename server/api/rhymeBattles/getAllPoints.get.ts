@@ -1,15 +1,20 @@
 import type { PointFeature } from 'supercluster'
 import { isNull } from 'drizzle-orm'
-import { battleTable } from '~/server/database/schema'
-import { useDatabase } from '~/server/utils/useDatabase'
+import { rhymeBattleTable } from '~/server/database/schema'
 
 export default defineEventHandler(
   async (event) => {
     const db = await useDatabase(event)
-    const battles = await db.query.battleTable.findMany({
-      where: isNull(battleTable.deletedAt),
+    const battles = await db.query.rhymeBattleTable.findMany({
+      where: isNull(rhymeBattleTable.deletedAt),
     })
-    return battles.map<PointFeature<Partial<typeof battleTable.$inferSelect>>>(value => ({
+    if (!battles || !battles.length) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Not Found',
+      })
+    }
+    return battles.map<PointFeature<Partial<typeof rhymeBattleTable.$inferSelect>>>(value => ({
       type: 'Feature',
       properties: {
         name: value.name,

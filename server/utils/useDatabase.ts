@@ -6,21 +6,23 @@ import * as schema from '../database/schema'
 async function createPostgresDb() {
   const { Pool } = pg
   const { dbConnectionString } = useRuntimeConfig()
+  if (!dbConnectionString)
+    throw new Error('Missing \'NUXT_DB_CONNECTION_STRING\' in .env')
   const pool = new Pool({ connectionString: dbConnectionString })
   await pool.connect()
   return drizzle(pool, { schema })
 }
 
-export function useDatabase(event: H3Event) {
+export async function useDatabase(event: H3Event) {
   if (event.context.db)
     return event.context.db
-  const db = createPostgresDb()
+  const db = await createPostgresDb()
   event.context.db = db
   return db
 }
 
 declare module 'h3' {
   interface H3EventContext {
-    db: ReturnType<typeof createPostgresDb> | undefined
+    db: Awaited<ReturnType<typeof createPostgresDb>> | undefined
   }
 }

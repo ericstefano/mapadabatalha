@@ -1,22 +1,21 @@
 import { randomUUID } from 'node:crypto'
 import * as v from 'valibot'
-import { battleTable } from '~/server/database/schema'
-import { useDatabase } from '~/server/utils/useDatabase'
+import { rhymeBattleTable } from '~/server/database/schema'
 
-const createBattleSchema = v.object({
+const rhymeBattleBodySchema = v.object({
   name: v.string('name is required'),
   instagram: v.string('instagram is required'),
   lat: v.number('lat is required'),
   lon: v.number('lon is required'),
 })
 
-function validateBattle(data: unknown) {
-  return v.safeParse(createBattleSchema, data)
+function validateBody(data: unknown) {
+  return v.safeParse(rhymeBattleBodySchema, data)
 }
 
 export default defineEventHandler(
   async (event) => {
-    const parsed = await readValidatedBody(event, validateBattle)
+    const parsed = await readValidatedBody(event, validateBody)
     if (!parsed.success) {
       throw createError({
         statusCode: 400,
@@ -25,15 +24,13 @@ export default defineEventHandler(
       })
     }
     const db = await useDatabase(event)
-    const [{ id }] = await db.insert(battleTable)
+    const [{ id }] = await db.insert(rhymeBattleTable)
       .values({
         id: randomUUID(),
-        updatedAt: new Date(),
-        createdAt: new Date(),
         ...parsed.output,
       })
       .returning({
-        id: battleTable.id,
+        id: rhymeBattleTable.id,
       })
     setResponseStatus(event, 200)
     return { ...parsed.output, id }

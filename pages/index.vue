@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-const { data: battles, status } = await useFetch('/api/battles/getAllPoints')
+const { data: battles, status } = await useFetch('/api/rhymeBattles/getAllPoints')
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
-const isDesktop = useMediaQuery('(min-width: 768px)')
+const isDesktop = useMediaQuery('(min-width: 1024px)')
 const active = ref<string | null>(null)
 const open = computed(() => Boolean(active.value))
+function clearActive() {
+  active.value = null
+}
 
 watchEffect(() => {
   if (status.value === 'success' && battles.value && battles.value.length) {
@@ -24,21 +27,22 @@ watchEffect(() => {
         :coordinates="point.geometry.coordinates"
       />
       <ClusterMarker
-        v-if="point.properties?.cluster" :coordinates="point.geometry.coordinates"
-        :count="point.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(point.id)"
+        v-if="point.properties?.cluster" :count="point.properties.point_count"
+        :zoom="supercluster.getClusterExpansionZoom(point.id)" :coordinates="point.geometry.coordinates"
       />
     </template>
-    <Drawer v-if="!isDesktop" :open="open">
-      <DrawerContent @interact-outside="active = null" @escape-key-down="active = null">
-        <div class="mx-auto w-full max-w-sm h-[350px]">
+    <Drawer v-if="!isDesktop" :open="open" @release="clearActive">
+      <DrawerContent @interact-outside="clearActive" @escape-key-down="clearActive">
+        <div class="mx-auto w-full max-w-sm h-[250px]">
           <DrawerHeader>
             <DrawerTitle>{{ battles?.find((battle) => battle.id === active)?.properties }}</DrawerTitle>
             <DrawerDescription>Detalhes da Batalha</DrawerDescription>
           </DrawerHeader>
         </div>
+        <RhymeBattleInfo :id="active" />
       </DrawerContent>
     </Drawer>
-    <Sheet v-if="isDesktop" :open="open" @update:open="active = null">
+    <Sheet v-if="isDesktop" :open="open" @update:open="clearActive">
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>{{ battles?.find((battle) => battle.id === active)?.properties }}</SheetTitle>
@@ -46,6 +50,7 @@ watchEffect(() => {
             Detalhes da batalha
           </SheetDescription>
         </SheetHeader>
+        <RhymeBattleInfo :id="active" />
       </SheetContent>
     </Sheet>
   </div>

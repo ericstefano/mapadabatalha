@@ -15,6 +15,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
 
+  ssr: false,
+
   shadcn: {
     prefix: '',
     componentDir: './components/Shadcn',
@@ -36,6 +38,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     dbConnectionString: process.env.NUXT_DB_CONNECTION_STRING,
+    instagramCookieString: process.env.NUXT_INSTAGRAM_COOKIE_STRING,
     public: {},
   },
 
