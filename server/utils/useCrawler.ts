@@ -1,18 +1,13 @@
 import type { PlaywrightRequestHandler } from 'crawlee'
-import { BrowserName, DeviceCategory, PlaywrightCrawler, RequestList } from 'crawlee'
-import { INSTAGRAM_BASE_URL } from '~/constants'
+import { BrowserName, DeviceCategory, PlaywrightCrawler } from 'crawlee'
 import { useInstagramCookies } from './useInstagramCookies'
 
 interface UseCrawlerParams {
-  profile: string
   requestHandler: PlaywrightRequestHandler
 }
 
-export async function useCrawler({ profile, requestHandler }: UseCrawlerParams) {
+export function useCrawler({ requestHandler }: UseCrawlerParams) {
   const crawler = new PlaywrightCrawler({
-    requestList: await RequestList.open({
-      sources: [`${INSTAGRAM_BASE_URL}/${profile}/`],
-    }),
     requestHandler,
     maxRequestRetries: 0,
     browserPoolOptions: {
@@ -24,7 +19,6 @@ export async function useCrawler({ profile, requestHandler }: UseCrawlerParams) 
         },
       },
     },
-
     preNavigationHooks: [
       async ({ blockRequests, page }) => {
         page.setDefaultTimeout(5000)

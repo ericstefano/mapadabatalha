@@ -1,27 +1,31 @@
-import { createPlaywrightRouter, sleep } from 'crawlee'
+import type { rhymeBattleTable } from '../database/schema'
+import { createPlaywrightRouter, Dictionary, sleep } from 'crawlee'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { instagramPostsTable } from '../database/schema'
 
-export const DOWNLOAD_ASSETS_HANDLER_LABEL = 'DOWNLOAD_ASSETS'
-export const IMAGE_POST_ANCHOR_LOCATOR = 'a[href^="/p/"]'
-export const IMAGE_LOCATOR = 'img.xu96u03'
-export const TIMESTAMP_LOCATOR = 'span time'
-export const CAROUSEL_DOTS_LOCATOR = 'article ._acnb'
-export const POST_DESCRIPTION_LOCATOR = 'li h1'
-export const PROFILE_PICTURE_LOCATOR = 'canvas + span img'
-export const ALT_PROFILE_PICTURE_LOCATOR = 'div a img'
-
-interface UseRouterParams {
-  profile: string
-  rhymeBattleId: string
-  postIds: string[]
+const DOWNLOAD_ASSETS_HANDLER_LABEL = 'DOWNLOAD_ASSETS'
+const LOCATORS = {
+  IMAGE_POST_ANCHOR: 'a[href^="/p/"]',
+  IMAGE: 'img.xu96u03',
+  TIMESTAMP: 'span time',
+  CAROUSEL_DOTS: 'article ._acnb',
+  POST_DESCRIPTION: 'li h1',
+  PROFILE_PICTURE: 'canvas + span img',
+  ALT_PROFILE_PICTURE: 'div a img',
+}
+interface UseRouterContext {
   db: Awaited<ReturnType<typeof useDatabase>>
+  dictionary: {
+    battle: typeof rhymeBattleTable.$inferSelect
+    postIds: string[]
+  }
 }
 
-export function useRouter({ profile, rhymeBattleId, postIds, db }: UseRouterParams) {
+export function useRouter({ db, dictionary }: UseRouterContext) {
   const router = createPlaywrightRouter()
   router.addDefaultHandler(async ({ page, crawler }) => {
-    const profilePictureLocator = page.locator(PROFILE_PICTURE_LOCATOR).or(page.locator(ALT_PROFILE_PICTURE_LOCATOR)).first()
+    const { battle, postIds } = dictionary
+    const profilePictureLocator = page.locator(LOCATORS.PROFILE_PICTURE).or(page.locator(LOCATORS.ALT_PROFILE_PICTURE)).first()
     const profilePictureSrc = await profilePictureLocator.getAttribute('src')
     await crawler.addRequests([{
       url: profilePictureSrc!,
@@ -31,7 +35,7 @@ export function useRouter({ profile, rhymeBattleId, postIds, db }: UseRouterPara
         id: 'profile',
       },
     }])
-    const postLocator = page.locator(IMAGE_POST_ANCHOR_LOCATOR)
+    const postLocator = page.locator(LOCATORS.IMAGE_POST_ANCHOR)
     await postLocator.first().waitFor()
     const postElements = await postLocator.all()
     const posts = []
@@ -39,15 +43,15 @@ export function useRouter({ profile, rhymeBattleId, postIds, db }: UseRouterPara
       const href = await element.getAttribute('href')
       const id = href?.replace(/\/reel\/|\/p\/|\//g, '')
       if (postIds.includes(id!)) { return }
-      const img = element.locator(IMAGE_LOCATOR)
+      const img = element.locator(LOCATORS.IMAGE)
       const src = await img.getAttribute('src')
       const alt = await img.getAttribute('alt')
       await element.click()
-      const description = await page.locator(POST_DESCRIPTION_LOCATOR).textContent({
+      const description = await page.locator(LOCATORS.POST_DESCRIPTION).textContent({
         timeout: 500,
       }).catch(_error => '')
-      const postQuantity = (await page.locator(CAROUSEL_DOTS_LOCATOR).all()).length || 1
-      const timestamp = await page.locator(TIMESTAMP_LOCATOR).first().getAttribute('datetime')
+      const postQuantity = (await page.locator(LOCATORS.CAROUSEL_DOTS).all()).length || 1
+      const timestamp = await page.locator(LOCATORS.TIMESTAMP).first().getAttribute('datetime')
       await sleep(200)
       await page.keyboard.press('Escape')
       const post = {
@@ -58,7 +62,7 @@ export function useRouter({ profile, rhymeBattleId, postIds, db }: UseRouterPara
         timestamp,
         postQuantity,
         description,
-        rhymeBattleId,
+        rhymeBattleId: battle.id,
       }
       posts.push(post)
       await crawler.addRequests([{
@@ -73,8 +77,12 @@ export function useRouter({ profile, rhymeBattleId, postIds, db }: UseRouterPara
     await db.insert(instagramPostsTable).values(posts)
   })
 
-  router.addHandler(DOWNLOAD_ASSETS_HANDLER_LABEL, async ({ request, sendRequest, getKeyValueStore }) => {
-    const imageStore = await getKeyValueStore(`${profile}/images`)
+  interface AssetHandlerUserData {
+    id: string
+  }
+
+  router.addHandler<AssetHandlerUserData>(DOWNLOAD_ASSETS_HANDLER_LABEL, async ({ request, sendRequest, getKeyValueStore }) => {
+    const imageStore = await getKeyValueStore(`${dictionary.battle.instagram}/images`)
     if (request.skipNavigation) {
       const response = await sendRequest()
       const body = response.rawBody

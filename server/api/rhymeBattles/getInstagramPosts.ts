@@ -1,5 +1,6 @@
 import { eq } from 'drizzle-orm'
 import * as v from 'valibot'
+import { INSTAGRAM_BASE_URL } from '~/constants'
 import { instagramPostsTable, rhymeBattleTable } from '~/server/database/schema'
 
 const instagramPostsQuerySchema = v.object({
@@ -30,16 +31,15 @@ export default defineCachedEventHandler(
         statusMessage: 'Not Found',
       })
     }
-    const storedPosts = await db.query.instagramPostsTable.findMany({
+    const postIds = await db.query.instagramPostsTable.findMany({
+      where: eq(instagramPostsTable.rhymeBattleId, battle.id),
       columns: {
         id: true,
       },
-      where: eq(instagramPostsTable.rhymeBattleId, battle.id),
-    })
-    const postIds = storedPosts.map(post => post.id)
-    const router = useRouter({ profile: battle.instagram, rhymeBattleId: battle.id, postIds, db })
-    const crawler = await useCrawler({ profile: battle.instagram, requestHandler: router })
-    await crawler.run()
+    }).then(ids => ids.map(({ id }) => id))
+    const router = useRouter({ db, dictionary: { battle, postIds } })
+    const crawler = useCrawler({ requestHandler: router })
+    await crawler.run([`${INSTAGRAM_BASE_URL}/${battle.instagram}/`])
     return db.query.instagramPostsTable.findMany({
       columns: {
         rhymeBattleId: false,
