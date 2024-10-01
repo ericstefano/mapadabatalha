@@ -1,0 +1,5 @@
+{
+  "storageClientOptions": {
+    "localDataDirectory": "./server/storage/"
+  }
+}

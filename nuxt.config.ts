@@ -1,16 +1,26 @@
+import process from 'node:process'
 import { APP_DESCRIPTION } from './constants/index'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/icon',
-    "@nuxt/image",
-    "@nuxt/fonts",
+    '@nuxt/image',
+    '@nuxt/fonts',
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
+    'shadcn-nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/test-utils/module',
     '@vueuse/nuxt',
     '@pinia/nuxt',
   ],
+
+  ssr: true,
+
+  shadcn: {
+    prefix: '',
+    componentDir: './components/Shadcn',
+  },
 
   fonts: {
     defaults: {
@@ -19,11 +29,17 @@ export default defineNuxtConfig({
       subsets: [
         'latin-ext',
         'latin',
-      ]
+      ],
     },
     families: [
       { name: 'Inter', provider: 'google' },
-    ]
+    ],
+  },
+
+  runtimeConfig: {
+    dbConnectionString: process.env.NUXT_DB_CONNECTION_STRING,
+    instagramCookieString: process.env.NUXT_INSTAGRAM_COOKIE_STRING,
+    public: {},
   },
 
   app: {
@@ -58,7 +74,14 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext',
       },
-    }
+    },
+    storage: {
+      images: {
+        driver: 'fs',
+        // base: './server/storage/key_value_stores',
+        base: './public/posts',
+      },
+    },
   },
 
   colorMode: {
@@ -77,7 +100,7 @@ export default defineNuxtConfig({
         'Strict-Transport-Security': 'max-age=15552000; includeSubDomains;',
         'X-Content-Type-Options': 'nosniff',
         'X-XSS-Protection': '0',
-        'X-Powered-By': undefined
+        // 'X-Powered-By': undefined, //
       },
     },
   },
@@ -95,7 +118,7 @@ export default defineNuxtConfig({
   },
 
   icon: {
-    mode: 'svg'
+    mode: 'svg',
   },
 
   compatibilityDate: '2024-08-17',

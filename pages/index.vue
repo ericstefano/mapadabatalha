@@ -1,36 +1,18 @@
 <script lang="ts" setup>
-import type { AnyProps, PointFeature } from 'supercluster';
-interface Battle {
-  name: string
-  instagram: string
-  id: string
-  lat: number
-  lon: number
+const { data: battles, status } = await useFetch('/api/rhymeBattles/getAllPoints')
+const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
+const isDesktop = useMediaQuery('(min-width: 1024px)')
+const active = ref<string | null>(null)
+const open = computed(() => Boolean(active.value))
+function clearActive() {
+  active.value = null
 }
 
-const { data: battles, status } = await useFetch<Battle[]>('http://localhost:3000/battles', { server: true })
-const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
-
 watchEffect(() => {
-  if (status.value === 'success' && battles.value) {
-    const fromBattlesToPoints: PointFeature<AnyProps>[] = battles.value.map(value => ({
-      type: 'Feature',
-      properties: {
-        cluster: false,
-        name: value.name,
-        instagram: value.instagram
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [
-          value.lon,
-          value.lat,
-        ],
-      },
-      id: value.id,
-    }))
-    loadPoints(fromBattlesToPoints)
-  } else {
+  if (status.value === 'success' && battles.value && battles.value.length) {
+    loadPoints(battles.value)
+  }
+  else {
     loadPoints([])
   }
 })
@@ -38,11 +20,38 @@ watchEffect(() => {
 
 <template>
   <div v-if="status !== 'pending'" class="h-screen">
-    <Map :on-move="calculateClusters" :on-load="calculateClusters"></Map>
-    <template v-for="cluster in clusters" :key="cluster.id">
-      <BattleMarker v-if="!cluster.properties.cluster" :coordinates="cluster.geometry.coordinates" />
-      <ClusterMarker v-if="cluster.properties.cluster" :coordinates="cluster.geometry.coordinates"
-        :count="cluster.properties.point_count" :zoom="supercluster.getClusterExpansionZoom(cluster.id)" />
+    <Map :on-move="calculateClusters" :on-load="calculateClusters" />
+    <template v-for="point in clusters" :key="point.id">
+      <EntityMarker
+        v-if="!point.properties?.cluster" :id="point.id" v-model:active="active"
+        :coordinates="point.geometry.coordinates"
+      />
+      <ClusterMarker
+        v-if="point.properties?.cluster" :count="point.properties.point_count"
+        :zoom="supercluster.getClusterExpansionZoom(point.id)" :coordinates="point.geometry.coordinates"
+      />
     </template>
+    <Drawer v-if="!isDesktop" :open="open" @release="clearActive">
+      <DrawerContent @interact-outside="clearActive" @escape-key-down="clearActive">
+        <div class="mx-auto w-full max-w-sm h-[250px]">
+          <DrawerHeader>
+            <DrawerTitle>{{ battles?.find((battle) => battle.id === active)?.properties }}</DrawerTitle>
+            <DrawerDescription>Detalhes da Batalha</DrawerDescription>
+          </DrawerHeader>
+        </div>
+        <RhymeBattleInfo :id="active" />
+      </DrawerContent>
+    </Drawer>
+    <Sheet v-if="isDesktop" :open="open" @update:open="clearActive">
+      <SheetContent side="right">
+        <SheetHeader>
+          <SheetTitle>{{ battles?.find((battle) => battle.id === active)?.properties }}</SheetTitle>
+          <SheetDescription>
+            Detalhes da batalha
+          </SheetDescription>
+        </SheetHeader>
+        <RhymeBattleInfo :id="active" />
+      </SheetContent>
+    </Sheet>
   </div>
 </template>

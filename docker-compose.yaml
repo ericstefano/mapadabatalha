@@ -1,0 +1,19 @@
+services:
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: my-local-db
+    ports:
+      - '5432:5432'
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - node-network
+volumes:
+  dbdata:
+
+networks:
+  node-network:
+    driver: bridge
