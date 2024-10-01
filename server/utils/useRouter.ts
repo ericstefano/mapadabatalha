@@ -1,4 +1,3 @@
-import type { rhymeBattleTable } from '../database/schema'
 import { createPlaywrightRouter, Dictionary, sleep } from 'crawlee'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { instagramPostsTable } from '../database/schema'
@@ -15,16 +14,25 @@ const LOCATORS = {
 }
 interface UseRouterContext {
   db: Awaited<ReturnType<typeof useDatabase>>
-  dictionary: {
-    battle: typeof rhymeBattleTable.$inferSelect
-    postIds: string[]
-  }
+  storage: ReturnType<typeof useStorage>
 }
 
-export function useRouter({ db, dictionary }: UseRouterContext) {
+interface DefaultHandlerDictionary {
+  postIds: string[]
+  profileId: string
+  profileUsername: string
+  battleId: string
+}
+
+interface AssetHandlerUserData {
+  id: string
+  profileUsername: string
+}
+
+export function useRouter({ db, storage }: UseRouterContext) {
   const router = createPlaywrightRouter()
-  router.addDefaultHandler(async ({ page, crawler }) => {
-    const { battle, postIds } = dictionary
+  router.addDefaultHandler<DefaultHandlerDictionary>(async ({ page, crawler, request }) => {
+    const { postIds, profileId, profileUsername, battleId } = request.userData
     const profilePictureLocator = page.locator(LOCATORS.PROFILE_PICTURE).or(page.locator(LOCATORS.ALT_PROFILE_PICTURE)).first()
     const profilePictureSrc = await profilePictureLocator.getAttribute('src')
     await crawler.addRequests([{
@@ -33,6 +41,7 @@ export function useRouter({ db, dictionary }: UseRouterContext) {
       label: DOWNLOAD_ASSETS_HANDLER_LABEL,
       userData: {
         id: 'profile',
+        profileUsername,
       },
     }])
     const postLocator = page.locator(LOCATORS.IMAGE_POST_ANCHOR)
@@ -41,7 +50,8 @@ export function useRouter({ db, dictionary }: UseRouterContext) {
     const posts = []
     for await (const element of postElements) {
       const href = await element.getAttribute('href')
-      const id = href?.replace(/\/reel\/|\/p\/|\//g, '')
+      if (!href) { return }
+      const id = href.replace(/\/reel\/|\/p\/|\//g, '')
       if (postIds.includes(id!)) { return }
       const img = element.locator(LOCATORS.IMAGE)
       const src = await img.getAttribute('src')
@@ -62,7 +72,8 @@ export function useRouter({ db, dictionary }: UseRouterContext) {
         timestamp,
         postQuantity,
         description,
-        rhymeBattleId: battle.id,
+        instagramProfileId: profileId,
+        rhymeBattleId: battleId,
       }
       posts.push(post)
       await crawler.addRequests([{
@@ -70,6 +81,7 @@ export function useRouter({ db, dictionary }: UseRouterContext) {
         skipNavigation: true,
         userData: {
           id,
+          profileUsername,
         },
         label: DOWNLOAD_ASSETS_HANDLER_LABEL,
       }])
@@ -77,19 +89,13 @@ export function useRouter({ db, dictionary }: UseRouterContext) {
     await db.insert(instagramPostsTable).values(posts)
   })
 
-  interface AssetHandlerUserData {
-    id: string
-  }
-
-  router.addHandler<AssetHandlerUserData>(DOWNLOAD_ASSETS_HANDLER_LABEL, async ({ request, sendRequest, getKeyValueStore }) => {
-    const imageStore = await getKeyValueStore(`${dictionary.battle.instagram}/images`)
+  router.addHandler<AssetHandlerUserData>(DOWNLOAD_ASSETS_HANDLER_LABEL, async ({ request, sendRequest }) => {
     if (request.skipNavigation) {
       const response = await sendRequest()
       const body = response.rawBody
-      const contentType = response.headers['content-type']
-      return imageStore.setValue(request.userData.id, body, {
-        contentType,
-      })
+      // const contentType = response.headers['content-type']
+      await storage.setItemRaw(`${request.userData.profileUsername}:${request.userData.id}.jpeg`, body)
+      // await storage.setMeta()
     }
   })
 

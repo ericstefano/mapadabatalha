@@ -1,11 +1,14 @@
 import { isNull } from 'drizzle-orm'
-import { rhymeBattleTable } from '~/server/database/schema'
+import { rhymeBattlesTable } from '~/server/database/schema'
 
 export default defineEventHandler(
   async (event) => {
     const db = await useDatabase(event)
-    const battles = await db.query.rhymeBattleTable.findMany({
-      where: isNull(rhymeBattleTable.deletedAt),
+    const battles = await db.query.rhymeBattlesTable.findMany({
+      where: isNull(rhymeBattlesTable.deletedAt),
+      with: {
+        instagramProfiles: true,
+      },
     })
     if (!battles || !battles.length) {
       throw createError({

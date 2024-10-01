@@ -1,5 +1,5 @@
 {
-  "id": "cb7e03db-d7de-4018-8176-ab868c6da05c",
+  "id": "2bab97dc-3f4e-4fcf-b641-63cd9b2c92af",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,8 +14,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "battle_id": {
-          "name": "battle_id",
+        "instagram_profile_id": {
+          "name": "instagram_profile_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -78,26 +78,114 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "instagram_posts_battle_id_rhyme_battle_id_fk": {
-          "name": "instagram_posts_battle_id_rhyme_battle_id_fk",
-          "tableFrom": "instagram_posts",
-          "tableTo": "rhyme_battle",
-          "columnsFrom": [
-            "battle_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.rhyme_battle": {
-      "name": "rhyme_battle",
+    "public.instagram_profiles": {
+      "name": "instagram_profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "rhyme_battle_id": {
+          "name": "rhyme_battle_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.post_analyses": {
+      "name": "post_analyses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "instagram_post_id": {
+          "name": "instagram_post_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.rhyme_battles": {
+      "name": "rhyme_battles",
       "schema": "",
       "columns": {
         "id": {
@@ -108,12 +196,6 @@
         },
         "name": {
           "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "instagram": {
-          "name": "instagram",
           "type": "text",
           "primaryKey": false,
           "notNull": true

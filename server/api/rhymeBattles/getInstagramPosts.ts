@@ -1,7 +1,7 @@
+import { type RequestOptions, toughCookieToBrowserPoolCookie } from 'crawlee'
 import { eq } from 'drizzle-orm'
 import * as v from 'valibot'
-import { INSTAGRAM_BASE_URL } from '~/constants'
-import { instagramPostsTable, rhymeBattleTable } from '~/server/database/schema'
+import { rhymeBattlesTable } from '~/server/database/schema'
 
 const instagramPostsQuerySchema = v.object({
   id: v.string('id is required'),
@@ -22,8 +22,12 @@ export default defineCachedEventHandler(
       })
     }
     const db = await useDatabase(event)
-    const battle = await db.query.rhymeBattleTable.findFirst({
-      where: eq(rhymeBattleTable.id, parsed.output.id),
+    const battle = await db.query.rhymeBattlesTable.findFirst({
+      where: eq(rhymeBattlesTable.id, parsed.output.id),
+      with: {
+        instagramPosts: true,
+        instagramProfiles: true,
+      },
     })
     if (!battle) {
       throw createError({
@@ -31,21 +35,27 @@ export default defineCachedEventHandler(
         statusMessage: 'Not Found',
       })
     }
-    const postIds = await db.query.instagramPostsTable.findMany({
-      where: eq(instagramPostsTable.rhymeBattleId, battle.id),
-      columns: {
-        id: true,
-      },
-    }).then(ids => ids.map(({ id }) => id))
-    const router = useRouter({ db, dictionary: { battle, postIds } })
+    const storage = useStorage('images')
+    const router = useRouter({ db, storage })
     const crawler = useCrawler({ requestHandler: router })
-    await crawler.run([`${INSTAGRAM_BASE_URL}/${battle.instagram}/`])
-    return db.query.instagramPostsTable.findMany({
-      columns: {
-        rhymeBattleId: false,
+    const postIds = battle.instagramPosts.map(post => post.id)
+    const sources: RequestOptions[] = battle.instagramProfiles.map<RequestOptions>(profile => ({
+      url: profile.url,
+      userData: {
+        battleId: battle.id,
+        profileId: profile.id,
+        profileUsername: profile.username,
+        postIds,
       },
-      where: eq(instagramPostsTable.rhymeBattleId, battle.id),
-    })
+    }))
+    await crawler.run(sources)
+
+    return await db.query.rhymeBattlesTable.findFirst({
+      where: eq(rhymeBattlesTable.id, parsed.output.id),
+      with: {
+        instagramPosts: true,
+      },
+    }).then(battle => battle?.instagramPosts)
   },
-  { maxAge: 60 * 60 },
+  {maxAge: 60 * 60}
 )

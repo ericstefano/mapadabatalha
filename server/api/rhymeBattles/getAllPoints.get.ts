@@ -1,12 +1,15 @@
 import type { PointFeature } from 'supercluster'
 import { isNull } from 'drizzle-orm'
-import { rhymeBattleTable } from '~/server/database/schema'
+import { rhymeBattlesTable } from '~/server/database/schema'
 
 export default defineEventHandler(
   async (event) => {
     const db = await useDatabase(event)
-    const battles = await db.query.rhymeBattleTable.findMany({
-      where: isNull(rhymeBattleTable.deletedAt),
+    const battles = await db.query.rhymeBattlesTable.findMany({
+      where: isNull(rhymeBattlesTable.deletedAt),
+      with: {
+        instagramProfiles: true,
+      },
     })
     if (!battles || !battles.length) {
       throw createError({
@@ -14,11 +17,11 @@ export default defineEventHandler(
         statusMessage: 'Not Found',
       })
     }
-    return battles.map<PointFeature<Partial<typeof rhymeBattleTable.$inferSelect>>>(value => ({
+    return battles.map<PointFeature<Partial<typeof rhymeBattlesTable.$inferSelect>>>(value => ({
       type: 'Feature',
       properties: {
         name: value.name,
-        instagram: value.instagram,
+        instagramProfiles: value.instagramProfiles,
       },
       geometry: {
         type: 'Point',

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import * as v from 'valibot'
-import { rhymeBattleTable } from '~/server/database/schema'
+import { INSTAGRAM_BASE_URL } from '~/constants'
+import { instagramProfilesTable, rhymeBattlesTable } from '~/server/database/schema'
 
 const rhymeBattleBodySchema = v.object({
   name: v.string('name is required'),
@@ -24,15 +25,25 @@ export default defineEventHandler(
       })
     }
     const db = await useDatabase(event)
-    const [{ id }] = await db.insert(rhymeBattleTable)
+    const [battle] = await db.insert(rhymeBattlesTable)
       .values({
         id: randomUUID(),
         ...parsed.output,
       })
       .returning({
-        id: rhymeBattleTable.id,
+        id: rhymeBattlesTable.id,
+        lat: rhymeBattlesTable.lat,
+        lon: rhymeBattlesTable.lat,
+        name: rhymeBattlesTable.name,
       })
-    setResponseStatus(event, 200)
-    return { ...parsed.output, id }
+
+    await db.insert(instagramProfilesTable).values({
+      id: randomUUID(),
+      url: `${INSTAGRAM_BASE_URL}/${parsed.output.instagram}`,
+      username: parsed.output.instagram,
+      rhymeBattleId: battle.id,
+    }).returning()
+
+    return battle
   },
 )

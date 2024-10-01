@@ -6,3 +6,4 @@ dist
 .env
 .idea/
 server/storage
+public/posts

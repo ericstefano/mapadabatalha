@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
 
-  ssr: false,
+  ssr: true,
 
   shadcn: {
     prefix: '',
@@ -73,6 +73,13 @@ export default defineNuxtConfig({
     esbuild: {
       options: {
         target: 'esnext',
+      },
+    },
+    storage: {
+      images: {
+        driver: 'fs',
+        // base: './server/storage/key_value_stores',
+        base: './public/posts',
       },
     },
   },

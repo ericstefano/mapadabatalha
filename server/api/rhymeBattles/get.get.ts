@@ -1,6 +1,6 @@
 import { isNull } from 'drizzle-orm'
 import * as v from 'valibot'
-import { rhymeBattleTable } from '~/server/database/schema'
+import { rhymeBattlesTable } from '~/server/database/schema'
 
 const rhymeBatleQuerySchema = v.object({
   id: v.string('id is required'),
@@ -21,8 +21,14 @@ export default defineEventHandler(
       })
     }
     const db = await useDatabase(event)
-    const battle = await db.query.rhymeBattleTable.findFirst({
-      where: isNull(rhymeBattleTable.deletedAt),
+    const battle = await db.query.rhymeBattlesTable.findFirst({
+      where: isNull(rhymeBattlesTable.deletedAt),
+      columns: {
+        deletedAt: false,
+      },
+      with: {
+        instagramProfiles: true,
+      },
     })
     if (!battle) {
       throw createError({
