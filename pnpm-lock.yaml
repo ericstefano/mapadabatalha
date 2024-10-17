@@ -19,7 +19,7 @@ importers:
         version: 2.1.1
       crawlee:
         specifier: ^3.11.4
-        version: 3.11.4(playwright@1.47.2)
+        version: 3.11.4(playwright@1.48.1)
       drizzle-kit:
         specifier: ^0.24.2
         version: 0.24.2
@@ -74,7 +74,7 @@ importers:
         version: 1.8.0(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.22.5)
       '@nuxt/test-utils':
         specifier: ^3.14.2
-        version: 3.14.2(@playwright/test@1.47.2)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.47.2)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
+        version: 3.14.2(@playwright/test@1.48.1)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.48.1)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
       '@nuxtjs/color-mode':
         specifier: ^3.5.1
         version: 3.5.1(magicast@0.3.5)(rollup@4.22.5)
@@ -85,8 +85,8 @@ importers:
         specifier: ^0.5.4
         version: 0.5.4(magicast@0.3.5)(rollup@4.22.5)(typescript@5.5.4)(vue@3.5.10(typescript@5.5.4))
       '@playwright/test':
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ^1.48.1
+        version: 1.48.1
       '@types/pg':
         specifier: ^8.11.10
         version: 8.11.10
@@ -109,8 +109,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2(typescript@5.5.4)(vue@3.5.10(typescript@5.5.4))
       playwright-core:
-        specifier: ^1.47.2
-        version: 1.47.2
+        specifier: ^1.48.1
+        version: 1.48.1
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.13)
@@ -1636,8 +1636,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@playwright/test@1.47.2':
-    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==}
+  '@playwright/test@1.48.1':
+    resolution: {integrity: sha512-s9RtWoxkOLmRJdw3oFvhFbs9OJS0BzrLUc8Hf6l2UdCNd1rqeEyD4BhCJkvzeEoD1FsK4mirsWwGerhVmYKtZg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -5133,13 +5133,13 @@ packages:
   pkg-types@1.2.0:
     resolution: {integrity: sha512-+ifYuSSqOQ8CqP4MbZA5hDpb97n3E8SVWdJe+Wms9kj745lmd3b7EZJiqvmLwAlmRfjrI7Hi5z3kdBJ93lFNPA==}
 
-  playwright-core@1.47.2:
-    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==}
+  playwright-core@1.48.1:
+    resolution: {integrity: sha512-Yw/t4VAFX/bBr1OzwCuOMZkY1Cnb4z/doAFSwf4huqAGWmf9eMNjmK7NiOljCdLmxeRYcGPPmcDgU0zOlzP0YA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.47.2:
-    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==}
+  playwright@1.48.1:
+    resolution: {integrity: sha512-j8CiHW/V6HxmbntOfyB4+T/uk08tBy6ph0MpBXwuoofkSnLmlfdYNNkFTYD6ofzzlSqLA1fwH4vwvVFvJgLN0w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -6783,7 +6783,7 @@ snapshots:
       '@eslint-community/eslint-plugin-eslint-comments': 4.4.0(eslint@9.11.1(jiti@2.0.0))
       '@eslint/markdown': 6.1.1
       '@stylistic/eslint-plugin': 2.8.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
-      '@typescript-eslint/eslint-plugin': 8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
+      '@typescript-eslint/eslint-plugin': 8.7.0(@typescript-eslint/parser@7.18.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
       '@typescript-eslint/parser': 8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
       '@vitest/eslint-plugin': 1.1.4(@typescript-eslint/utils@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))
       eslint: 9.11.1(jiti@2.0.0)
@@ -7107,14 +7107,14 @@ snapshots:
       tslib: 2.7.0
       type-fest: 4.26.1
 
-  '@crawlee/browser-pool@3.11.4(playwright@1.47.2)':
+  '@crawlee/browser-pool@3.11.4(playwright@1.48.1)':
     dependencies:
       '@apify/log': 2.5.6
       '@apify/timeout': 0.3.1
       '@crawlee/core': 3.11.4
       '@crawlee/types': 3.11.4
       fingerprint-generator: 2.1.55
-      fingerprint-injector: 2.1.55(playwright@1.47.2)
+      fingerprint-injector: 2.1.55(playwright@1.48.1)
       lodash.merge: 4.6.2
       nanoid: 3.3.7
       ow: 0.28.2
@@ -7124,22 +7124,22 @@ snapshots:
       tiny-typed-emitter: 2.1.0
       tslib: 2.7.0
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.48.1
     transitivePeerDependencies:
       - supports-color
 
-  '@crawlee/browser@3.11.4(playwright@1.47.2)':
+  '@crawlee/browser@3.11.4(playwright@1.48.1)':
     dependencies:
       '@apify/timeout': 0.3.1
       '@crawlee/basic': 3.11.4
-      '@crawlee/browser-pool': 3.11.4(playwright@1.47.2)
+      '@crawlee/browser-pool': 3.11.4(playwright@1.48.1)
       '@crawlee/types': 3.11.4
       '@crawlee/utils': 3.11.4
       ow: 0.28.2
       tslib: 2.7.0
       type-fest: 4.26.1
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.48.1
     transitivePeerDependencies:
       - supports-color
 
@@ -7247,13 +7247,13 @@ snapshots:
       proper-lockfile: 4.1.2
       tslib: 2.7.0
 
-  '@crawlee/playwright@3.11.4(playwright@1.47.2)':
+  '@crawlee/playwright@3.11.4(playwright@1.48.1)':
     dependencies:
       '@apify/datastructures': 2.0.2
       '@apify/log': 2.5.6
       '@apify/timeout': 0.3.1
-      '@crawlee/browser': 3.11.4(playwright@1.47.2)
-      '@crawlee/browser-pool': 3.11.4(playwright@1.47.2)
+      '@crawlee/browser': 3.11.4(playwright@1.48.1)
+      '@crawlee/browser-pool': 3.11.4(playwright@1.48.1)
       '@crawlee/core': 3.11.4
       '@crawlee/types': 3.11.4
       '@crawlee/utils': 3.11.4
@@ -7267,17 +7267,17 @@ snapshots:
       string-comparison: 1.3.0
       tslib: 2.7.0
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.48.1
     transitivePeerDependencies:
       - puppeteer
       - supports-color
 
-  '@crawlee/puppeteer@3.11.4(playwright@1.47.2)':
+  '@crawlee/puppeteer@3.11.4(playwright@1.48.1)':
     dependencies:
       '@apify/datastructures': 2.0.2
       '@apify/log': 2.5.6
-      '@crawlee/browser': 3.11.4(playwright@1.47.2)
-      '@crawlee/browser-pool': 3.11.4(playwright@1.47.2)
+      '@crawlee/browser': 3.11.4(playwright@1.48.1)
+      '@crawlee/browser-pool': 3.11.4(playwright@1.48.1)
       '@crawlee/types': 3.11.4
       '@crawlee/utils': 3.11.4
       cheerio: 1.0.0-rc.12
@@ -8310,7 +8310,7 @@ snapshots:
       - supports-color
       - webpack-sources
 
-  '@nuxt/test-utils@3.14.2(@playwright/test@1.47.2)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.47.2)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))':
+  '@nuxt/test-utils@3.14.2(@playwright/test@1.48.1)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.48.1)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))':
     dependencies:
       '@nuxt/kit': 3.13.2(magicast@0.3.5)(rollup@4.22.5)
       '@nuxt/schema': 3.13.2(rollup@4.22.5)
@@ -8337,13 +8337,13 @@ snapshots:
       unenv: 1.10.0
       unplugin: 1.14.1
       vite: 5.4.8(@types/node@22.7.4)(terser@5.34.1)
-      vitest-environment-nuxt: 1.0.1(@playwright/test@1.47.2)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.47.2)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
+      vitest-environment-nuxt: 1.0.1(@playwright/test@1.48.1)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.48.1)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
       vue: 3.5.10(typescript@5.5.4)
       vue-router: 4.4.5(vue@3.5.10(typescript@5.5.4))
     optionalDependencies:
-      '@playwright/test': 1.47.2
+      '@playwright/test': 1.48.1
       jsdom: 25.0.1
-      playwright-core: 1.47.2
+      playwright-core: 1.48.1
       vitest: 1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1)
     transitivePeerDependencies:
       - magicast
@@ -8527,9 +8527,9 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@playwright/test@1.47.2':
+  '@playwright/test@1.48.1':
     dependencies:
-      playwright: 1.47.2
+      playwright: 1.48.1
 
   '@polka/url@1.0.0-next.28': {}
 
@@ -8791,10 +8791,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)':
+  '@typescript-eslint/eslint-plugin@8.7.0(@typescript-eslint/parser@7.18.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)':
     dependencies:
       '@eslint-community/regexpp': 4.11.1
-      '@typescript-eslint/parser': 8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
+      '@typescript-eslint/parser': 7.18.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
       '@typescript-eslint/scope-manager': 8.7.0
       '@typescript-eslint/type-utils': 8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
       '@typescript-eslint/utils': 8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
@@ -9803,24 +9803,24 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  crawlee@3.11.4(playwright@1.47.2):
+  crawlee@3.11.4(playwright@1.48.1):
     dependencies:
       '@crawlee/basic': 3.11.4
-      '@crawlee/browser': 3.11.4(playwright@1.47.2)
-      '@crawlee/browser-pool': 3.11.4(playwright@1.47.2)
+      '@crawlee/browser': 3.11.4(playwright@1.48.1)
+      '@crawlee/browser-pool': 3.11.4(playwright@1.48.1)
       '@crawlee/cheerio': 3.11.4
       '@crawlee/cli': 3.11.4
       '@crawlee/core': 3.11.4
       '@crawlee/http': 3.11.4
       '@crawlee/jsdom': 3.11.4
       '@crawlee/linkedom': 3.11.4
-      '@crawlee/playwright': 3.11.4(playwright@1.47.2)
-      '@crawlee/puppeteer': 3.11.4(playwright@1.47.2)
+      '@crawlee/playwright': 3.11.4(playwright@1.48.1)
+      '@crawlee/puppeteer': 3.11.4(playwright@1.48.1)
       '@crawlee/utils': 3.11.4
       import-local: 3.2.0
       tslib: 2.7.0
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.48.1
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -10508,7 +10508,7 @@ snapshots:
     dependencies:
       eslint: 9.11.1(jiti@2.0.0)
     optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 8.7.0(@typescript-eslint/parser@8.7.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
+      '@typescript-eslint/eslint-plugin': 8.7.0(@typescript-eslint/parser@7.18.0(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4))(eslint@9.11.1(jiti@2.0.0))(typescript@5.5.4)
 
   eslint-plugin-vue@9.28.0(eslint@9.11.1(jiti@2.0.0)):
     dependencies:
@@ -10776,12 +10776,12 @@ snapshots:
       header-generator: 2.1.55
       tslib: 2.7.0
 
-  fingerprint-injector@2.1.55(playwright@1.47.2):
+  fingerprint-injector@2.1.55(playwright@1.48.1):
     dependencies:
       fingerprint-generator: 2.1.55
       tslib: 2.7.0
     optionalDependencies:
-      playwright: 1.47.2
+      playwright: 1.48.1
 
   flat-cache@4.0.1:
     dependencies:
@@ -12754,11 +12754,11 @@ snapshots:
       mlly: 1.7.1
       pathe: 1.1.2
 
-  playwright-core@1.47.2: {}
+  playwright-core@1.48.1: {}
 
-  playwright@1.47.2:
+  playwright@1.48.1:
     dependencies:
-      playwright-core: 1.47.2
+      playwright-core: 1.48.1
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -14211,9 +14211,9 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.34.1
 
-  vitest-environment-nuxt@1.0.1(@playwright/test@1.47.2)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.47.2)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4)):
+  vitest-environment-nuxt@1.0.1(@playwright/test@1.48.1)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.48.1)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4)):
     dependencies:
-      '@nuxt/test-utils': 3.14.2(@playwright/test@1.47.2)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.47.2)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
+      '@nuxt/test-utils': 3.14.2(@playwright/test@1.48.1)(h3@1.12.0)(jsdom@25.0.1)(magicast@0.3.5)(nitropack@2.9.7(drizzle-orm@0.33.0(@types/pg@8.11.10)(pg@8.13.0))(magicast@0.3.5))(playwright-core@1.48.1)(rollup@4.22.5)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))(vue-router@4.4.5(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
     transitivePeerDependencies:
       - '@cucumber/cucumber'
       - '@jest/globals'
