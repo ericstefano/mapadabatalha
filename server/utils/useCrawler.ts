@@ -22,7 +22,8 @@ export function useCrawler({ requestHandler }: UseCrawlerParams) {
     preNavigationHooks: [
       async ({ blockRequests, page }) => {
         page.setDefaultTimeout(5000)
-        await page.context().addCookies(useInstagramCookies())
+        const cookies = useInstagramCookies()
+        await page.context().addCookies(cookies)
         await blockRequests({
           urlPatterns: [
             '.mp4',

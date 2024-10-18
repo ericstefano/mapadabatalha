@@ -4,13 +4,28 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: my-local-db
+      POSTGRES_DB: local-db
     ports:
       - '5432:5432'
     volumes:
       - dbdata:/data/db
     networks:
       - node-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - database
+    networks:
+      - node-network
+    env_file: .env
 volumes:
   dbdata:
 

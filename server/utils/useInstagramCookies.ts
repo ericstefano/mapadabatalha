@@ -40,6 +40,6 @@ export function useInstagramCookies() {
     throw new Error('Missing \'NUXT_INSTAGRAM_COOKIE_STRING\' in .env')
   const parsedCookies = v.safeParse(cookiesSchema, parseCookieString(instagramCookieString))
   if (!parsedCookies.success)
-    throw new Error(`Invalid Cookies. ${parsedCookies.issues.map(issue => issue.message).join(', ')}`)
+    throw new Error(`Invalid cookies. ${parsedCookies.issues.map(issue => issue.message).join(', ')}`)
   return parsedCookies.output
 }

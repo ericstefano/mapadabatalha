@@ -52,16 +52,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img
+  <!-- <img
     v-show="loaded && coordinates" ref="markerRef"
     :src="`/posts/${id}/profile.jpeg`"
     class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl"
     @click="handleClick"
-  >
+  > -->
 
-  <!-- <div
+  <div
     v-show="loaded && coordinates" ref="markerRef"
     class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
     @click="handleClick"
-  /> -->
+  />
 </template>

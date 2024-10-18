@@ -1,6 +1,8 @@
 import type { RequestOptions } from 'crawlee'
+import consola from 'consola'
 import { eq, sql } from 'drizzle-orm'
 import * as v from 'valibot'
+import { INSTAGRAM_BASE_URL } from '~/constants'
 import { instagramPostsTable, rhymeBattlesTable } from '~/server/database/schema'
 
 const rhymeBattleRouterParams = v.object({
@@ -60,7 +62,7 @@ export default defineCachedEventHandler(
     const crawler = useCrawler({ requestHandler: router })
     const postIds = battle.instagramPosts.map(post => post.id)
     const sources: RequestOptions[] = battle.instagramProfiles.map<RequestOptions>(profile => ({
-      url: profile.url,
+      url: `${INSTAGRAM_BASE_URL}/${profile.username}`,
       userData: {
         battleId: battle.id,
         profileId: profile.id,
@@ -68,7 +70,12 @@ export default defineCachedEventHandler(
         postIds,
       },
     }))
-    await crawler.run(sources)
+    try {
+      await crawler.run(sources)
+    }
+    catch (e) {
+      consola.error(e)
+    }
 
     const [countResult] = await db.select({
       count: sql`count(*)`.mapWith(Number).as('count'),

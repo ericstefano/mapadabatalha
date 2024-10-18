@@ -1,11 +1,11 @@
-import { createPlaywrightRouter, Dictionary, sleep } from 'crawlee'
+import { createPlaywrightRouter, sleep } from 'crawlee'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { instagramPostsTable } from '../database/schema'
 
 const DOWNLOAD_ASSETS_HANDLER_LABEL = 'DOWNLOAD_ASSETS'
 const LOCATORS = {
-  IMAGE_POST_ANCHOR: 'a[href^="/p/"]',
-  IMAGE: 'img.xu96u03',
+  IMAGE_POST_ANCHOR: 'a[href*="/p/"]',
+  IMAGE: 'img',
   TIMESTAMP: 'span time',
   CAROUSEL_DOTS: 'article ._acnb',
   POST_DESCRIPTION: 'li h1',
@@ -51,7 +51,7 @@ export function useRouter({ db, storage }: UseRouterContext) {
     for await (const element of postElements) {
       const href = await element.getAttribute('href')
       if (!href) { return }
-      const id = href.replace(/\/reel\/|\/p\/|\//g, '')
+      const id = href.replace(/.*\/(reel|p)\/([^/]+).*/, '$2')
       if (postIds.includes(id!)) { return }
       const img = element.locator(LOCATORS.IMAGE)
       const src = await img.getAttribute('src')

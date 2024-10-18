@@ -78,8 +78,7 @@ export default defineNuxtConfig({
     storage: {
       images: {
         driver: 'fs',
-        // base: './server/storage/key_value_stores',
-        base: './public/posts',
+        base: './public/',
       },
     },
   },

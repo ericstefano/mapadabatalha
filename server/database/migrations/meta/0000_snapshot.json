@@ -1,5 +1,5 @@
 {
-  "id": "e20cca32-0242-43e7-a58b-a76f626dbeec",
+  "id": "aaa0158b-cc8e-42e1-bbe8-5e8da1ce2074",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,14 +14,14 @@
           "primaryKey": true,
           "notNull": true
         },
-        "instagram_profile_id": {
-          "name": "instagram_profile_id",
+        "rhyme_battle_id": {
+          "name": "rhyme_battle_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "rhyme_battle_id": {
-          "name": "rhyme_battle_id",
+        "instagram_profile_id": {
+          "name": "instagram_profile_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -75,12 +75,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -110,12 +104,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -129,12 +117,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -177,12 +159,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -231,12 +207,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},

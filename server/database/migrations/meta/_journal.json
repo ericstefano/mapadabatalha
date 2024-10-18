@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1727893903625,
-      "tag": "0000_stale_mantis",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1728162125234,
-      "tag": "0001_modern_namor",
+      "when": 1729190332039,
+      "tag": "0000_uneven_lizard",
       "breakpoints": true
     }
   ]

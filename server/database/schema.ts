@@ -14,7 +14,6 @@ export const instagramProfilesTable = pgTable('instagram_profiles', {
   id: text('id').primaryKey(),
   rhymeBattleId: text('rhyme_battle_id').notNull(),
   username: text('username').notNull(),
-  url: text('url').notNull(),
   createdAt: timestamp('created_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
 })

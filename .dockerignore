@@ -1,0 +1,14 @@
+*.log
+dist
+.idea/
+server/storage
+public/posts
+node_modules
+.nuxt
+.output
+.vscode
+clear.sh
+pnpm-lock.yaml
+todo.md
+LICENSE
+README.md

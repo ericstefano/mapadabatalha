@@ -1,1 +1,0 @@
-ALTER TABLE "instagram_posts" ADD COLUMN "rhyme_battle_id" text NOT NULL;

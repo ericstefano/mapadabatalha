@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto'
 import * as v from 'valibot'
-import { INSTAGRAM_BASE_URL } from '~/constants'
 import { instagramProfilesTable, rhymeBattlesTable } from '~/server/database/schema'
 
 const rhymeBattleBodySchema = v.object({
@@ -39,7 +38,6 @@ export default defineEventHandler(
 
     await db.insert(instagramProfilesTable).values({
       id: randomUUID(),
-      url: `${INSTAGRAM_BASE_URL}/${parsed.output.instagram}`,
       username: parsed.output.instagram,
       rhymeBattleId: battle.id,
     }).returning()

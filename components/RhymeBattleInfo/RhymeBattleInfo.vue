@@ -31,7 +31,7 @@ async function increasePage() {
   <template v-if="hasData" />
   <div class="flex flex-row items-center gap-2 rounded-lg py-2 px-0">
     <img
-      v-if="id" :src="`/posts/${id}/profile.jpeg`"
+      v-if="id" :src="`/${id}/profile.jpeg`"
       class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal text-primary select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full"
       alt="profile"
     >
@@ -55,8 +55,8 @@ async function increasePage() {
           :src="`/posts/${post.rhymeBattleId}/${post.id}.jpeg`" :alt="post.alt"
         > -->
         <img
-          v-if="id" class="object-cover aspect-square h-full rounded-sm"
-          :src="`/posts/${post.rhymeBattleId}/${post.id}.jpeg`" :alt="post.alt"
+          v-if="id" class="object-cover aspect-square h-full rounded-sm overflow-hidden"
+          :src="`/${post.rhymeBattleId}/${post.id}.jpeg`" :alt="post.alt"
         >
       </NuxtLink>
       <Button
@@ -72,5 +72,8 @@ async function increasePage() {
         />
       </template>
     </div>
+    <p v-if="status === 'error' || (!hasData && status === 'success')" class="text-center text-sm">
+      Nenhuma postagem encontrada.
+    </p>
   </div>
 </template>
