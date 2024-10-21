@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxtjs/color-mode',
     '@vueuse/nuxt',
-    '@pinia/nuxt',
   ],
 
   ssr: true,

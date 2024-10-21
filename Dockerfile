@@ -45,5 +45,5 @@ RUN pnpm build --preset node_server
 EXPOSE 3000
 
 # Start the application
-# CMD sh -c "pnpm db:generate && pnpm db:migrate && pnpm db:push && pnpm dev"
-CMD sh -c "pnpm db:generate && pnpm db:migrate && pnpm db:push && node .output/server/index.mjs"
+CMD sh -c "pnpm db:generate && pnpm db:migrate && pnpm db:push && pnpm dev"
+# CMD sh -c "pnpm db:generate && pnpm db:migrate && pnpm db:push && pnpm start"

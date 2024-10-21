@@ -1,14 +1,12 @@
 *.log
-dist
 .idea/
-server/storage
-public/posts
-node_modules
 .nuxt
 .output
 .vscode
+node_modules
+dist
+server/storage
 clear.sh
-pnpm-lock.yaml
 todo.md
 LICENSE
 README.md

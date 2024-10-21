@@ -10,12 +10,19 @@
 [] Parâmetros/state de url para abrir batalhas
 [] Páginação das postagens do Instagram -> usar Cursor
 [] Ordenação por data das postagens do Instagram
-[] Links nos Detalhes da Batalha
+[x] Links nos Detalhes da Batalha
+[] Variáveis de ambiente dinâmicas
+[] Storage dinâmico (docker)
+[] Imagem única e mais inteligente, só mover o que precisa
+[] Comandos do drizzle no docker, ordem correta, mover arquivos certos
+[] Tratamento de imagem que não encontra caminho.
+[] Tratamento de erro com cookies expirados (ERR_TOO_MANY_REDIRECTS)
 
 - [] Instagrams (possível várias contas)
 - [] Google Maps -> Street View
 -
 
-[] Não salvar urls na tabela, montar elas no front (?)
+[] Mudar para Sqlite (?)
+[o] Não salvar urls na tabela, montar elas no front (?)
 
 [] Tamanho dinâmico dos modais -> alinhamento do marcador ao centro

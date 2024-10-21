@@ -6,6 +6,7 @@ const { id } = defineProps<RhymeBattleInfoProps>()
 const page = ref(1)
 const perPage = ref(2)
 const posts = ref([])
+const imageError = ref(false)
 const { data: postsData, status } = useFetch(`/api/rhyme-battles/${id}/instagram-posts`, {
   params: {
     page,
@@ -25,16 +26,25 @@ const hasData = computed(() => !!id && posts.value.length && battleData.value)
 async function increasePage() {
   page.value = page.value + 1
 }
+
+function handleImageError() {
+  imageError.value = true
+}
 </script>
 
 <template>
   <template v-if="hasData" />
   <div class="flex flex-row items-center gap-2 rounded-lg py-2 px-0">
     <img
-      v-if="id" :src="`/${id}/profile.jpeg`"
+      v-if="id && !imageError" :src="`/${id}/profile.jpeg`"
       class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal text-primary select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full"
       alt="profile"
+      @error.prevent="handleImageError"
     >
+    <div
+      v-else
+      class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal text-primary select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full"
+    />
     <h1 class="text-xl font-bold">
       {{ battleData?.name }}
     </h1>

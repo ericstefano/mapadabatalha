@@ -14,6 +14,10 @@ const active = defineModel<string | null>('active', {
   required: true,
 })
 const markerRef = shallowRef<HTMLElement | null>(null)
+const imageError = ref(false)
+function handleImageError() {
+  imageError.value = true
+}
 
 const { getZoom, flyTo, startRotateAround, stopRotateAround, loaded } = useMap()
 const { initializeMarker, terminateMarker } = useMarker()
@@ -52,15 +56,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- <img
-    v-show="loaded && coordinates" ref="markerRef"
-    :src="`/posts/${id}/profile.jpeg`"
+  <img
+    v-show="loaded && coordinates && !imageError" ref="markerRef"
+    :src="`/${id}/profile.jpeg`"
     class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl"
     @click="handleClick"
-  > -->
+    @error="handleImageError"
+  >
 
   <div
-    v-show="loaded && coordinates" ref="markerRef"
+    v-show="loaded && coordinates && imageError" ref="markerRef"
     class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
     @click="handleClick"
   />

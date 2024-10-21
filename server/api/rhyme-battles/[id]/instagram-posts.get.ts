@@ -74,6 +74,7 @@ export default defineCachedEventHandler(
       await crawler.run(sources)
     }
     catch (e) {
+      consola.log(Object.values(e))
       consola.error(e)
     }
 
@@ -81,7 +82,7 @@ export default defineCachedEventHandler(
       count: sql`count(*)`.mapWith(Number).as('count'),
     }).from(instagramPostsTable).where(eq(instagramPostsTable.rhymeBattleId, parsedRouterParams.output.id))
 
-    const totalPages = Math.ceil(countResult.count / parsedQueryParams.output.perPage)
+    const totalPages = Math.ceil(countResult.count / parsedQueryParams.output.perPage) || 1
     if (parsedQueryParams.output.page > totalPages) {
       throw createError({
         statusCode: 400,

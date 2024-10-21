@@ -3,7 +3,7 @@ node_modules
 dist
 .output
 .nuxt
-.env
+.env*
 .idea/
 server/storage
 public/posts
