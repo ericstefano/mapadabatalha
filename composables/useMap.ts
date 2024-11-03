@@ -18,6 +18,8 @@ export interface initializeMapOptions {
   onMove?: (event: MapLibreEvent<MouseEvent | TouchEvent | WheelEvent | undefined>) => void
   language?: string
   center?: LngLatLike
+  zoom?: number
+  pitch?: number
   maxBounds?: LngLatBoundsLike
   ref: ShallowRef<HTMLElement | null> | Ref<HTMLElement | null>
 }
@@ -97,14 +99,19 @@ export function useMap() {
     }
   }
 
+  const { public: {
+    maptilerKey,
+  } } = useRuntimeConfig()
+
   function initializeMap(options: initializeMapOptions) {
-    const { ref, onLoad, onMove, center = BRAZIL_CENTER_COORDINATES, language = 'visitor', maxBounds = BRAZIL_MAX_BOUNDS } = options
+    const { ref, onLoad, onMove, center = BRAZIL_CENTER_COORDINATES, zoom = 1, pitch = 0, language = 'visitor', maxBounds = BRAZIL_MAX_BOUNDS } = options
 
     map.value = markRaw(new Map({
       container: ref.value!,
-      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=U2r8rW378rl0OijWPkJB',
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${maptilerKey}`,
       center,
-      zoom: 1,
+      zoom,
+      pitch,
       antialias: true,
       maxBounds,
     }))

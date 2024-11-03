@@ -5,5 +5,6 @@ dist
 .nuxt
 .env*
 .idea/
+public/*/
 server/storage
 public/posts

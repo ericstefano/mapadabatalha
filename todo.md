@@ -17,6 +17,8 @@
 [] Comandos do drizzle no docker, ordem correta, mover arquivos certos
 [] Tratamento de imagem que não encontra caminho.
 [] Tratamento de erro com cookies expirados (ERR_TOO_MANY_REDIRECTS)
+[] Rodar método de unmount/ destroy / disconnect do drizzle ou pg em algum hook do nuxt para evitar "TOO MANY COnnections" ou trocar para SQLlite
+[] Adicionar referência do Rolê nas Gerais do Viaduto Santa Tereza.
 
 - [] Instagrams (possível várias contas)
 - [] Google Maps -> Street View
@@ -24,5 +26,6 @@
 
 [] Mudar para Sqlite (?)
 [o] Não salvar urls na tabela, montar elas no front (?)
+[] Mudar do maptiler para https://openfreemap.org/
 
 [] Tamanho dinâmico dos modais -> alinhamento do marcador ao centro

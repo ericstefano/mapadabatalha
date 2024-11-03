@@ -38,7 +38,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     dbConnectionString: process.env.NUXT_DB_CONNECTION_STRING,
     instagramCookieString: process.env.NUXT_INSTAGRAM_COOKIE_STRING,
-    public: {},
+    public: {
+      maptilerKey: process.env.NUXT_MAPTILER_KEY, // Maybe create a proxy endpoint in /server since this key is needed in frontend and will be exposed
+    },
   },
 
   app: {

@@ -1,14 +1,36 @@
 <script lang="ts" setup>
+import type { LngLatLike } from 'maplibre-gl'
+import { HORIZON_PITCH, MAX_ZOOM } from '~/constants'
+
 const { data: battles, status } = await useFetch('/api/rhyme-battles/points') // await aqui faz a página esperar a requisição carregar
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
 const isDesktop = useMediaQuery('(min-width: 1024px)')
+const urlParams = useUrlSearchParams()
 const active = ref<string | null>(null)
 const open = computed(() => Boolean(active.value))
+const mapProps = computed(() => {
+  const base = {
+    onMove: calculateClusters,
+    onLoad: calculateClusters,
+  }
+  const found = battles.value?.find(({ id }) => id === urlParams.id)
+  if (!found) {
+    return base
+  }
+
+  return {
+    ...base,
+    center: found.geometry.coordinates as LngLatLike,
+    zoom: MAX_ZOOM,
+    pitch: HORIZON_PITCH,
+  }
+})
+
 function clearActive() {
   active.value = null
 }
 
-watchEffect(() => {
+onMounted(() => {
   if (status.value === 'success' && battles.value && battles.value.length) {
     loadPoints(battles.value)
   }
@@ -16,11 +38,23 @@ watchEffect(() => {
     loadPoints([])
   }
 })
+
+// watch(status, () => {
+//   if (status.value === 'success' && battles.value && battles.value.length) {
+//     loadPoints(battles.value)
+//   }
+//   else {
+//     loadPoints([])
+//   }
+// }, {
+//   immediate: true,
+//   deep: true,
+// })
 </script>
 
 <template>
   <div v-if="status !== 'pending'" class="h-screen">
-    <Map :on-move="calculateClusters" :on-load="calculateClusters" />
+    <Map v-bind="mapProps" />
     <template v-for="point in clusters" :key="point.id">
       <EntityMarker
         v-if="!point.properties?.cluster" :id="point.id" v-model:active="active"
