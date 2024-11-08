@@ -100,7 +100,7 @@ export function useMap() {
   }
 
   const { public: {
-    maptilerKey,
+    maptilerToken,
   } } = useRuntimeConfig()
 
   function initializeMap(options: initializeMapOptions) {
@@ -108,7 +108,7 @@ export function useMap() {
 
     map.value = markRaw(new Map({
       container: ref.value!,
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${maptilerKey}`,
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${maptilerToken}`,
       center,
       zoom,
       pitch,

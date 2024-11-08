@@ -1,5 +1,7 @@
 {
   "storageClientOptions": {
-    "localDataDirectory": "./server/storage/"
+    "localDataDirectory": "./server/storage/",
+    "persistStorage": false,
+    "writeMetadata": false
   }
 }

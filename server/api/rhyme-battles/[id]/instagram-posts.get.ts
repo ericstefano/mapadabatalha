@@ -1,8 +1,8 @@
-import type { RequestOptions } from 'crawlee'
-import consola from 'consola'
 import { eq, sql } from 'drizzle-orm'
+import { createError } from 'h3'
 import * as v from 'valibot'
 import { INSTAGRAM_BASE_URL } from '~/constants'
+import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 import { instagramPostsTable, rhymeBattlesTable } from '~/server/database/schema'
 
 const rhymeBattleRouterParams = v.object({
@@ -22,7 +22,7 @@ function validateQueryParams(data: unknown) {
   return v.safeParse(rhymeBattleQueryParams, data)
 }
 
-export default defineCachedEventHandler(
+export default defineEventHandler(
   async (event) => {
     const parsedRouterParams = await getValidatedRouterParams(event, validateRouterParams)
     const parsedQueryParams = await getValidatedQuery(event, validateQueryParams)
@@ -57,25 +57,50 @@ export default defineCachedEventHandler(
       })
     }
 
-    const storage = useStorage('images')
-    const router = useRouter({ db, storage })
-    const crawler = useCrawler({ requestHandler: router })
     const postIds = battle.instagramPosts.map(post => post.id)
-    const sources: RequestOptions[] = battle.instagramProfiles.map<RequestOptions>(profile => ({
-      url: `${INSTAGRAM_BASE_URL}/${profile.username}`,
-      userData: {
-        battleId: battle.id,
-        profileId: profile.id,
-        profileUsername: profile.username,
-        postIds,
-      },
-    }))
+    const requestQueue = await useRequestQueue({
+      queueIdOrName: `${crypto.getRandomValues(new Uint32Array(1))[0]}`, // Bugging out without generating a queue with unique ID
+    })
+    battle.instagramProfiles.forEach((profile) => {
+      requestQueue.addRequest({
+        url: `${INSTAGRAM_BASE_URL}/${profile.username}`,
+        userData: {
+          battleId: battle.id,
+          profileId: profile.id,
+          profileUsername: profile.username,
+          postIds,
+        },
+      })
+    })
+    const storage = useStorage('images')
+    const requestHandler = useRouter({ db, storage })
+    const crawler = useCrawler({ requestHandler, requestQueue })
+
     try {
-      await crawler.run(sources)
+      await crawler.run()
     }
-    catch (e) {
-      consola.log(Object.values(e))
-      consola.error(e)
+    catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes(ERR_TOO_MANY_REDIRECTS)) {
+          throw createError({
+            statusCode: 401,
+            statusMessage: 'Unauthorized',
+            message: `${error.message}: the cookies may be expired or the page doesn't exist.`,
+          })
+        }
+
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Internal Server Error',
+          message: error.message,
+        })
+      }
+
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Internal Server Error',
+        message: 'Unknown error.',
+      })
     }
 
     const [countResult] = await db.select({
@@ -105,5 +130,4 @@ export default defineCachedEventHandler(
       totalPages,
     }
   },
-  // { maxAge: 60 * 60 },
 )

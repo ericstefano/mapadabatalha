@@ -1,5 +1,6 @@
 import { createPlaywrightRouter, sleep } from 'crawlee'
 import { INSTAGRAM_BASE_URL } from '~/constants'
+import { sanitizeId } from '~/utils/id'
 import { instagramPostsTable } from '../database/schema'
 
 const DOWNLOAD_ASSETS_HANDLER_LABEL = 'DOWNLOAD_ASSETS'
@@ -69,7 +70,7 @@ export function useRouter({ db, storage }: UseRouterContext) {
         href: `${INSTAGRAM_BASE_URL}${href}`,
         src,
         alt,
-        timestamp,
+        timestamp: new Date(timestamp!),
         postQuantity,
         description,
         instagramProfileId: profileId,
@@ -95,7 +96,7 @@ export function useRouter({ db, storage }: UseRouterContext) {
       const body = response.rawBody
       // const contentType = response.headers['content-type']
 
-      await storage.setItemRaw(`${request.userData.battleId}:${request.userData.id}.jpeg`, body) // Salvar com id do perfil do instagram ao invés do username.
+      await storage.setItemRaw(`${request.userData.battleId}:${sanitizeId(request.userData.id)}.jpeg`, body) // Salvar com id do perfil do instagram ao invés do username.
       // await storage.setMeta()
     }
   })

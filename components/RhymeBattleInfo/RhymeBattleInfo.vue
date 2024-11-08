@@ -1,29 +1,70 @@
 <script setup lang="ts">
 interface RhymeBattleInfoProps {
-  id: string | null
+  active: string | null
 }
-const { id } = defineProps<RhymeBattleInfoProps>()
+
+const props = defineProps<RhymeBattleInfoProps>()
+const emits = defineEmits<{
+  'update:active': [active: string | null]
+}>()
+
+const active = useVModel(props, 'active', emits, {
+  passive: true,
+})
+
 const page = ref(1)
 const perPage = ref(2)
-const posts = ref([])
 const imageError = ref(false)
-const { data: postsData, status } = useFetch(`/api/rhyme-battles/${id}/instagram-posts`, {
+/*
+  Keep data, reactive key issues:
+  https://github.com/nuxt/nuxt/issues/14507
+  https://github.com/nuxt/nuxt/issues/21532
+  https://github.com/nuxt/nuxt/issues/24332
+  https://github.com/nuxt/nuxt/issues/22348
+
+*/
+type GetInstagramPostsResponse = Awaited<ReturnType<typeof getInstagramPosts>>
+const parsedPosts = useState<GetInstagramPostsResponse['data']>(() => [])
+
+// eslint-disable-next-line unused-imports/no-unused-vars
+async function getInstagramPosts() {
+  return $fetch(`/api/rhyme-battles/${active.value}/instagram-posts`, {
+    params: {
+      page: page.value,
+      perPage: perPage.value,
+    },
+    async onResponse({ response }) {
+      parsedPosts.value = [...parsedPosts.value, ...response._data.data]
+    },
+  })
+}
+
+const { data: posts, status: postsStatus } = await useFetch(`/api/rhyme-battles/${active.value}/instagram-posts`, {
   params: {
     page,
     perPage,
   },
   server: false,
-  onResponse({ response }) {
-    posts.value = [...posts.value, ...response._data.data]
+  lazy: true,
+  async onResponse({ response }) {
+    parsedPosts.value = [...parsedPosts.value, ...response._data.data]
   },
 })
-const { data: battleData } = useFetch(`/api/rhyme-battles/${id}`, {
+
+const { data: battleData, status: battleStatus } = useFetch(`/api/rhyme-battles/${active.value}`, {
   server: false,
+  lazy: true,
 })
 
-const hasData = computed(() => !!id && posts.value.length && battleData.value)
+onMounted(() => {
+  parsedPosts.value = []
+  page.value = 1
+  perPage.value = 2
+})
 
-async function increasePage() {
+const hasData = computed(() => Boolean(active.value && battleData.value && posts.value?.data && posts.value.data.length))
+
+function increasePage() {
   page.value = page.value + 1
 }
 
@@ -32,22 +73,23 @@ function handleImageError() {
 }
 </script>
 
-<template>
-  <template v-if="hasData" />
+<template v-if="hasData">
   <div class="flex flex-row items-center gap-2 rounded-lg py-2 px-0">
     <img
-      v-if="id && !imageError" :src="`/${id}/profile.jpeg`"
+      v-if="active && battleStatus === 'success' && !imageError" :src="`/${active}/profile.jpeg`"
       class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal text-primary select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full"
       alt="profile"
       @error.prevent="handleImageError"
     >
+    <Skeleton v-else-if="battleStatus === 'pending'" class="shadow-xl drop-shadow-xl h-10 w-10 rounded-full shrink-0" />
     <div
       v-else
       class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal text-primary select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full"
     />
-    <h1 class="text-xl font-bold">
+    <h1 v-if="battleStatus === 'success'" class="text-xl font-bold">
       {{ battleData?.name }}
     </h1>
+    <Skeleton v-else-if="battleStatus === 'pending'" class="w-44 h-7" />
   </div>
   <div class="h-full w-full flex flex-col max-h-screen overscroll-none">
     <p class="text-muted-foreground mb-2">
@@ -57,7 +99,7 @@ function handleImageError() {
       class="flex gap-4 max-h-80 scroll-smooth overflow-y-hidden overflow-x-auto lg:overflow-y-auto lg:overflow-x-hidden lg:grid lg:grid-cols-2 lg:justify-center overscroll-none"
     >
       <NuxtLink
-        v-for="post in posts" :key="post.id"
+        v-for="post in parsedPosts" :key="post.id"
         class="hover:scale-[1.02] transition-all shrink-0 h-full grow-1 aspect-square" :href="post.href" target="blank"
       >
         <!-- <NuxtIMg
@@ -65,24 +107,24 @@ function handleImageError() {
           :src="`/posts/${post.rhymeBattleId}/${post.id}.jpeg`" :alt="post.alt"
         > -->
         <img
-          v-if="id" class="object-cover aspect-square h-full rounded-sm overflow-hidden"
-          :src="`/${post.rhymeBattleId}/${post.id}.jpeg`" :alt="post.alt"
+          v-if="active" class="object-cover aspect-square h-full rounded-sm overflow-hidden text-ellipsis"
+          :src="`/${post.rhymeBattleId}/${sanitizeId(post.id)}.jpeg`" :alt="post.alt"
         >
       </NuxtLink>
       <Button
-        v-if="hasData && status !== 'pending' && page < postsData?.totalPages" type="button" variant="outline"
+        v-if="hasData && postsStatus === 'success' && page < posts?.totalPages" type="button" variant="outline"
         class="h-full aspect-square lg:aspect-auto focus:bg-transparent lg:col-span-2" @click="increasePage"
       >
         Ver mais postagens
       </Button>
-      <template v-if="status === 'pending'">
+      <template v-if="postsStatus === 'pending'">
         <Skeleton
           v-for="number in Array.from({ length: perPage }, (_, index) => index)" :key="number"
           class="min-h-full aspect-square rounded-sm"
         />
       </template>
     </div>
-    <p v-if="status === 'error' || (!hasData && status === 'success')" class="text-center text-sm">
+    <p v-if="postsStatus === 'error' || (!hasData && postsStatus === 'success')" class="text-center text-sm">
       Nenhuma postagem encontrada.
     </p>
   </div>

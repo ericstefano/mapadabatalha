@@ -1,43 +1,43 @@
 import { relations } from 'drizzle-orm'
-import { integer, pgTable, real, text, timestamp } from 'drizzle-orm/pg-core'
+import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const rhymeBattlesTable = pgTable('rhyme_battles', {
+export const rhymeBattlesTable = sqliteTable('rhyme_battles', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   lat: real('lat').notNull(),
   lon: real('lon').notNull(),
-  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
-export const instagramProfilesTable = pgTable('instagram_profiles', {
+export const instagramProfilesTable = sqliteTable('instagram_profiles', {
   id: text('id').primaryKey(),
   rhymeBattleId: text('rhyme_battle_id').notNull(),
   username: text('username').notNull(),
-  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
-export const instagramPostsTable = pgTable('instagram_posts', {
+export const instagramPostsTable = sqliteTable('instagram_posts', {
   id: text('id').primaryKey(),
   rhymeBattleId: text('rhyme_battle_id').notNull(),
   instagramProfileId: text('instagram_profile_id').notNull(),
   href: text('href').notNull(),
   src: text('src').notNull(),
   alt: text('alt').notNull(),
-  timestamp: timestamp('timestamp', { mode: 'string', withTimezone: true }).notNull(),
+  timestamp: integer('timestamp', { mode: 'timestamp' }).notNull(),
   postQuantity: integer('post_quantity').notNull(),
   description: text('description').notNull(),
-  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
-export const postAnalysesTable = pgTable('post_analyses', {
+export const postAnalysesTable = sqliteTable('post_analyses', {
   id: text('id').primaryKey(),
   instagramPostId: text('instagram_post_id').notNull(),
   content: text('content').notNull(),
-  createdAt: timestamp('created_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'string', withTimezone: true }).notNull().defaultNow(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
 export const rhymeBattleRelations = relations(rhymeBattlesTable, ({ many }) => ({

@@ -1,22 +1,3 @@
-services:
-  database:
-    image: postgres:alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: local-db
-    ports:
-      - '5432:5432'
-    volumes:
-      - dbdata:/data/db
-    networks:
-      - node-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   # web:
   #   build: .
   #   ports:

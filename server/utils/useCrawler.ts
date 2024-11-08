@@ -1,14 +1,17 @@
-import type { PlaywrightRequestHandler } from 'crawlee'
-import { BrowserName, DeviceCategory, PlaywrightCrawler } from 'crawlee'
+import type { PlaywrightRequestHandler, RequestProvider } from 'crawlee'
+import { BrowserName, CriticalError, DeviceCategory, PlaywrightCrawler } from 'crawlee'
+import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 import { useInstagramCookies } from './useInstagramCookies'
 
 interface UseCrawlerParams {
   requestHandler: PlaywrightRequestHandler
+  requestQueue?: RequestProvider
 }
 
-export function useCrawler({ requestHandler }: UseCrawlerParams) {
+export function useCrawler({ requestHandler, requestQueue }: UseCrawlerParams) {
   const crawler = new PlaywrightCrawler({
     requestHandler,
+    requestQueue,
     maxRequestRetries: 0,
     browserPoolOptions: {
       fingerprintOptions: {
@@ -18,6 +21,12 @@ export function useCrawler({ requestHandler }: UseCrawlerParams) {
           locales: ['pt-BR'],
         },
       },
+    },
+    async failedRequestHandler(_, error) {
+      if (error.message.includes(ERR_TOO_MANY_REDIRECTS)) {
+        throw new CriticalError(ERR_TOO_MANY_REDIRECTS)
+      }
+      throw new CriticalError(error.message)
     },
     preNavigationHooks: [
       async ({ blockRequests, page }) => {

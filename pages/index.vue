@@ -68,13 +68,13 @@ onMounted(() => {
     <Drawer v-if="!isDesktop" :open="open" @release="clearActive">
       <DrawerContent class="h-[450px]" @interact-outside="clearActive" @escape-key-down="clearActive">
         <div class="mx-auto w-full max-w-xl px-6 h-[250px]">
-          <RhymeBattleInfo :id="active" />
+          <RhymeBattleInfo v-model:active="active" />
         </div>
       </DrawerContent>
     </Drawer>
     <Sheet v-if="isDesktop" :open="open" @update:open="clearActive">
       <SheetContent side="right">
-        <RhymeBattleInfo :id="active" />
+        <RhymeBattleInfo v-model:active="active" />
       </SheetContent>
     </Sheet>
   </div>
