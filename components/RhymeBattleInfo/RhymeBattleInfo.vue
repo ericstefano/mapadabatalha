@@ -39,7 +39,7 @@ async function getInstagramPosts() {
   })
 }
 
-const { data: posts, status: postsStatus } = await useFetch(`/api/rhyme-battles/${active.value}/instagram-posts`, {
+const { data: posts, status: postsStatus, refresh: refreshPosts } = await useFetch(`/api/rhyme-battles/${active.value}/instagram-posts`, {
   params: {
     page,
     perPage,
@@ -120,12 +120,21 @@ function handleImageError() {
       <template v-if="postsStatus === 'pending'">
         <Skeleton
           v-for="number in Array.from({ length: perPage }, (_, index) => index)" :key="number"
-          class="min-h-full aspect-square rounded-sm"
+          class="min-w-full aspect-square rounded-sm"
         />
       </template>
     </div>
-    <p v-if="postsStatus === 'error' || (!hasData && postsStatus === 'success')" class="text-center text-sm">
+
+    <p v-if="postsStatus === 'success' && !hasData" class="text-sm mt-1">
       Nenhuma postagem encontrada.
     </p>
+    <div v-if="postsStatus === 'error'" class="w-full flex flex-col mt-1">
+      <p class="text-red-400 text-sm mb-4">
+        Erro ao buscar as postagens. Por favor, tente novamente.
+      </p>
+      <Button variant="outline" class="mx-auto" @click="refreshPosts">
+        Tentar novamente
+      </Button>
+    </div>
   </div>
 </template>
