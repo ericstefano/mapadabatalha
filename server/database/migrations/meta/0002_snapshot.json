@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8ae9e5c9-db74-4f1e-91b2-150667c10b7c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "4e29115f-a5d6-41a9-9ce4-69fd2e5bfb64",
+  "prevId": "cbc4f9bd-beab-464d-b0f6-f249fd9424d7",
   "tables": {
     "instagram_posts": {
       "name": "instagram_posts",
@@ -39,7 +39,7 @@
           "name": "alt",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "timestamp": {
@@ -60,7 +60,7 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "created_at": {
@@ -216,8 +216,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "error": {
-          "name": "error",
+        "errors": {
+          "name": "errors",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -324,7 +324,9 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"post_analyses\".\"error\"": "\"post_analyses\".\"errors\""
+    }
   },
   "internal": {
     "indexes": {}

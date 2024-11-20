@@ -1,5 +1,7 @@
 export const APP_NAME = 'Mapa da Batalha'
 export const APP_DESCRIPTION = 'Vitesse for Nuxt 3'
 export const INSTAGRAM_BASE_URL = 'https://www.instagram.com'
+export const OPEN_ROUTER_BASE_URL = 'https://openrouter.ai/api/v1'
+export const MAPTILER_BASE_URL = 'https://api.maptiler.com/maps/streets-v2/'
 export const MAX_ZOOM = 17.5
 export const HORIZON_PITCH = 85

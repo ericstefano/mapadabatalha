@@ -28,6 +28,7 @@ export default defineEventHandler(
       throw createError({
         statusCode: 404,
         statusMessage: 'Not Found',
+        message: `The rhyme battle id "${parsed.output.id}" was not found.`,
       })
     }
     return battle

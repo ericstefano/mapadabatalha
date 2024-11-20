@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8ae9e5c9-db74-4f1e-91b2-150667c10b7c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "cbc4f9bd-beab-464d-b0f6-f249fd9424d7",
+  "prevId": "8ae9e5c9-db74-4f1e-91b2-150667c10b7c",
   "tables": {
     "instagram_posts": {
       "name": "instagram_posts",
@@ -39,7 +39,7 @@
           "name": "alt",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "timestamp": {
@@ -60,7 +60,7 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "created_at": {

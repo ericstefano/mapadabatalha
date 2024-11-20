@@ -1,6 +1,7 @@
 import type { FlyToOptions, LngLatBoundsLike, LngLatLike, MapLibreEvent, Marker } from 'maplibre-gl'
 import type { ShallowRef } from 'vue'
 import { GeolocateControl, Map, NavigationControl } from 'maplibre-gl'
+import { MAPTILER_BASE_URL } from '~/constants'
 
 const BRAZIL_CENTER_COORDINATES: LngLatLike = [-43.93420430483323, -19.91665382890247]
 const BRAZIL_MAX_BOUNDS: LngLatBoundsLike = [
@@ -108,7 +109,7 @@ export function useMap() {
 
     map.value = markRaw(new Map({
       container: ref.value!,
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${maptilerToken}`,
+      style: `${MAPTILER_BASE_URL}style.json?key=${maptilerToken}`,
       center,
       zoom,
       pitch,

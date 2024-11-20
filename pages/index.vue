@@ -66,8 +66,8 @@ onMounted(() => {
       />
     </template>
     <Drawer v-if="!isDesktop" :open="open" @release="clearActive">
-      <DrawerContent class="h-[450px]" @interact-outside="clearActive" @escape-key-down="clearActive">
-        <div class="mx-auto w-full max-w-xl px-6 h-[250px]">
+      <DrawerContent class="h-2/3" @interact-outside="clearActive" @escape-key-down="clearActive">
+        <div class="mx-auto w-full max-w-2xl px-6 h-[250px]">
           <RhymeBattleInfo v-model:active="active" />
         </div>
       </DrawerContent>

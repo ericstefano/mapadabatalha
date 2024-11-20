@@ -68,7 +68,6 @@ export function useRouter({ db, storage }: UseRouterContext) {
       const post = {
         id,
         href: `${INSTAGRAM_BASE_URL}${href}`,
-        src,
         alt,
         timestamp: new Date(timestamp!),
         postQuantity,
@@ -94,10 +93,8 @@ export function useRouter({ db, storage }: UseRouterContext) {
     if (request.skipNavigation) {
       const response = await sendRequest()
       const body = response.rawBody
-      // const contentType = response.headers['content-type']
 
-      await storage.setItemRaw(`${request.userData.battleId}:${sanitizeId(request.userData.id)}.jpeg`, body) // Salvar com id do perfil do instagram ao invés do username.
-      // await storage.setMeta()
+      await storage.setItemRaw(`${request.userData.battleId}:${sanitizeId(request.userData.id)}.jpeg`, body)
     }
   })
 

@@ -1,5 +1,5 @@
+// import { MemoryStorage } from '@crawlee/memory-storage'
 import type { StorageManagerOptions } from 'crawlee'
-import { MemoryStorage } from '@crawlee/memory-storage'
 import { RequestQueue } from 'crawlee'
 
 interface UseRequestQueueParams {

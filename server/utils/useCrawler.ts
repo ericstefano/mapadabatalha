@@ -1,5 +1,5 @@
-import type { PlaywrightRequestHandler, RequestProvider } from 'crawlee'
-import { BrowserName, CriticalError, DeviceCategory, PlaywrightCrawler } from 'crawlee'
+import type { DeviceCategory, PlaywrightRequestHandler, RequestProvider } from 'crawlee'
+import { BrowserName, CriticalError, PlaywrightCrawler } from 'crawlee'
 import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 import { useInstagramCookies } from './useInstagramCookies'
 
@@ -17,7 +17,7 @@ export function useCrawler({ requestHandler, requestQueue }: UseCrawlerParams) {
       fingerprintOptions: {
         fingerprintGeneratorOptions: {
           browsers: [BrowserName.chrome, BrowserName.firefox],
-          devices: [DeviceCategory.desktop],
+          devices: ['desktop' as DeviceCategory],
           locales: ['pt-BR'],
         },
       },
