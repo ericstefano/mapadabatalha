@@ -87,6 +87,9 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true,
     },
+    scheduledTasks: {
+      '* * * * *': ['scheduled:test'],
+    },
   },
 
   colorMode: {
