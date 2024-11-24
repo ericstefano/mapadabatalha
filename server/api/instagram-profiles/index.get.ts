@@ -1,7 +1,7 @@
 export default defineEventHandler(
   async (event) => {
     const db = await useDatabase(event)
-    const battles = await db.query.rhymeBattlesTable.findMany()
-    return { data: battles }
+    const profiles = await db.query.instagramProfilesTable.findMany()
+    return { data: profiles }
   },
 )

@@ -84,6 +84,9 @@ export default defineNuxtConfig({
         base: './public/',
       },
     },
+    experimental: {
+      tasks: true,
+    },
   },
 
   colorMode: {

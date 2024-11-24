@@ -4,7 +4,7 @@ import { HORIZON_PITCH, MAX_ZOOM } from '~/constants'
 
 const { data: battles, status } = await useFetch('/api/rhyme-battles/points') // await aqui faz a página esperar a requisição carregar
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
-const isDesktop = useMediaQuery('(min-width: 1024px)')
+const isDesktop = useMediaQuery('(min-width: 768px)')
 const urlParams = useUrlSearchParams()
 const active = ref<string | null>(null)
 const open = computed(() => Boolean(active.value))
@@ -13,7 +13,7 @@ const mapProps = computed(() => {
     onMove: calculateClusters,
     onLoad: calculateClusters,
   }
-  const found = battles.value?.find(({ id }) => id === urlParams.id)
+  const found = battles.value?.data?.find(({ id }) => id === urlParams.id)
   if (!found) {
     return base
   }
@@ -31,8 +31,8 @@ function clearActive() {
 }
 
 onMounted(() => {
-  if (status.value === 'success' && battles.value && battles.value.length) {
-    loadPoints(battles.value)
+  if (status.value === 'success' && battles.value && battles.value.data && battles.value.data.length) {
+    loadPoints(battles.value.data)
   }
   else {
     loadPoints([])
@@ -65,15 +65,17 @@ onMounted(() => {
         :zoom="supercluster.getClusterExpansionZoom(point.id)" :coordinates="point.geometry.coordinates"
       />
     </template>
-    <Drawer v-if="!isDesktop" :open="open" @release="clearActive">
-      <DrawerContent class="h-2/3" @interact-outside="clearActive" @escape-key-down="clearActive">
-        <div class="mx-auto w-full max-w-2xl px-6 h-[250px]">
+    <!-- Made it not dismissible because of buggy behavior with scroll / carousel -->
+    <Drawer v-if="!isDesktop" :open="open" :dismissible="false" @release="clearActive">
+      <DrawerContent class="h-3/4 px-6 pb-6" @interact-outside="clearActive" @escape-key-down="clearActive" @open-auto-focus.prevent>
+        <div class="mx-auto h-full max-w-2xl w-full">
           <RhymeBattleInfo v-model:active="active" />
         </div>
       </DrawerContent>
     </Drawer>
+
     <Sheet v-if="isDesktop" :open="open" @update:open="clearActive">
-      <SheetContent side="right">
+      <SheetContent side="left" @open-auto-focus.prevent>
         <RhymeBattleInfo v-model:active="active" />
       </SheetContent>
     </Sheet>

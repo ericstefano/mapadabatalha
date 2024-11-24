@@ -1,7 +1,7 @@
 export default defineEventHandler(
   async (event) => {
     const db = await useDatabase(event)
-    const battles = await db.query.rhymeBattlesTable.findMany()
-    return { data: battles }
+    const analyses = await db.query.postAnalysesTable.findMany()
+    return { data: analyses }
   },
 )

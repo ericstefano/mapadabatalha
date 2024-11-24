@@ -1,4 +1,4 @@
-import { useRouter } from '@/server/utils/useRouter'
+import { SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, useRouter } from '@/server/utils/useRouter'
 import { eq } from 'drizzle-orm'
 import { createError } from 'h3'
 import * as v from 'valibot'
@@ -48,6 +48,7 @@ export default defineEventHandler(
     battle.instagramProfiles.forEach((profile) => {
       requestQueue.addRequest({
         url: `${INSTAGRAM_BASE_URL}/${profile.username}`,
+        label: SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL,
         userData: {
           battleId: battle.id,
           profileId: profile.id,

@@ -18,8 +18,9 @@ export default defineEventHandler(
       })
     }
     const db = await useDatabase(event)
-    return db.query.postAnalysesTable.findMany({
+    const analyses = await db.query.postAnalysesTable.findMany({
       where: (analyses, { eq }) => eq(analyses.rhymeBattleId, parsed.output.id),
     })
+    return { data: analyses }
   },
 )

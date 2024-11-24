@@ -1,5 +1,5 @@
 import type { DeviceCategory, PlaywrightRequestHandler, RequestProvider } from 'crawlee'
-import { BrowserName, CriticalError, PlaywrightCrawler } from 'crawlee'
+import { BrowserName, CriticalError, OperatingSystemsName, PlaywrightCrawler } from 'crawlee'
 import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 import { useInstagramCookies } from './useInstagramCookies'
 
@@ -19,6 +19,7 @@ export function useCrawler({ requestHandler, requestQueue }: UseCrawlerParams) {
           browsers: [BrowserName.chrome, BrowserName.firefox],
           devices: ['desktop' as DeviceCategory],
           locales: ['pt-BR'],
+          operatingSystems: [OperatingSystemsName.windows, OperatingSystemsName.macos, OperatingSystemsName.linux, OperatingSystemsName.android],
         },
       },
     },
@@ -37,11 +38,14 @@ export function useCrawler({ requestHandler, requestQueue }: UseCrawlerParams) {
           urlPatterns: [
             '.mp4',
             '.webp',
+            '.jpg',
             '.png',
+            '.wasm',
             '.woff2',
             'gtm.js',
             'www.googletagmanager.com',
             'pixel.admaxium.com',
+            '*reels*'
           ],
         })
       },

@@ -3,7 +3,9 @@ import { INSTAGRAM_BASE_URL } from '~/constants'
 import { sanitizeId } from '~/utils/id'
 import { instagramPostsTable } from '../database/schema'
 
-const DOWNLOAD_ASSETS_HANDLER_LABEL = 'DOWNLOAD_ASSETS'
+export const SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL = 'SCRAPE_POSTS'
+export const DOWNLOAD_ASSET_HANDLER_LABEL = 'DOWNLOAD_ASSET'
+export const GET_PROFILE_PICTURE_HANDLER_LABEL = 'GET_PROFILE_PICTURE'
 const LOCATORS = {
   IMAGE_POST_ANCHOR: 'a[href*="/p/"]',
   IMAGE: 'img',
@@ -30,26 +32,19 @@ interface AssetHandlerUserData {
   battleId: string
 }
 
+function randomBetween(min: number, max: number) { return Math.floor(Math.random() * (max - min + 1)) + min }
+
 export function useRouter({ db, storage }: UseRouterContext) {
   const router = createPlaywrightRouter()
-  router.addDefaultHandler<DefaultHandlerDictionary>(async ({ page, crawler, request }) => {
+
+  router.addHandler<DefaultHandlerDictionary>(SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, async ({ page, crawler, request }) => {
     const { postIds, profileId, battleId } = request.userData
-    const profilePictureLocator = page.locator(LOCATORS.PROFILE_PICTURE).or(page.locator(LOCATORS.ALT_PROFILE_PICTURE)).first()
-    const profilePictureSrc = await profilePictureLocator.getAttribute('src')
-    await crawler.addRequests([{
-      url: profilePictureSrc!,
-      skipNavigation: true,
-      label: DOWNLOAD_ASSETS_HANDLER_LABEL,
-      userData: {
-        id: 'profile',
-        battleId,
-      },
-    }])
     const postLocator = page.locator(LOCATORS.IMAGE_POST_ANCHOR)
     await postLocator.first().waitFor()
     const postElements = await postLocator.all()
     const posts = []
     for await (const element of postElements) {
+      await sleep(randomBetween(737, 984)) // try to mess up instagram bot identifiers.
       const href = await element.getAttribute('href')
       if (!href) { return }
       const id = href.replace(/.*\/(reel|p)\/([^/]+).*/, '$2')
@@ -57,13 +52,19 @@ export function useRouter({ db, storage }: UseRouterContext) {
       const img = element.locator(LOCATORS.IMAGE)
       const src = await img.getAttribute('src')
       const alt = await img.getAttribute('alt')
-      await element.click()
+      await element.click({
+        delay: randomBetween(34, 72),
+        position: {
+          x: randomBetween(21, 109),
+          y: randomBetween(12, 56),
+        },
+      })
       const description = await page.locator(LOCATORS.POST_DESCRIPTION).textContent({
         timeout: 500,
       }).catch(_error => '')
       const postQuantity = (await page.locator(LOCATORS.CAROUSEL_DOTS).all()).length || 1
       const timestamp = await page.locator(LOCATORS.TIMESTAMP).first().getAttribute('datetime')
-      await sleep(200)
+      await sleep(200) // slow down so it can close.
       await page.keyboard.press('Escape')
       const post = {
         id,
@@ -83,17 +84,31 @@ export function useRouter({ db, storage }: UseRouterContext) {
           id,
           battleId,
         },
-        label: DOWNLOAD_ASSETS_HANDLER_LABEL,
+        label: DOWNLOAD_ASSET_HANDLER_LABEL,
       }])
     }
     await db.insert(instagramPostsTable).values(posts)
   })
 
-  router.addHandler<AssetHandlerUserData>(DOWNLOAD_ASSETS_HANDLER_LABEL, async ({ request, sendRequest }) => {
+  router.addHandler('GET_PROFILE_PICTURE_LABEL', async ({ page, crawler, request }) => {
+    const { battleId } = request.userData
+    const profilePictureLocator = page.locator(LOCATORS.PROFILE_PICTURE).or(page.locator(LOCATORS.ALT_PROFILE_PICTURE)).first()
+    const profilePictureSrc = await profilePictureLocator.getAttribute('src')
+    await crawler.addRequests([{
+      url: profilePictureSrc!,
+      skipNavigation: true,
+      label: DOWNLOAD_ASSET_HANDLER_LABEL,
+      userData: {
+        id: 'profile',
+        battleId,
+      },
+    }])
+  })
+
+  router.addHandler<AssetHandlerUserData>(DOWNLOAD_ASSET_HANDLER_LABEL, async ({ request, sendRequest }) => {
     if (request.skipNavigation) {
       const response = await sendRequest()
       const body = response.rawBody
-
       await storage.setItemRaw(`${request.userData.battleId}:${sanitizeId(request.userData.id)}.jpeg`, body)
     }
   })

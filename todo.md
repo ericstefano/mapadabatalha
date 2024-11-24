@@ -1,5 +1,4 @@
 [] Arrumar timestamps (fazer ser data, utilizar timezone brasileira ou fazer transformação)
-[x] Remover softDelete (deletedAt)
 [] Bugs com ssr
 [x] Bug com devtools -> apertar shift + alt + d
 [] bug com o Drawer, scrollando ao "clicar" no botão de ver mais postagens
@@ -13,8 +12,6 @@
 [x] Links nos Detalhes da Batalha
 [x] Variáveis de ambiente dinâmicas
 [] Storage dinâmico (docker)
-[] Imagem única e mais inteligente, só mover o que precisa
-[] Comandos do drizzle no docker, ordem correta, mover arquivos certos
 [] Tratamento de imagem que não encontra caminho.
 [o] Tratamento de erro com cookies expirados (ERR_TOO_MANY_REDIRECTS)
 [x] Rodar método de unmount/ destroy / disconnect do drizzle ou pg em algum hook do nuxt para evitar "TOO MANY COnnections"
@@ -31,8 +28,11 @@
 [] Soft delete das postagens / análises (?)
 [] Análise qualitativa com matriz de confusão, verificar com orientador.
 [] Perguntar ao modelo se a imagem se trata de um flyer ou não antes de entrar no fluxo de extração.
-[] Considerar cronjob
+[] Considerar cronjob (será possível com o Nuxt Events).
+[] Adicionar splash screen antes do carregamento do mapa.
 [] Considerar proxy (?)
+[x] Mudar hieraquia visual, postagens devem ser menores que as análises
+[] Transformar postagens em carousel também
 
 - [] Instagrams (possível várias contas)
 - [] Google Maps -> Street View
@@ -42,4 +42,34 @@
 [o] Não salvar urls na tabela, montar elas no front (?)
 [] Mudar do maptiler para https://openfreemap.org/
 
-[] Tamanho dinâmico dos modais -> alinhamento do marcador ao centro
+[] Fazer um webhook no email para enviar código do Instagram para logar no scraper quando os cookies da sessão expirarem (tratamento de erro).
+Usar o próprio perfil do Instagram como teste para ver se o scraper está com a sessão expirada.
+Basta verificar se carrega e se o botão tem o texto "seguir" ou "seguindo".
+
+[]Análise qualitativa primeiro, antes do frontend.
+[] Criar prompt para identificar se é flyer ou não antes de fazer a análise.
+[] Cadastrar várias batalhas (mostrar o sistema versão completa).
+[x] Mandar data da postagem ao invés do ano atual no prompt de usuário.
+[] Matriz de confusão para identificação de flyer (sim ou não e falsos positivos).
+[] Matriz de confusão deve ser para as DUAS partes do prompt.
+OU
+[] Taxa de acerto / taxa de erro -> Montar um bom critério aleatório para recolher as postagens (ex: recolher postagens de vários locais em um período), fazer classificação visual e manual.
+[] Buckets R2 ou cloudinary
+
+Extração:
+Priorizar perfil com data de extração de postagem mais antiga (createdAt) e com menor quantidade postagens.
+
+Análise:
+Priorizar perfil com data de análise mais antiga e com menor quantidade de análises NÃO DELETADAS
+
+Não fazer análises de postagens que já tenham análises, mesmo análises DELETADAS.
+Soft deletar todas as análises ao fazer novas análises (post endpoint).
+Definir melhor um critério para soft deletar as análises e refaze-las.
+
+Ao buscar as análises, retornar somente análises que deleteAt seja NULL.
+
+Aprender sobre medidas anti-scraping ->
+https://docs.apify.com/academy/anti-scraping
+
+<!-- Tentei, porém ficou esquisito e travado por conta do render do mapa -->
+<!-- [] Tamanho dinâmico dos modais -> alinhamento do marcador ao centro  -->

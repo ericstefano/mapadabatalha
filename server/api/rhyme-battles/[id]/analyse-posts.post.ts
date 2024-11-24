@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer'
-import { isBefore, parseISO } from 'date-fns'
+import { format, isBefore, parseISO } from 'date-fns'
 import * as v from 'valibot'
 import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
 import { postAnalysesTable } from '~/server/database/schema'
@@ -12,14 +12,17 @@ const QUOTES_REGEX = /['"]/g
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-
-function parseLine(raw?: string | null) {
+interface ParseLineParams {
+  rawLine?: string | null
+  postDate: Date
+}
+function parseLine({ rawLine, postDate }: ParseLineParams) {
   const errors: Partial<Record<keyof typeof POST_ANALYSIS_ERRORS, true>> = {}
-  const line = raw || ''
+  const line = rawLine || ''
   const split = line.split(',')
   if (split.length !== 2) {
     errors.INVALID_LINE_FORMAT = true
-    return { raw, result: 'null, null', errors }
+    return { rawLine, result: 'null, null', errors }
   }
   const rawDateTime = split[0].trim().replace(QUOTES_REGEX, '')
   const rawLocation = split[1].trim().replace(QUOTES_REGEX, '')
@@ -42,12 +45,12 @@ function parseLine(raw?: string | null) {
     errors.INVALID_DATETIME = true
   }
 
-  if (dateTimeIsValid && isBefore(parseISO(dateTime!), new Date())) {
+  if (dateTimeIsValid && isBefore(parseISO(dateTime!), postDate)) {
     errors.PAST_DATETIME = true
   }
 
   const result = `${dateTime},${location}`
-  return { raw, result, errors }
+  return { rawLine, result, errors }
 }
 
 function hasMessage(obj: Record<string, any>): obj is NonStreamingChoice {
@@ -127,6 +130,7 @@ export default defineEventHandler(
         message: `The rhyme battle id "${parsed.output.id}" has no recent Instagram posts to be analyzed.`,
       })
     }
+
     const storage = useStorage('images')
     const openRouterClient = useOpenRouter()
     await Promise.all(
@@ -154,8 +158,9 @@ export default defineEventHandler(
                 {
                   type: 'text',
                   text: `
-                  The current year is ${new Date().getFullYear()}.
+                  The current year is ${new Date().getFullYear()}. 
                   The image content will be in brazilian format.
+                  It was posted on ${format(post.timestamp, 'yyyy-MM-dd')}
                   Extract the datetime and location information from the next image.`,
                 },
                 {
@@ -218,7 +223,7 @@ export default defineEventHandler(
           return
         }
 
-        const parsedLine = parseLine(choice.message.content)
+        const parsedLine = parseLine({ rawLine: choice.message.content, postDate: post.timestamp })
 
         await db.insert(postAnalysesTable).values({
           id: completionsResponse.id,
@@ -231,7 +236,7 @@ export default defineEventHandler(
           totalCost: generationResponseData.total_cost,
           generationTime: generationResponseData.generation_time,
           latency: generationResponseData.latency,
-          rawContent: parsedLine.raw,
+          rawContent: parsedLine.rawLine,
           parsedContent: parsedLine.result,
           errors: parsedLine.errors,
         })

@@ -65,10 +65,6 @@ export const instagramProfilesRelations = relations(instagramProfilesTable, ({ o
     fields: [instagramProfilesTable.rhymeBattleId],
     references: [rhymeBattlesTable.id],
   }),
-  // instagramProfile: one(instagramProfilesTable, {
-  //   fields: [instagramProfilesTable.instagramProfileId],
-  //   references: [instagramProfilesTable.id],
-  // }),
   posts: many(instagramPostsTable),
 }))
 

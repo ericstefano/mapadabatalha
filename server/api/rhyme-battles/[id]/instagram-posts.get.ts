@@ -56,8 +56,8 @@ export default defineEventHandler(
       count: sql`count(*)`.mapWith(Number).as('count'),
     }).from(instagramPostsTable).where(eq(instagramPostsTable.rhymeBattleId, parsedRouterParams.output.id))
 
-    const totalPages = Math.ceil(countResult.count / parsedQueryParams.output.perPage) || 1
-    if (parsedQueryParams.output.page > totalPages) {
+    const totalPages = Math.ceil(countResult.count / parsedQueryParams.output.perPage)
+    if (totalPages !== 0 && parsedQueryParams.output.page > totalPages) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Bad Request',

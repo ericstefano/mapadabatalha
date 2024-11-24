@@ -20,7 +20,8 @@ const forwarded = useForwardPropsEmits(props, emits)
         props.class,
       )"
     >
-      <div class="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      <div v-if="forwarded.dismissible" class="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      <div v-else class="mt-4 h-2" />
       <slot />
     </DrawerContent>
   </DrawerPortal>
