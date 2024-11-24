@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1732049670020,
-      "tag": "0000_demonic_deathstrike",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1732049706943,
-      "tag": "0001_cultured_dragon_lord",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1732050014840,
-      "tag": "0002_flaky_susan_delgado",
+      "when": 1732471733783,
+      "tag": "0000_outstanding_vampiro",
       "breakpoints": true
     }
   ]

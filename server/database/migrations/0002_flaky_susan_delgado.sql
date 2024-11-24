@@ -1,1 +1,0 @@
-ALTER TABLE `post_analyses` RENAME COLUMN "error" TO "errors";

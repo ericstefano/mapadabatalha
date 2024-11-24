@@ -3,10 +3,10 @@ CREATE TABLE IF NOT EXISTS `instagram_posts` (
 	`rhyme_battle_id` text NOT NULL,
 	`instagram_profile_id` text NOT NULL,
 	`href` text NOT NULL,
-	`alt` text NOT NULL,
+	`alt` text,
 	`timestamp` integer NOT NULL,
 	`post_quantity` integer NOT NULL,
-	`description` text NOT NULL,
+	`description` text,
 	`created_at` integer NOT NULL,
 	`updated_at` integer NOT NULL
 );
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `post_analyses` (
 	`latency` integer,
 	`raw_content` text,
 	`parsed_content` text,
-	`error` text,
+	`errors` text,
 	`created_at` integer NOT NULL,
 	`updated_at` integer NOT NULL
 );
