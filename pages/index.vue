@@ -37,6 +37,12 @@ onMounted(() => {
   else {
     loadPoints([])
   }
+
+  // #TODO: Healt-Check, remove it.
+  setTimeout(async () => {
+    const response = await $fetch('/api/health-check')
+    console.log(response?.data)
+  }, 66000)
 })
 
 // watch(status, () => {
