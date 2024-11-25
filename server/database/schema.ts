@@ -39,7 +39,7 @@ export const instagramPostsTable = sqliteTable('instagram_posts', {
 export const postAnalysesTable = sqliteTable('post_analyses', {
   id: text('id').primaryKey(),
   rhymeBattleId: text('rhyme_battle_id').notNull(),
-  instagramPostId: text('instagram_post_id').notNull(),
+  instagramPostId: text('instagram_post_id').unique().notNull(),
   model: text('model').notNull(),
   provider: text('provider').notNull(),
   nativeTokensPrompt: integer('native_tokens_prompt'),
@@ -57,7 +57,7 @@ export const postAnalysesTable = sqliteTable('post_analyses', {
 export const postIndentificationsTable = sqliteTable('post_identifications', {
   id: text('id').primaryKey(),
   rhymeBattleId: text('rhyme_battle_id').notNull(),
-  instagramPostId: text('instagram_post_id').notNull(),
+  instagramPostId: text('instagram_post_id').unique().notNull(),
   model: text('model').notNull(),
   provider: text('provider').notNull(),
   nativeTokensPrompt: integer('native_tokens_prompt'),
@@ -65,7 +65,8 @@ export const postIndentificationsTable = sqliteTable('post_identifications', {
   totalCost: integer('total_cost'),
   generationTime: integer('generation_time'),
   latency: integer('latency'),
-  content: text('content'),
+  rawContent: text('raw_content'),
+  parsedContent: text('parsed_content'),
   error: integer('error', { mode: 'boolean' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),

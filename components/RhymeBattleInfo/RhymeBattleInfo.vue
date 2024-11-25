@@ -4,7 +4,6 @@ import type { UnwrapRefCarouselApi } from '../Shadcn/Carousel/interface'
 import type { GetInstagramPostsResponse } from './~types'
 import { isFuture, isPast, parseISO } from 'date-fns'
 import { INSTAGRAM_BASE_URL, LLM_INFO_MAP } from '~/constants'
-import Countdown from './Countdown.vue'
 import Divider from './Divider.vue'
 import Header from './Header.vue'
 import Subtitle from './Subtitle.vue'
@@ -179,7 +178,7 @@ function handleScrollEnd(api: UnwrapRefCarouselApi) {
   }
 }
 
-watch([postAnalyses.data, instagramPosts.data], async () => {
+watchAtMost([postAnalyses.data, instagramPosts.data], async () => {
   if (instagramPosts.status.value === 'error' || postAnalyses.status.value === 'error')
     return
 
@@ -203,6 +202,8 @@ watch([postAnalyses.data, instagramPosts.data], async () => {
     await analysePosts.execute()
     await postAnalyses.execute()
   }
+}, {
+  count: 2,
 })
 
 onMounted(() => {
@@ -243,16 +244,15 @@ onMounted(() => {
                 </NuxtLink>
               </p>
               <p v-if="isFuture(parseISO(analysis?.dateString))">
-                Segundo sua análise a próxima ocorrência do evento acontecerá no dia <span class="font-bold">{{
+                Segundo sua análise uma ocorrência do evento acontecerá no dia <span class="font-bold">{{
                   formatDateLong(parseISO(analysis?.dateString)) }}</span>
                 no local <span class="font-bold">"{{ analysis.location }}"</span>.
               </p>
               <p v-else-if="isPast(parseISO(analysis?.dateString))">
-                Segundo sua análise a última ocorrência do evento aconteceu no dia <span class="font-bold">{{
+                Segundo sua análise uma ocorrência do evento aconteceu no dia <span class="font-bold">{{
                   formatDateLong(parseISO(analysis?.dateString)) }}</span>
                 no local <span class="font-bold">"{{ analysis.location }}"</span>.
               </p>
-              <Countdown v-if="isFuture(parseISO(analysis?.dateString))" :to-date="parseISO(analysis?.dateString)" />
               <div class="flex justify-end">
                 <Popover size="top" :hide-when-detached="true">
                   <Button as-child variant="ghost" size="icon" class="p-0.5 h-8 w-8 text-green-300">
@@ -261,7 +261,7 @@ onMounted(() => {
                     </PopoverTrigger>
                   </Button>
                   <PopoverContent class="p-1.5 px-3 w-auto max-w-xs text-sm">
-                    Esta análise custou $ {{ analysis.totalCost?.toString().replace('.', ',') }}
+                    Esta análise custou $ {{ analysis.totalCost?.toFixed(8) }}
                   </PopoverContent>
                 </Popover>
                 <Popover size="top" :hide-when-detached="true">
@@ -302,7 +302,7 @@ onMounted(() => {
                     </PopoverTrigger>
                   </Button>
                   <PopoverContent class="p-1.5 px-3 w-auto max-w-xs text-sm">
-                    Esta análise custou $ {{ analysis.totalCost?.toString().replace('.', ',') }}
+                    Esta análise custou $ {{ analysis.totalCost?.toFixed(8) }}
                   </PopoverContent>
                 </Popover>
                 <Popover size="top" :hide-when-detached="true">
@@ -320,9 +320,7 @@ onMounted(() => {
           </CarouselItem>
         </template>
         <template v-if="page === 1 && hasNoPostAnalyses && (hasPostsLoading || hasPostAnalysesLoading)">
-          <CarouselItem
-            v-for="number in Array.from({ length: perPage }, (_, index) => index)" :key="number"
-          >
+          <CarouselItem>
             <div class="flex flex-col gap-2 justify-between min-h-full">
               <Skeleton class="flex-grow-0 flex-shrink-1 w-full rounded-sm h-10" />
               <Skeleton class="flex-grow-0 flex-shrink-1 w-full rounded-sm h-20" />

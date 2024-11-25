@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX `post_analyses_instagram_post_id_unique` ON `post_analyses` (`instagram_post_id`);--> statement-breakpoint
+CREATE UNIQUE INDEX `post_identifications_instagram_post_id_unique` ON `post_identifications` (`instagram_post_id`);

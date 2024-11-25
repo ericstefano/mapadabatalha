@@ -2,12 +2,32 @@ import type { Buffer } from 'node:buffer'
 import { sleep } from 'crawlee'
 import { format } from 'date-fns'
 import * as v from 'valibot'
-import { analyseSystemPrompt, MODEL_TO_USE_FOR_ANALYSIS } from '~/constants/llm'
+import { MODEL_TO_USE } from '~/constants/llm'
 import { postAnalysesTable } from '~/server/database/schema'
 import { sanitizeId } from '~/utils/id'
 import { bufferToBase64 } from '~/utils/image'
-import { hasMessage, parseLine } from '~/utils/llm'
+import { hasMessage, parseAnalysis } from '~/utils/llm'
 
+const analyseSystemPrompt = {
+  role: 'system' as const,
+  content: `
+You are a flyer image analysis tool that extracts and structures temporal and spatial information.
+- ANSWER in pt-br (brazilian portuguese)
+- ONLY RESPOND THE CSV LINE
+- ALWAYS validate dates:
+  * ONLY accept dates between current date and next 12 months
+  * If date is in the past or more than 12 months in future, return null
+- ONLY extract location if you are highly confident it's an event venue
+- If either date OR location is invalid/uncertain, return null for BOTH
+- ALWAYS ANSWER ONLY WITH A SINGLE LINE IN CSV FORMAT
+
+Required format: YYYY-MM-DDTHH:mm, location
+
+Valid response examples:
+null, null
+2024-03-15T14:30, Parque Central 
+`,
+}
 const analysePostRouterParams = v.object({
   id: v.string('id is required'),
 })
@@ -37,6 +57,12 @@ export default defineEventHandler(
         message: `The instagram post id "${parsed.output.id}" was not found.`,
       })
     }
+    const analysis = await db.query.postAnalysesTable.findFirst({
+      where: (analyses, { eq }) => (eq(analyses.instagramPostId, parsed.output.id)),
+    })
+    if (analysis) {
+      return sendNoContent(event)
+    }
     const storage = useStorage('images')
     const openRouterClient = useOpenRouter()
     const battleId = post.rhymeBattleId
@@ -54,7 +80,7 @@ export default defineEventHandler(
     const base64image = bufferToBase64(image)
 
     const requestBody = useOpenRouterRequestBody({
-      model: MODEL_TO_USE_FOR_ANALYSIS,
+      model: MODEL_TO_USE,
       systemPrompt: analyseSystemPrompt,
       userPrompt: {
         role: 'user',
@@ -112,7 +138,7 @@ export default defineEventHandler(
       return
     }
 
-    const parsedLine = parseLine({ rawLine: choice.message.content, postDate: post.timestamp })
+    const parsedLine = parseAnalysis({ raw: choice.message.content })
 
     await db.insert(postAnalysesTable).values({
       id: completionsResponse.id,
@@ -125,7 +151,7 @@ export default defineEventHandler(
       totalCost: generationResponseData.total_cost,
       generationTime: generationResponseData.generation_time,
       latency: generationResponseData.latency,
-      rawContent: parsedLine.rawLine,
+      rawContent: parsedLine.raw,
       parsedContent: parsedLine.result,
       errors: parsedLine.errors,
     })

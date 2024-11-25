@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm'
 import * as v from 'valibot'
 
 const rhymeBattleRouterParams = v.object({
@@ -18,9 +19,24 @@ export default defineEventHandler(
       })
     }
     const db = await useDatabase(event)
-    const analyses = await db.query.postAnalysesTable.findMany({
+    const combinedAnalyses = await db.query.postAnalysesTable.findMany({
       where: (analyses, { eq }) => eq(analyses.rhymeBattleId, parsed.output.id),
+      // with: {
+      //   postIdentifications: true
+      // },
+      extras: table => ({
+        totalCost: sql`${table.totalCost} 
+        + (SELECT total_cost FROM post_identifications WHERE rhyme_battle_id = ${parsed.output.id})`.as('totalCost'),
+        // nativeTokensPrompt: sql`${table.nativeTokensPrompt}
+        // + (SELECT native_tokens_prompt FROM post_identifications WHERE rhyme_battle_id = ${parsed.output.id})`.as('nativeTokensPrompt'),
+        // nativeTokensCompletion: sql`${table.nativeTokensCompletion}
+        // + (SELECT native_tokens_completion FROM post_identifications WHERE rhyme_battle_id = ${parsed.output.id})`.as('nativeTokensCompletion'),
+        // generationTime: sql`${table.generationTime}
+        // + (SELECT generation_time FROM post_identifications WHERE rhyme_battle_id = ${parsed.output.id})`.as('generationTime'),
+        // latency: sql`${table.latency}
+        // + (SELECT latency FROM post_identifications WHERE rhyme_battle_id = ${parsed.output.id})`.as('latency'),
+      }),
     })
-    return { data: analyses }
+    return { data: combinedAnalyses }
   },
 )

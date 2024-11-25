@@ -16,7 +16,7 @@ export function useCrawler({ requestHandler, requestQueue }: UseCrawlerParams) {
     browserPoolOptions: {
       fingerprintOptions: {
         fingerprintGeneratorOptions: {
-          browsers: [BrowserName.chrome, BrowserName.firefox],
+          browsers: [BrowserName.firefox],
           devices: ['desktop' as DeviceCategory],
           locales: ['pt-BR'],
           operatingSystems: [OperatingSystemsName.windows, OperatingSystemsName.macos, OperatingSystemsName.linux, OperatingSystemsName.android],

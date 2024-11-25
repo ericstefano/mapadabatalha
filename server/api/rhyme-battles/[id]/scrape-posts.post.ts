@@ -1,9 +1,6 @@
-import { SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, useRouter } from '@/server/utils/useRouter'
 import { eq } from 'drizzle-orm'
 import { createError } from 'h3'
 import * as v from 'valibot'
-import { INSTAGRAM_BASE_URL } from '~/constants'
-import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 import { rhymeBattlesTable } from '~/server/database/schema'
 
 const scrapePostsRouterParams = v.object({

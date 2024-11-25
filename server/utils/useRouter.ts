@@ -20,11 +20,12 @@ interface UseRouterContext {
   storage: ReturnType<typeof useStorage>
 }
 
-interface DefaultHandlerDictionary {
+export interface DefaultHandlerDictionary {
   postIds: string[]
   profileId: string
   profileUsername: string
   battleId: string
+  scrollSecs?: number
 }
 
 interface AssetHandlerUserData {
@@ -37,14 +38,17 @@ function randomBetween(min: number, max: number) { return Math.floor(Math.random
 export function useRouter({ db, storage }: UseRouterContext) {
   const router = createPlaywrightRouter()
 
-  router.addHandler<DefaultHandlerDictionary>(SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, async ({ page, crawler, request }) => {
-    const { postIds, profileId, battleId } = request.userData
+  router.addHandler<DefaultHandlerDictionary>(SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, async ({ page, crawler, request, infiniteScroll }) => {
+    const { postIds, profileId, battleId, scrollSecs = 1 } = request.userData
+    await infiniteScroll({
+      timeoutSecs: scrollSecs,
+    })
     const postLocator = page.locator(LOCATORS.IMAGE_POST_ANCHOR)
     await postLocator.first().waitFor()
     const postElements = await postLocator.all()
     const posts = []
     for await (const element of postElements) {
-      await sleep(randomBetween(737, 984)) // try to mess up instagram bot identifiers.
+      await sleep(randomBetween(700, 1000)) // try to mess up instagram bot identifiers.
       const href = await element.getAttribute('href')
       if (!href) { return }
       const id = href.replace(/.*\/(reel|p)\/([^/]+).*/, '$2')
@@ -52,11 +56,13 @@ export function useRouter({ db, storage }: UseRouterContext) {
       const img = element.locator(LOCATORS.IMAGE)
       const src = await img.getAttribute('src')
       const alt = await img.getAttribute('alt')
+      const rect = await element.evaluate(el => el.getBoundingClientRect())
+      await element.scrollIntoViewIfNeeded()
       await element.click({
-        delay: randomBetween(34, 72),
+        delay: randomBetween(34, 92),
         position: {
-          x: randomBetween(21, 109),
-          y: randomBetween(12, 56),
+          x: randomBetween(0, rect.width),
+          y: randomBetween(0, rect.height),
         },
       })
       const description = await page.locator(LOCATORS.POST_DESCRIPTION).textContent({
@@ -64,7 +70,7 @@ export function useRouter({ db, storage }: UseRouterContext) {
       }).catch(_error => '')
       const postQuantity = (await page.locator(LOCATORS.CAROUSEL_DOTS).all()).length || 1
       const timestamp = await page.locator(LOCATORS.TIMESTAMP).first().getAttribute('datetime')
-      await sleep(200) // slow down so it can close.
+      await sleep(randomBetween(200, 300)) // slow down so it can close.
       await page.keyboard.press('Escape')
       const post = {
         id,

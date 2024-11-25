@@ -1,20 +1,30 @@
-import { isBefore, parseISO } from 'date-fns'
 import * as v from 'valibot'
 import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
 
+function keepOnlyFirstComma(text: string): string {
+  const firstCommaIndex = text.indexOf(',')
+  if (firstCommaIndex === -1) {
+    return text
+  }
+
+  const firstPart = text.substring(0, firstCommaIndex + 1)
+  const secondPart = text.substring(firstCommaIndex + 1).replace(/,/g, '')
+  return firstPart + secondPart
+}
+
 const QUOTES_REGEX = /['"]/g
 
-interface ParseLineParams {
-  rawLine?: string | null
-  postDate: Date
+interface ParseAnalysisLineParams {
+  raw: string | null | undefined
 }
-export function parseLine({ rawLine, postDate }: ParseLineParams) {
+export function parseAnalysis({ raw }: ParseAnalysisLineParams) {
   const errors: Partial<Record<keyof typeof POST_ANALYSIS_ERRORS, true>> = {}
-  const line = rawLine || ''
-  const split = line.split(',')
+  const line = raw || ''
+  const treatedLine = keepOnlyFirstComma(line)
+  const split = treatedLine.split(',')
   if (split.length !== 2) {
     errors.INVALID_LINE_FORMAT = true
-    return { rawLine, result: 'null, null', errors }
+    return { raw, result: 'null, null', errors }
   }
   const rawDateTime = split[0].trim().replace(QUOTES_REGEX, '')
   const rawLocation = split[1].trim().replace(QUOTES_REGEX, '')
@@ -37,12 +47,24 @@ export function parseLine({ rawLine, postDate }: ParseLineParams) {
     errors.INVALID_DATETIME = true
   }
 
-  if (dateTimeIsValid && isBefore(parseISO(dateTime!), postDate)) {
-    errors.PAST_DATETIME = true
-  }
-
   const result = `${dateTime},${location}`
-  return { rawLine, result, errors }
+  return { raw, result, errors }
+}
+
+function checkBooleanish(booleanish: string) {
+  if (booleanish === 'true' || booleanish === 'false')
+    return booleanish
+  return null
+}
+
+interface ParseIdentifyLineParams {
+  raw: string | null | undefined
+}
+export function parseIdentify({ raw }: ParseIdentifyLineParams) {
+  const line = raw || ''
+  const treatedLine = line.trim().toLowerCase()
+  const result = checkBooleanish(treatedLine)
+  return { raw, error: result === null, result }
 }
 
 export function hasMessage(obj: Record<string, any>): obj is NonStreamingChoice {

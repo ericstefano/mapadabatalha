@@ -30,25 +30,31 @@ export default defineEventHandler(
     }
 
     const instagramPosts = await db.query.instagramPostsTable.findMany({
-      columns: { id: true, timestamp: true, description: true, alt: true, href: true, rhymeBattleId: true },
+      columns: { id: true },
       orderBy: (battles, { desc }) => [desc(battles.timestamp)],
       where: (posts, { eq }) => (eq(posts.rhymeBattleId, parsed.output.id)),
-      // where: (posts, { gt }) => (gt(posts.timestamp, subDays(new Date(), 15))),
       limit: 3,
+      // where: (posts, { gt }) => (gt(posts.timestamp, subDays(new Date(), 15))),
     })
-
-    // Talvez seja seguro remover essa verificação
-    if (!instagramPosts.length) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Not Found',
-        message: `The rhyme battle id "${parsed.output.id}" has no recent Instagram posts to be analyzed.`,
-      })
-    }
 
     await Promise.all(
       instagramPosts.map(post =>
-        $fetch(`/api/instagram-posts/${post.id}/analyse-post`, {
+        $fetch(`/api/instagram-posts/${post.id}/identify-post`, {
+          method: 'POST',
+        }),
+      ),
+    )
+
+    const identifiedPostIds = await db.query.postIndentificationsTable.findMany({
+      columns: { instagramPostId: true },
+      orderBy: (identifications, { desc }) => [desc(identifications.createdAt)],
+      where: (identifications, { eq, and }) => (and(eq(identifications.rhymeBattleId, parsed.output.id), eq(identifications.parsedContent, 'true'))),
+      limit: 3,
+    })
+
+    await Promise.all(
+      identifiedPostIds.map(identified =>
+        $fetch(`/api/instagram-posts/${identified.instagramPostId}/analyse-post`, {
           method: 'POST',
         }),
       ),
