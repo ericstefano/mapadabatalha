@@ -20,12 +20,13 @@ You are a flyer image analysis tool that extracts and structures temporal and sp
 - ONLY extract location if you are highly confident it's an event venue
 - If either date OR location is invalid/uncertain, return null for BOTH
 - ALWAYS ANSWER ONLY WITH A SINGLE LINE IN CSV FORMAT
+- ALWAYS USE ; AS THE SEPARATOR FOR THE CSV LINE
 
-Required format: YYYY-MM-DDTHH:mm, location
+Required format: YYYY-MM-DDTHH:mm;location
 
 Valid response examples:
-null, null
-2024-03-15T14:30, Parque Central 
+null;null
+2024-03-15T14:30;Parque Central 
 `,
 }
 const analysePostRouterParams = v.object({

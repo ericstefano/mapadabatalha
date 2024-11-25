@@ -20,7 +20,8 @@ You are a flyer image identification tool.
 - Return true only if highly confident the image is a flyer
 - Return false if image does not meet flyer criteria
 
-Respond format:
+
+Valid response examples:
 true
 false
 `,

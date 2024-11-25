@@ -38,24 +38,12 @@ onMounted(() => {
     loadPoints([])
   }
 
-  // #TODO: Healt-Check, remove it.
+  // #TODO: Health-Check, remove it.
   setTimeout(async () => {
     const response = await $fetch('/api/health-check')
     console.log('health-check:', response.status, response.checkCount)
   }, 66000)
 })
-
-// watch(status, () => {
-//   if (status.value === 'success' && battles.value && battles.value.length) {
-//     loadPoints(battles.value)
-//   }
-//   else {
-//     loadPoints([])
-//   }
-// }, {
-//   immediate: true,
-//   deep: true,
-// })
 </script>
 
 <template>
