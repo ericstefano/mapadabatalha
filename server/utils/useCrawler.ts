@@ -38,14 +38,18 @@ export function useCrawler({ requestHandler, requestQueue }: UseCrawlerParams) {
           urlPatterns: [
             '.mp4',
             '.webp',
-            '.jpg',
             '.png',
             '.wasm',
             '.woff2',
             'gtm.js',
             'www.googletagmanager.com',
             'pixel.admaxium.com',
-            '*reels*'
+
+            '.jpg',
+            '.jpeg',
+            '.avif',
+            '.svg',
+            '*reels*',
           ],
         })
       },

@@ -57,7 +57,6 @@ export function useRouter({ db, storage }: UseRouterContext) {
       const src = await img.getAttribute('src')
       const alt = await img.getAttribute('alt')
       const rect = await element.evaluate(el => el.getBoundingClientRect())
-      await element.scrollIntoViewIfNeeded()
       await element.click({
         delay: randomBetween(34, 92),
         position: {

@@ -62,9 +62,7 @@ export default defineEventHandler(
       })
     }
 
-    const instagramPosts = await db.query.instagramPostsTable.findMany({
-      where: (posts, { eq }) => eq(posts.instagramProfileId, parsedRouterParams.output.id),
-    })
+    const instagramPosts = await db.query.instagramPostsTable.findMany({ columns: { id: true } })
 
     const postIds = instagramPosts.map(post => post.id)
 

@@ -20,7 +20,7 @@ interface ParseAnalysisLineParams {
 export function parseAnalysis({ raw }: ParseAnalysisLineParams) {
   const errors: Partial<Record<keyof typeof POST_ANALYSIS_ERRORS, true>> = {}
   const line = raw || ''
-  const treatedLine = keepOnlyFirstComma(line)
+  const treatedLine = keepOnlyFirstComma(line).toLowerCase()
   const split = treatedLine.split(',')
   if (split.length !== 2) {
     errors.INVALID_LINE_FORMAT = true
