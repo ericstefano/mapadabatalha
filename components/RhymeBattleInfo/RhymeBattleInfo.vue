@@ -2,7 +2,7 @@
 import type { EngineType } from 'embla-carousel'
 import type { UnwrapRefCarouselApi } from '../Shadcn/Carousel/interface'
 import type { GetInstagramPostsResponse } from './~types'
-import { intlFormat, isFuture, isPast, parseISO } from 'date-fns'
+import { isFuture, isPast, parseISO } from 'date-fns'
 import { INSTAGRAM_BASE_URL, LLM_INFO_MAP } from '~/constants'
 import Countdown from './Countdown.vue'
 import Divider from './Divider.vue'
@@ -18,27 +18,6 @@ const props = defineProps<{
 const emits = defineEmits<{
   'update:active': [active: string | null]
 }>()
-
-function formatDateShort(date: Date | string) {
-  return intlFormat(date, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }, {
-    locale: 'pt-BR',
-  })
-}
-
-function formatDateLong(date: Date | string) {
-  return intlFormat(date, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-  }, {
-    locale: 'pt-BR',
-  })
-}
 
 const active = useVModel(props, 'active', emits, {
   passive: true,
@@ -237,7 +216,7 @@ onMounted(() => {
   <Header :id="active" :name="battle?.name" :status="battleStatus" />
   <div class="w-full flex flex-col">
     <Subtitle class="gap-0.5">
-      <Icon v-if="page === 1 && (hasPostsLoading || hasPostAnalysesLoading)" name="svg-spinners:bars-scale-middle" />
+      <Icon v-if="page === 1 && hasNoPostAnalyses && (hasPostsLoading || hasPostAnalysesLoading)" name="svg-spinners:bars-scale-middle" />
       <Icon v-else name="lucide:lightbulb" />
       Análises
     </Subtitle>
@@ -292,7 +271,7 @@ onMounted(() => {
                     </PopoverTrigger>
                   </Button>
                   <PopoverContent class="p-1.5 px-3 w-auto text-sm">
-                    Análise feita em {{ formatDateShort(analysis.createdAt) }}
+                    Análise feita em {{ formatDateLong(analysis.createdAt) }}
                   </PopoverContent>
                 </Popover>
               </div>
@@ -340,7 +319,7 @@ onMounted(() => {
             </div>
           </CarouselItem>
         </template>
-        <template v-if="page === 1 && (hasPostsLoading || hasPostAnalysesLoading)">
+        <template v-if="page === 1 && hasNoPostAnalyses && (hasPostsLoading || hasPostAnalysesLoading)">
           <CarouselItem
             v-for="number in Array.from({ length: perPage }, (_, index) => index)" :key="number"
           >

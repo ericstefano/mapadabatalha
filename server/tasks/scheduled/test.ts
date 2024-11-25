@@ -15,8 +15,7 @@ export default defineTask({
     // console.log({ context, name, payload })
     // const data = await $fetch('/api/instagram-posts')
     // console.log(data)
-    const response = await $fetch('/api/health-check')
-
+    await $fetch('/api/health-check')
     return { result: 'success' }
   },
 })

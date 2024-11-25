@@ -6,12 +6,12 @@ import { INSTAGRAM_BASE_URL } from '~/constants'
 import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 import { rhymeBattlesTable } from '~/server/database/schema'
 
-const rhymeBattleRouterParams = v.object({
+const scrapePostsRouterParams = v.object({
   id: v.string('id is required'),
 })
 
 function validateRouterParams(data: unknown) {
-  return v.safeParse(rhymeBattleRouterParams, data)
+  return v.safeParse(scrapePostsRouterParams, data)
 }
 
 export default defineEventHandler(
@@ -30,8 +30,7 @@ export default defineEventHandler(
     const battle = await db.query.rhymeBattlesTable.findFirst({
       where: eq(rhymeBattlesTable.id, parsedRouterParams.output.id),
       with: {
-        instagramPosts: true,
-        instagramProfiles: true,
+        instagramProfile: true,
       },
     })
     if (!battle) {
@@ -41,52 +40,8 @@ export default defineEventHandler(
       })
     }
 
-    const postIds = battle.instagramPosts.map(post => post.id)
-    const requestQueue = await useRequestQueue({
-      queueIdOrName: `${crypto.getRandomValues(new Uint32Array(1))[0]}`, // Bugs when not generating a queue with an unique ID
+    return $fetch(`/api/instagram-profiles/${battle.instagramProfile?.id}/scrape-posts`, {
+      method: 'POST',
     })
-    battle.instagramProfiles.forEach((profile) => {
-      requestQueue.addRequest({
-        url: `${INSTAGRAM_BASE_URL}/${profile.username}`,
-        label: SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL,
-        userData: {
-          battleId: battle.id,
-          profileId: profile.id,
-          profileUsername: profile.username,
-          postIds,
-        },
-      })
-    })
-    const storage = useStorage('images')
-    const requestHandler = useRouter({ db, storage })
-    const crawler = useCrawler({ requestHandler, requestQueue })
-
-    try {
-      await crawler.run()
-    }
-    catch (error) {
-      if (!(error instanceof Error)) {
-        throw createError({
-          statusCode: 500,
-          statusMessage: 'Internal Server Error',
-          message: 'Unknown error.',
-        })
-      }
-
-      if (error.message.includes(ERR_TOO_MANY_REDIRECTS)) {
-        throw createError({
-          statusCode: 401,
-          statusMessage: 'Unauthorized',
-          message: `${error.message}: the cookies may be expired or the page doesn't exist.`,
-        })
-      }
-
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Internal Server Error',
-        message: error.message,
-      })
-    }
-    return sendNoContent(event)
   },
 )

@@ -41,7 +41,7 @@ onMounted(() => {
   // #TODO: Healt-Check, remove it.
   setTimeout(async () => {
     const response = await $fetch('/api/health-check')
-    console.log(response?.data)
+    console.log('health-check:', response.status, response.checkCount)
   }, 66000)
 })
 

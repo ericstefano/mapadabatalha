@@ -3,21 +3,21 @@ import { createError } from 'h3'
 import * as v from 'valibot'
 import { instagramPostsTable, rhymeBattlesTable } from '~/server/database/schema'
 
-const rhymeBattleRouterParams = v.object({
+const instagramPostsRouterParams = v.object({
   id: v.string('id is required'),
 })
 
 function validateRouterParams(data: unknown) {
-  return v.safeParse(rhymeBattleRouterParams, data)
+  return v.safeParse(instagramPostsRouterParams, data)
 }
 
-const rhymeBattleQueryParams = v.object({
+const instagramPostsQueryParams = v.object({
   page: v.pipe(v.optional(v.string('page is required'), '1'), v.transform(Number), v.number('page must be a number'), v.integer('page must be an integer')),
   perPage: v.pipe(v.optional(v.string('limit is required'), '4'), v.transform(Number), v.number('limit must be a number'), v.integer('limit must be an integer')),
 })
 
 function validateQueryParams(data: unknown) {
-  return v.safeParse(rhymeBattleQueryParams, data)
+  return v.safeParse(instagramPostsQueryParams, data)
 }
 
 export default defineEventHandler(

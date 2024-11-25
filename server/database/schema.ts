@@ -54,10 +54,26 @@ export const postAnalysesTable = sqliteTable('post_analyses', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
-export const rhymeBattleRelations = relations(rhymeBattlesTable, ({ many }) => ({
-  instagramProfiles: many(instagramProfilesTable),
+export const postIndentificationsTable = sqliteTable('post_identifications', {
+  id: text('id').primaryKey(),
+  rhymeBattleId: text('rhyme_battle_id').notNull(),
+  instagramPostId: text('instagram_post_id').notNull(),
+  model: text('model').notNull(),
+  provider: text('provider').notNull(),
+  nativeTokensPrompt: integer('native_tokens_prompt'),
+  nativeTokensCompletion: integer('native_tokens_completion'),
+  totalCost: integer('total_cost'),
+  generationTime: integer('generation_time'),
+  latency: integer('latency'),
+  content: text('content'),
+  error: integer('error', { mode: 'boolean' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+})
+
+export const rhymeBattleRelations = relations(rhymeBattlesTable, ({ one, many }) => ({
+  instagramProfile: one(instagramProfilesTable),
   instagramPosts: many(instagramPostsTable),
-  // postAnalyses: many(postAnalysesTable),
 }))
 
 export const instagramProfilesRelations = relations(instagramProfilesTable, ({ one, many }) => ({
