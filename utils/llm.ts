@@ -12,7 +12,7 @@ export function parseAnalysis({ raw }: ParseAnalysisLineParams) {
   const split = line.split(';')
   if (split.length !== 2) {
     errors.INVALID_LINE_FORMAT = true
-    return { raw, result: 'null, null', errors }
+    return { raw, result: 'null;null', errors }
   }
   const rawDateTime = split[0].trim().replace(QUOTES_REGEX, '')
   const rawLocation = split[1].trim().replace(QUOTES_REGEX, '')
@@ -35,7 +35,7 @@ export function parseAnalysis({ raw }: ParseAnalysisLineParams) {
     errors.INVALID_DATETIME = true
   }
 
-  const result = `${dateTime},${location?.toLowerCase() || null}`
+  const result = `${dateTime};${location?.toLowerCase() || null}`
   return { raw, result, errors }
 }
 
@@ -50,7 +50,7 @@ interface ParseIdentifyLineParams {
 }
 export function parseIdentify({ raw }: ParseIdentifyLineParams) {
   const line = raw || ''
-  const treatedLine = line.trim().toLowerCase()
+  const treatedLine = line.trim().toLowerCase().replaceAll('.', '').replaceAll(',', '')
   const result = checkBooleanish(treatedLine)
   return { raw, error: result === null, result }
 }

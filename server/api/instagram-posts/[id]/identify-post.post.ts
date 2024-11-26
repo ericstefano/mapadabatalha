@@ -13,17 +13,8 @@ export const identifySystemPrompt = {
 You are a flyer image identification tool.
 - ONLY RESPOND true OR false
 - ONLY RESPOND WITH ONE WORD TOKEN
-- Identify if the image is a flyer by checking for these characteristics:
-  * Contains text and graphical design elements
-  * Appears to be an event announcement or advertisement
-  * Structured layout typical of informational posters
 - Return true only if highly confident the image is a flyer
 - Return false if image does not meet flyer criteria
-
-
-Valid response examples:
-true
-false
 `,
 }
 
@@ -87,8 +78,7 @@ export default defineEventHandler(
           {
             type: 'text',
             text: `
-                The image content will be in brazilian format.
-                Identify if the next image is a flyer.`,
+                Is the next image a flyer? Answer true or false.`,
           },
           {
             type: 'image_url',

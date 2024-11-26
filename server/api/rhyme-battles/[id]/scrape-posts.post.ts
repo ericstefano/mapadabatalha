@@ -26,18 +26,27 @@ export default defineEventHandler(
     const db = await useDatabase(event)
     const battle = await db.query.rhymeBattlesTable.findFirst({
       where: eq(rhymeBattlesTable.id, parsedRouterParams.output.id),
-      with: {
-        instagramProfile: true,
-      },
     })
     if (!battle) {
       throw createError({
         statusCode: 404,
         statusMessage: 'Not Found',
+        message: `The rhyme battle id "${parsedRouterParams.output.id}" was not found.`,
       })
     }
 
-    return $fetch(`/api/instagram-profiles/${battle.instagramProfile?.id}/scrape-posts`, {
+    const instagramProfile = await db.query.instagramProfilesTable.findFirst({
+      where: (profiles, { eq }) => (eq(profiles.rhymeBattleId, battle.id)),
+    })
+    if (!instagramProfile) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Not Found',
+        message: `The instagram profile id "${parsedRouterParams.output.id}" was not found.`,
+      })
+    }
+
+    return $fetch(`/api/instagram-profiles/${instagramProfile.id}/scrape-posts`, {
       method: 'POST',
     })
   },
