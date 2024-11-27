@@ -34,7 +34,6 @@ export default defineEventHandler(
       orderBy: (battles, { desc }) => [desc(battles.timestamp)],
       where: (posts, { eq }) => (eq(posts.rhymeBattleId, parsed.output.id)),
       limit: 3,
-      // where: (posts, { gt }) => (gt(posts.timestamp, subDays(new Date(), 15))),
     })
 
     await Promise.all(

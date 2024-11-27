@@ -28,7 +28,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="markerRef"
-    class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-red-600 text-lg shadow-lg"
+    class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-blue-400 text-xl shadow-lg"
     @click="handleClick"
   >
     {{ count }}

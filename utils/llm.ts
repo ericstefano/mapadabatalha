@@ -9,7 +9,8 @@ interface ParseAnalysisLineParams {
 export function parseAnalysis({ raw }: ParseAnalysisLineParams) {
   const errors: Partial<Record<keyof typeof POST_ANALYSIS_ERRORS, true>> = {}
   const line = raw || ''
-  const split = line.split(';')
+  const treated = line.replaceAll('\n', '')
+  const split = treated.split(';')
   if (split.length !== 2) {
     errors.INVALID_LINE_FORMAT = true
     return { raw, result: 'null;null', errors }
@@ -50,7 +51,7 @@ interface ParseIdentifyLineParams {
 }
 export function parseIdentify({ raw }: ParseIdentifyLineParams) {
   const line = raw || ''
-  const treatedLine = line.trim().toLowerCase().replaceAll('.', '').replaceAll(',', '')
+  const treatedLine = line.trim().toLowerCase().replaceAll('.', '').replaceAll(',', '').replaceAll('\n', '')
   const result = checkBooleanish(treatedLine)
   return { raw, error: result === null, result }
 }

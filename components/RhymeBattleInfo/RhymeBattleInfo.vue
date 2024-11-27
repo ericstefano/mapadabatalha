@@ -98,7 +98,7 @@ const parsedPostAnalyses = computed(() => {
     let location: string | null = null
 
     if (analysis.parsedContent) {
-      const split = analysis.parsedContent.split(',')
+      const split = analysis.parsedContent.split(';')
       dateString = split[0]
       location = split[1]
     }
@@ -178,7 +178,8 @@ function handleScrollEnd(api: UnwrapRefCarouselApi) {
   }
 }
 
-watchAtMost([postAnalyses.data, instagramPosts.data], async () => {
+const tries = ref(0)
+watch([postAnalyses.data, instagramPosts.data], async () => {
   if (instagramPosts.status.value === 'error' || postAnalyses.status.value === 'error')
     return
 
@@ -197,13 +198,12 @@ watchAtMost([postAnalyses.data, instagramPosts.data], async () => {
     return
 
   const hasAnalyses = postAnalyses.data.value && postAnalyses.data.value.data.length
-  if (!hasAnalyses) {
+  if (!hasAnalyses && tries.value < 2) {
     postAnalyses.clear()
     await analysePosts.execute()
     await postAnalyses.execute()
+    tries.value++
   }
-}, {
-  count: 2,
 })
 
 onMounted(() => {
@@ -226,11 +226,11 @@ onMounted(() => {
         <template v-if="!hasPostAnalysesLoading">
           <CarouselItem
             v-for="analysis in parsedPostAnalyses" :key="analysis.id"
-            class="min-h-44  relative flex items-center"
+            class="min-h-44 relative flex items-center"
           >
             <WarningOverlay :show="analysis.hasError" />
             <div v-if="!analysis.hasError" class="flex flex-col gap-2 select-none text-sm justify-between h-full">
-              <p>
+              <p class="max-h-24 overflow-hidden text-ellipsis">
                 O modelo
                 <span class="text-yellow-400 font-bold">{{ LLM_INFO_MAP[analysis.model].name }}</span> da <span
                   class="text-yellow-400 font-bold"
@@ -291,7 +291,7 @@ onMounted(() => {
                   postagem.
                 </NuxtLink>
               </p>
-              <p>
+              <p class="max-h-24 overflow-hidden text-ellipsis">
                 A sua resposta foi: <span class="italic font-bold">"{{ analysis.rawContent }}"</span>
               </p>
               <div class="flex justify-end">

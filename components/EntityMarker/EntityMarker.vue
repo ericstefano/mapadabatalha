@@ -7,7 +7,6 @@ const emits = defineEmits<{
   'update:active': [active: string | null]
 }>()
 const RENDER_ANIMATION_DELAY_MS = 200
-// const RENDER_ANIMATION_DELAY_MS = 200 + 50
 
 interface EntityMarkerProps {
   coordinates: LngLatLike
@@ -73,17 +72,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- <img
+  <img
     v-show="loaded && coordinates" ref="markerRef"
     :src="`/${id}/profile.jpeg`"
-    class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl"
-    @click="handleClick"
-    @error="handleImageError"
-  > -->
-
-  <div
-    v-show="loaded && coordinates" ref="markerRef"
     class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
     @click="handleClick"
-  />
+    @error.prevent
+  >
 </template>

@@ -48,7 +48,7 @@ export function useRouter({ db, storage }: UseRouterContext) {
     const postElements = await postLocator.all()
     const posts = []
     for await (const element of postElements) {
-      await sleep(randomBetween(700, 1000)) // try to mess up instagram bot identifiers.
+      await sleep(randomBetween(200, 500)) // try to mess up instagram bot identifiers.
       const href = await element.getAttribute('href')
       if (!href) { return }
       const id = href.replace(/.*\/(reel|p)\/([^/]+).*/, '$2')

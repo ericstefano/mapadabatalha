@@ -46,8 +46,9 @@ export default defineEventHandler(
       })
     }
 
-    return $fetch(`/api/instagram-profiles/${instagramProfile.id}/scrape-posts`, {
+    await $fetch(`/api/instagram-profiles/${instagramProfile.id}/scrape-posts`, {
       method: 'POST',
     })
+    return sendNoContent(event)
   },
 )

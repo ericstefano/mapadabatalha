@@ -77,8 +77,7 @@ export default defineEventHandler(
         content: [
           {
             type: 'text',
-            text: `
-                Is the next image a flyer? Answer true or false.`,
+            text: 'Is the next image a flyer? Answer true or false.',
           },
           {
             type: 'image_url',
