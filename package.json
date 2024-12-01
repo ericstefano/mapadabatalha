@@ -28,6 +28,7 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.6",
     "@libsql/client": "^0.14.0",
+    "@vee-validate/valibot": "4.13.2",
     "@vueuse/core": "^11.2.0",
     "@vueuse/nuxt": "^11.1.0",
     "class-variance-authority": "^0.7.0",
@@ -47,10 +48,12 @@
     "tailwind-merge": "^2.5.2",
     "ufo": "^1.5.4",
     "valibot": "^0.42.1",
-    "vaul-vue": "^0.2.0"
+    "vaul-vue": "^0.2.0",
+    "vee-validate": "4.13.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.7.3",
+    "@iconify-json/svg-spinners": "^1.2.1",
     "@nuxt/eslint": "^0.4.0",
     "@nuxt/fonts": "^0.10.2",
     "@nuxt/icon": "^1.5.2",

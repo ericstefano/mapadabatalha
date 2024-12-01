@@ -1,16 +1,12 @@
 import { relations } from 'drizzle-orm'
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
-import type { Time } from '~/types'
 
 export const rhymeBattlesTable = sqliteTable('rhyme_battles', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   lat: real('lat').notNull(),
   lon: real('lon').notNull(),
-  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
-  weekDay: text('week_day', { enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] }).notNull(),
-  startTime: text('start_time', { length: 5 }).$type<Time>().notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
@@ -18,7 +14,7 @@ export const rhymeBattlesTable = sqliteTable('rhyme_battles', {
 export const instagramProfilesTable = sqliteTable('instagram_profiles', {
   id: text('id').primaryKey(),
   rhymeBattleId: text('rhyme_battle_id').notNull(),
-  username: text('username').notNull(),
+  username: text('username').notNull().unique(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })

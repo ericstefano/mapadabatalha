@@ -14,6 +14,9 @@ importers:
       '@libsql/client':
         specifier: ^0.14.0
         version: 0.14.0
+      '@vee-validate/valibot':
+        specifier: 4.13.2
+        version: 4.13.2(vue@3.5.10(typescript@5.5.4))
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.2.0(vue@3.5.10(typescript@5.5.4))
@@ -74,10 +77,16 @@ importers:
       vaul-vue:
         specifier: ^0.2.0
         version: 0.2.0(radix-vue@1.9.6(vue@3.5.10(typescript@5.5.4)))(vue@3.5.10(typescript@5.5.4))
+      vee-validate:
+        specifier: 4.13.2
+        version: 4.13.2(vue@3.5.10(typescript@5.5.4))
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^3.7.3
         version: 3.7.3(@typescript-eslint/utils@8.7.0(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4))(@vue/compiler-sfc@3.5.13)(eslint-plugin-format@0.1.2(eslint@9.11.1(jiti@2.4.0)))(eslint@9.11.1(jiti@2.4.0))(typescript@5.5.4)(vitest@1.6.0(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1))
+      '@iconify-json/svg-spinners':
+        specifier: ^1.2.1
+        version: 1.2.1
       '@nuxt/eslint':
         specifier: ^0.4.0
         version: 0.4.0(eslint@9.11.1(jiti@2.4.0))(magicast@0.3.5)(rollup@4.22.5)(typescript@5.5.4)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
@@ -1432,6 +1441,9 @@ packages:
   '@iconify-json/lucide@1.2.6':
     resolution: {integrity: sha512-HVLLxmG/rJ91GqpEE97OHdEwb/LfjwMVdynWIrnjvNRQNoKvrYG2N2+jABSBibEhnYQOfv+k8/7X6fK44PEtKA==}
 
+  '@iconify-json/svg-spinners@1.2.1':
+    resolution: {integrity: sha512-QZNA4YzFD2zqdC6nIBJM6WlAGakUCjvMt92Ks1R4XFxkd76Ps3rdiauYWESDRZvNYURAByp2b9cwZarFula65g==}
+
   '@iconify/collections@1.0.465':
     resolution: {integrity: sha512-40sG1esFVHw4WdT9vH16FAu21KqZqudGHLCDs4uRAnLaym1XFXLJYzT1YEYlaV+mz3N7DQMBcjuJqQFPFFz42Q==}
 
@@ -2269,6 +2281,9 @@ packages:
     resolution: {integrity: sha512-SLr0eQfznVp63iKi47L4s5Yz+oiQjDA82VBP4jlXi7dM9fSIn1ul1aKvBqle/ZxI2cqY8zVGz60EjhjWeu754A==}
     peerDependencies:
       vue: '>=2.7 || >=3'
+
+  '@vee-validate/valibot@4.13.2':
+    resolution: {integrity: sha512-Vz/sAJc0i1Z1zsXbER15/7EUcD2mYHCaBrmmFs6oFBSDFoDXwJYjPMSklHqyOUVEt15wBVd9HU52f+4cD/5kxw==}
 
   '@vercel/nft@0.26.5':
     resolution: {integrity: sha512-NHxohEqad6Ra/r4lGknO52uc/GrWILXAMs1BB4401GTqww0fw1bAqzpG1XHuDO+dprg4GvsD9ZLLSsdo78p9hQ==}
@@ -6714,6 +6729,9 @@ packages:
     resolution: {integrity: sha512-sgECfZthyaCKW10N0fm27cg8HYTFK5qMWgypqkXMQ4Wbl/zZKx7xZICgcoxIIE+WFAP/MBL2EFwC/YvLxw3Zeg==}
     engines: {node: '>=0.10.0'}
 
+  valibot@0.33.3:
+    resolution: {integrity: sha512-/fuY1DlX8uiQ7aphlzrrI2DbG0YJk84JMgvz2qKpUIdXRNsS53varfo4voPjSrjUr5BSV2K0miSEJUOlA5fQFg==}
+
   valibot@0.42.1:
     resolution: {integrity: sha512-3keXV29Ar5b//Hqi4MbSdV7lfVp6zuYLZuA9V1PvQUsXqogr+u5lvLPLk3A4f74VUXDnf/JfWMN6sB+koJ/FFw==}
     peerDependencies:
@@ -6734,6 +6752,11 @@ packages:
     peerDependencies:
       radix-vue: ^1.4.0
       vue: ^3.3.0
+
+  vee-validate@4.13.2:
+    resolution: {integrity: sha512-HlpR/6MJ92TW9f135umMZKUqdd/tFQTxLNSf2ImbU4Y/MlLVAUpF1l64VdjTOhbClAqPjCb5p/SqHDxLpUHXrw==}
+    peerDependencies:
+      vue: ^3.4.26
 
   vite-hot-client@0.2.3:
     resolution: {integrity: sha512-rOGAV7rUlUHX89fP2p2v0A2WWvV3QMX2UYq0fRqsWSvFvev4atHWqjwGoKaZT1VTKyLGk533ecu3eyd0o59CAg==}
@@ -8219,6 +8242,10 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
+  '@iconify-json/svg-spinners@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify/collections@1.0.465':
     dependencies:
       '@iconify/types': 2.0.0
@@ -9422,6 +9449,14 @@ snapshots:
       hookable: 5.5.3
       unhead: 1.11.7
       vue: 3.5.10(typescript@5.5.4)
+
+  '@vee-validate/valibot@4.13.2(vue@3.5.10(typescript@5.5.4))':
+    dependencies:
+      type-fest: 4.26.1
+      valibot: 0.33.3
+      vee-validate: 4.13.2(vue@3.5.10(typescript@5.5.4))
+    transitivePeerDependencies:
+      - vue
 
   '@vercel/nft@0.26.5':
     dependencies:
@@ -14747,6 +14782,8 @@ snapshots:
 
   vali-date@1.0.0: {}
 
+  valibot@0.33.3: {}
+
   valibot@0.42.1(typescript@5.5.4):
     optionalDependencies:
       typescript: 5.5.4
@@ -14765,6 +14802,12 @@ snapshots:
       vue: 3.5.10(typescript@5.5.4)
     transitivePeerDependencies:
       - '@vue/composition-api'
+
+  vee-validate@4.13.2(vue@3.5.10(typescript@5.5.4)):
+    dependencies:
+      '@vue/devtools-api': 6.6.4
+      type-fest: 4.26.1
+      vue: 3.5.10(typescript@5.5.4)
 
   vite-hot-client@0.2.3(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1)):
     dependencies:

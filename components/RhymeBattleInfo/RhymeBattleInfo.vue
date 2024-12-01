@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { EngineType } from 'embla-carousel'
 import type { UnwrapRefCarouselApi } from '../Shadcn/Carousel/interface'
-import type { GetInstagramPostsResponse } from './~types'
+import type { GetInstagramPostsResponse } from './types'
 import { isFuture, isPast, parseISO } from 'date-fns'
-import { INSTAGRAM_BASE_URL, LLM_INFO_MAP } from '~/constants'
+import { INSTAGRAM_BASE_URL } from '~/constants'
+import { LLM_INFO_MAP } from '~/constants/llm'
 import Divider from './Divider.vue'
 import Header from './Header.vue'
 import Subtitle from './Subtitle.vue'
@@ -178,7 +179,6 @@ function handleScrollEnd(api: UnwrapRefCarouselApi) {
   }
 }
 
-const tries = ref(0)
 watch([postAnalyses.data, instagramPosts.data], async () => {
   if (instagramPosts.status.value === 'error' || postAnalyses.status.value === 'error')
     return
@@ -198,11 +198,10 @@ watch([postAnalyses.data, instagramPosts.data], async () => {
     return
 
   const hasAnalyses = postAnalyses.data.value && postAnalyses.data.value.data.length
-  if (!hasAnalyses && tries.value < 2) {
+  if (!hasAnalyses) {
     postAnalyses.clear()
     await analysePosts.execute()
     await postAnalyses.execute()
-    tries.value++
   }
 })
 
@@ -336,7 +335,7 @@ onMounted(() => {
             Erro ao buscar as análises. Por favor, tente novamente.
           </TryAgain>
         </CarouselItem>
-        <CarouselItem v-else-if="hasNoPostAnalyses" class="h-full w-full flex justify-center items-center">
+        <CarouselItem v-else-if="hasNoPostAnalyses && !hasPostAnalysesLoading" class="h-full w-full flex justify-center items-center">
           <p class="text-sm select-none">
             Nenhuma análise encontrada.
           </p>

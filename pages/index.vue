@@ -2,7 +2,7 @@
 import type { LngLatLike } from 'maplibre-gl'
 import { HORIZON_PITCH, MAX_ZOOM } from '~/constants'
 
-const { data: battles, status } = await useFetch('/api/rhyme-battles/points') // await aqui faz a página esperar a requisição carregar
+const { data: battles, status } = await useFetch('/api/rhyme-battles/points') // adding an await makes the page wait for this request to load
 const { clusters, calculateClusters, supercluster, loadPoints } = useCluster()
 const isDesktop = useMediaQuery('(min-width: 768px)')
 const urlParams = useUrlSearchParams()

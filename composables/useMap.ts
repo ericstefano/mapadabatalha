@@ -104,6 +104,10 @@ export function useMap() {
     maptilerToken,
   } } = useRuntimeConfig()
 
+  if (!maptilerToken) {
+    throw new Error('Missing \'NUXT_PUBLIC_MAPTILER_TOKEN \' in .env')
+  }
+
   function initializeMap(options: initializeMapOptions) {
     const { ref, onLoad, onMove, center = BRAZIL_CENTER_COORDINATES, zoom = 1, pitch = 0, language = 'visitor', maxBounds = BRAZIL_MAX_BOUNDS } = options
 
