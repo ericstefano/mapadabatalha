@@ -27,3 +27,7 @@ export function base64ToBuffer(base64String: string): Buffer {
   const cleanedBase64 = base64String.replace(/^data:.*?;base64,/, '').trim()
   return Buffer.from(cleanedBase64, 'base64')
 }
+
+export function getFileExtension(fileName: string) {
+  return fileName.substring(fileName.lastIndexOf('.') + 1)
+}

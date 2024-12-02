@@ -4,8 +4,8 @@ import { format } from 'date-fns'
 import * as v from 'valibot'
 import { MODEL_TO_USE } from '~/constants/llm'
 import { postAnalysesTable } from '~/server/database/schema'
+import { bufferToBase64 } from '~/utils/file'
 import { sanitizeId } from '~/utils/id'
-import { bufferToBase64 } from '~/utils/image'
 import { hasMessage, parseAnalysis } from '~/utils/llm'
 
 const analyseSystemPrompt = {

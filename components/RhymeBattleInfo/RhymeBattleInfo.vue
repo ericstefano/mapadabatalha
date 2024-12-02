@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { EngineType } from 'embla-carousel'
 import type { UnwrapRefCarouselApi } from '../Shadcn/Carousel/interface'
-import type { GetInstagramPostsResponse } from './types'
 import { isFuture, isPast, parseISO } from 'date-fns'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { LLM_INFO_MAP } from '~/constants/llm'
+import type { GetInstagramPostsResponse } from '~/types'
 import Divider from './Divider.vue'
 import Header from './Header.vue'
 import Subtitle from './Subtitle.vue'
@@ -180,8 +180,13 @@ function handleScrollEnd(api: UnwrapRefCarouselApi) {
 }
 
 watch([postAnalyses.data, instagramPosts.data], async () => {
-  if (instagramPosts.status.value === 'error' || postAnalyses.status.value === 'error')
+  if (
+    instagramPosts.status.value === 'error'
+    || postAnalyses.status.value === 'error'
+    || scrapePosts.status.value === 'error'
+    || analysePosts.status.value === 'error') {
     return
+  }
 
   if (instagramPosts.status.value === 'pending')
     return
@@ -215,7 +220,7 @@ onMounted(() => {
 <template>
   <Header :id="active" :name="battle?.name" :status="battleStatus" />
   <div class="w-full flex flex-col">
-    <Subtitle class="gap-0.5">
+    <Subtitle class="gap-1.5">
       <Icon v-if="page === 1 && hasNoPostAnalyses && (hasPostsLoading || hasPostAnalysesLoading)" name="svg-spinners:bars-scale-middle" />
       <Icon v-else name="lucide:lightbulb" />
       Análises

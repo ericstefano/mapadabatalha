@@ -40,6 +40,8 @@ export default defineNuxtConfig({
     tursoConnectionUrl: process.env.NUXT_TURSO_CONNECTION_URL,
     tursoAuthToken: process.env.NUXT_TURSO_AUTH_TOKEN,
     openRouterAuthToken: process.env.NUXT_OPEN_ROUTER_AUTH_TOKEN,
+    instagramAccount: process.env.NUXT_INSTAGRAM_ACCOUNT,
+    instagramPassword: process.env.NUXT_INSTAGRAM_PASSWORD,
     public: {
       maptilerToken: process.env.NUXT_PUBLIC_MAPTILER_TOKEN, // Maybe create a proxy endpoint in /server since this key is needed in frontend and will be exposed
     },
@@ -95,22 +97,6 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'system',
     classSuffix: '',
-  },
-
-  routeRules: {
-    '/**': {
-      headers: {
-        // 'Content-Security-Policy': 'base-uri \'none\'; default-src \'none\'; connect-src \'self\' https:; font-src \'self\' https: data:; form-action \'self\'; frame-ancestors \'self\'; frame-src \'self\'; img-src \'self\' data:; manifest-src \'self\'; media-src \'self\'; object-src \'none\'; script-src-attr \'none\'; style-src \'self\' https: \'unsafe-inline\'; script-src \'self\' https: \'unsafe-inline\' \'strict-dynamic\' \'nonce-{{nonce}}\'; upgrade-insecure-requests; worker-src \'self\';',
-        'Cross-Origin-Opener-Policy': 'same-origin',
-        // 'Cross-Origin-Embedder-Policy': 'require-corp',
-        'Cross-Origin-Resource-Policy': 'same-origin',
-        'Referrer-Policy': 'no-referrer',
-        'Strict-Transport-Security': 'max-age=15552000; includeSubDomains;',
-        'X-Content-Type-Options': 'nosniff',
-        'X-XSS-Protection': '0',
-        // 'X-Powered-By': undefined, //
-      },
-    },
   },
 
   components: true,

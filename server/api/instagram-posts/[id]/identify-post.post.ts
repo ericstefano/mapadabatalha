@@ -3,18 +3,16 @@ import { sleep } from 'crawlee'
 import * as v from 'valibot'
 import { MODEL_TO_USE } from '~/constants/llm'
 import { postIndentificationsTable } from '~/server/database/schema'
+import { bufferToBase64 } from '~/utils/file'
 import { sanitizeId } from '~/utils/id'
-import { bufferToBase64 } from '~/utils/image'
 import { hasMessage, parseIdentify } from '~/utils/llm'
 
 export const identifySystemPrompt = {
   role: 'system' as const,
   content: `
-You are a flyer image identification tool.
+You are a hip hop flyer identification tool.
 - ONLY RESPOND true OR false
 - ONLY RESPOND WITH ONE WORD TOKEN
-- Return true only if highly confident the image is a flyer
-- Return false if image does not meet flyer criteria
 `,
 }
 

@@ -26,8 +26,6 @@ export const instagramPostsTable = sqliteTable('instagram_posts', {
   href: text('href').notNull(),
   alt: text('alt'),
   timestamp: integer('timestamp', { mode: 'timestamp' }).notNull(),
-  postQuantity: integer('post_quantity').notNull(),
-  description: text('description'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })

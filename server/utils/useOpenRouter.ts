@@ -1,5 +1,5 @@
-import type { Message, Request } from './types'
 import { OPEN_ROUTER_BASE_URL } from '~/constants'
+import type { Message, Request } from '~/types/openrouter'
 
 export function useOpenRouter() {
   const { openRouterAuthToken } = useRuntimeConfig()

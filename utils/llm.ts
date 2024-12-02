@@ -1,5 +1,6 @@
 import * as v from 'valibot'
 import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
+import { hasProperty } from '~/utils/object'
 
 const QUOTES_REGEX = /['"]/g
 
@@ -57,5 +58,5 @@ export function parseIdentify({ raw }: ParseIdentifyLineParams) {
 }
 
 export function hasMessage(obj: Record<string, any>): obj is NonStreamingChoice {
-  return 'message' in obj
+  return hasProperty(obj, 'message')
 }

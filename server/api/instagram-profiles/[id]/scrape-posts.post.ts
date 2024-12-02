@@ -1,17 +1,9 @@
-import type { DefaultHandlerDictionary } from '@/server/utils/useRouter'
-import { SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, useRouter } from '@/server/utils/useRouter'
+import { GET_FROM_RESPONSE_HANDLER_LABEl, LOGIN_HANDLER_LABEL, SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, useRouter } from '@/server/utils/useRouter'
 import { createError } from 'h3'
 import * as v from 'valibot'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
 
-function randomChoice<T>(...values: T[]): T {
-  if (values.length === 0) {
-    throw new Error('randomChoice requires at least one argument')
-  }
-  const randomIndex = Math.floor(Math.random() * values.length)
-  return values[randomIndex]
-}
 const scrapePostsRouterParams = v.object({
   id: v.string('id is required'),
 })
@@ -70,16 +62,26 @@ export default defineEventHandler(
       queueIdOrName: `${crypto.getRandomValues(new Uint32Array(1))[0]}`, // Bugs when not generating a queue with an unique ID
     })
 
-    requestQueue.addRequest({
-      url: `${INSTAGRAM_BASE_URL}/${instagramProfile.username}${randomChoice('/', '')}`,
-      label: SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL,
+    const { instagramPassword, instagramAccount } = useRuntimeConfig()
+    if (!instagramAccount) {
+      throw new Error('Missing \'NUXT_INSTAGRAM_ACCOUNT \' in .env')
+    }
+    if (!instagramPassword) {
+      throw new Error('Missing \'NUXT_INSTAGRAM_PASSWORD \' in .env')
+    }
+
+    await requestQueue.addRequest({
+      url: INSTAGRAM_BASE_URL,
+      label: GET_FROM_RESPONSE_HANDLER_LABEl,
       userData: {
-        battleId: instagramProfile.rhymeBattleId,
+        account: instagramAccount,
+        password: instagramPassword,
         profileId: instagramProfile.id,
+        battleId: instagramProfile.rhymeBattleId,
         profileUsername: instagramProfile.username,
         scrollSecs: parsedQueryParams.output.scrollSecs,
         postIds,
-      } as DefaultHandlerDictionary,
+      },
     })
 
     const storage = useStorage('images')

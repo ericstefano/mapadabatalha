@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d065d925-787d-437a-8d01-35c15c910601",
-  "prevId": "535188a5-4146-4f6c-9900-bc3c3f17891b",
+  "id": "dc5166b2-ef7c-40cd-9445-b8ede48555f2",
+  "prevId": "640a89a6-8588-4fca-9bbd-8b50d7ab3b68",
   "tables": {
     "instagram_posts": {
       "name": "instagram_posts",
@@ -47,20 +47,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "post_quantity": {
-          "name": "post_quantity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "created_at": {
@@ -123,7 +109,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "instagram_profiles_username_unique": {
+          "name": "instagram_profiles_username_unique",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -238,7 +232,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "post_analyses_instagram_post_id_unique": {
+          "name": "post_analyses_instagram_post_id_unique",
+          "columns": [
+            "instagram_post_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -353,7 +355,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "post_identifications_instagram_post_id_unique": {
+          "name": "post_identifications_instagram_post_id_unique",
+          "columns": [
+            "instagram_post_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -386,28 +396,6 @@
         "lon": {
           "name": "lon",
           "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": true
-        },
-        "week_day": {
-          "name": "week_day",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "start_time": {
-          "name": "start_time",
-          "type": "text(5)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
