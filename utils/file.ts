@@ -1,4 +1,5 @@
-import { Buffer } from 'node:buffer'
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { Buffer } from 'buffer'
 
 export function bufferToBase64(buffer: Buffer, mimeType: string = 'image/jpeg'): string {
   const base64String = buffer.toString('base64')

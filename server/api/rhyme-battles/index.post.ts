@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import * as v from 'valibot'
 import { instagramProfilesTable, rhymeBattlesTable } from '~/server/database/schema'
+import { useDatabase } from '~/server/utils/useDatabase'
 import { base64ToBuffer } from '~/utils/file'
 
 const rhymeBattleBodySchema = v.object({

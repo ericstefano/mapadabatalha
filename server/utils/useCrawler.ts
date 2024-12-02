@@ -1,10 +1,10 @@
 import type { PlaywrightRequestHandler, RequestProvider } from 'crawlee'
+import type { PostEdge } from '~/types/instagram'
 import { CriticalError, PlaywrightCrawler } from 'crawlee'
 import { fromUnixTime } from 'date-fns'
 import { chromium } from 'playwright'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { ERR_TOO_MANY_REDIRECTS } from '~/constants/errors'
-import type { PostEdge } from '~/types/instagram'
 import { hasProperty } from '~/utils/object'
 import { randomBetween } from '~/utils/random'
 

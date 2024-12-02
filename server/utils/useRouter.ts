@@ -1,10 +1,7 @@
-import { createPlaywrightRouter, sleep } from 'crawlee'
-import { fromUnixTime } from 'date-fns'
+import type { useDatabase } from './useDatabase'
+import { createPlaywrightRouter } from 'crawlee'
 import { INSTAGRAM_BASE_URL } from '~/constants'
-import type { PostEdge } from '~/types/instagram'
 import { sanitizeId } from '~/utils/id'
-import { hasProperty } from '~/utils/object'
-import { randomBetween } from '~/utils/random'
 import { instagramPostsTable } from '../database/schema'
 
 export const LOGIN_HANDLER_LABEL = 'LOGIN'

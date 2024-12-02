@@ -1,5 +1,6 @@
 import type { PointFeature } from 'supercluster'
 import type { rhymeBattlesTable } from '~/server/database/schema'
+import { useDatabase } from '~/server/utils/useDatabase'
 
 export default defineEventHandler(
   async (event) => {

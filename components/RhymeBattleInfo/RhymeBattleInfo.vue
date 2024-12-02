@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { EngineType } from 'embla-carousel'
 import type { UnwrapRefCarouselApi } from '../Shadcn/Carousel/interface'
+import type { GetInstagramPostsResponse } from '~/types'
 import { isFuture, isPast, parseISO } from 'date-fns'
 import { INSTAGRAM_BASE_URL } from '~/constants'
 import { LLM_INFO_MAP } from '~/constants/llm'
-import type { GetInstagramPostsResponse } from '~/types'
 import Divider from './Divider.vue'
 import Header from './Header.vue'
 import Subtitle from './Subtitle.vue'

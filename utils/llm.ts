@@ -1,5 +1,6 @@
-import * as v from 'valibot'
 import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
+import type { NonStreamingChoice } from '~/types/openrouter'
+import * as v from 'valibot'
 import { hasProperty } from '~/utils/object'
 
 const QUOTES_REGEX = /['"]/g

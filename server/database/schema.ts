@@ -1,6 +1,6 @@
+import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
 import { relations } from 'drizzle-orm'
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
 
 export const rhymeBattlesTable = sqliteTable('rhyme_battles', {
   id: text('id').primaryKey(),
