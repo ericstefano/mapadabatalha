@@ -10,6 +10,7 @@
     "dev": "nuxi dev",
     "generate": "nuxi generate",
     "postinstall": "nuxi prepare",
+    "preview": "nuxi preview",
     "prepare": "playwright install",
     "start": "node .output/server/index.mjs",
     "start:generate": "npx serve .output/public",

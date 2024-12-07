@@ -65,7 +65,7 @@ export default defineEventHandler(
       queueIdOrName: `${crypto.getRandomValues(new Uint32Array(1))[0]}`, // Bugs when not generating a queue with an unique ID
     })
 
-    const { instagramPassword, instagramAccount } = useRuntimeConfig()
+    const { instagramPassword, instagramAccount } = useRuntimeConfig(event)
     if (!instagramAccount) {
       throw new Error('Missing \'NUXT_INSTAGRAM_ACCOUNT \' in .env')
     }

@@ -40,7 +40,6 @@
 
 [] Link pro Google Maps Street View junto ao título da batalha no header
 
-
 [x] Mudar para Sqlite (?)
 [o] Não salvar urls na tabela, montar elas no front (?)
 [] Mudar do maptiler para https://openfreemap.org/
@@ -71,31 +70,8 @@ Definir melhor um critério para soft deletar as análises e refaze-las.
 
 Ao buscar as análises, retornar somente análises que deleteAt seja NULL.
 
-Aprender sobre medidas anti-scraping ->
+Tutorial Anti-Anti-Scraping:
 https://docs.apify.com/academy/anti-scraping
-
-Rodar requisição para fazer identificação da postagem antes de mandar pa análise (É flyer ou NÃO é flyer).
-
-Nova tabela para guardar identificações da postagem.
-
-Se fizer uma identificação de postagem, e a reposta for NÃO.
-NÃO pode fazer análise dessa postagem.
-
-Nesse caso deve salvar a identificação, e não deve salvar a análise pois ela não será feita.
-
-Pro FrontEnd essa tabela é irrelevante.
-Essa tabela vai ser útil para a análise qualitativa.
-Para a análise qualitativa funcionar, eu preciso fazer análise de uma quantidade de postagens, então devo fazer SCRAPING de todas as postagens da batalha para ter espaço para fazer análise.
-
-\*Criar nova tabela "postIdentifications"
-
-\*Criar nova endpoint que recebe o id da batalha para fazer uma nova requisição com prompt para o LLM para indetificar se a imagem se trata de um flyer de anúncio (true ou false) e salvar essa identificação na tabela. Se NÃO for um flyer segundo essa identificação, ele NÃO faz a análise (não roda a endpoint
-
-\*Não preciso adicionar soft delete para as análises de batalha SE eu retornar somente as três análises mais recentes.
-
-\*Criar outra endpoint de análise de postagens para ser por id de postagem ao invés de para batalha de rima e usar para a endpoint de análises de batalha de rima essa nova endpoint.
-
-\*Considerar apagar as colunas isActive, weekDay, startTime
 
 <!-- Tentei, porém ficou esquisito e travado por conta do render do mapa -->
 <!-- [] Tamanho dinâmico dos modais -> alinhamento do marcador ao centro  -->
