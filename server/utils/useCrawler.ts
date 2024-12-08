@@ -29,7 +29,7 @@ export function useCrawler({ requestHandler, requestQueue, proxyConfiguration }:
     launchContext: {
       launcher: chromium,
       launchOptions: {
-        headless: false,
+        headless: true,
         locale: 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
         geolocation: {
           longitude: -47.04492258656643,
