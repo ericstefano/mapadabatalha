@@ -101,6 +101,63 @@ export function useRouter({ db, storage }: UseRouterContext) {
     await db.insert(instagramPostsTable).values(filtered)
   })
 
+  // router.addHandler(SCRAPE_INSTAGRAM_PROFILE_POSTS_HANDLER_LABEL, async ({ page, crawler, request, infiniteScroll }) => {
+  //   const { postIds, profileId, battleId, scrollSecs = 1 } = request.userData
+  //   await infiniteScroll({
+  //     timeoutSecs: scrollSecs,
+  //   })
+  //   const postLocator = page.locator(LOCATORS.IMAGE_POST_ANCHOR)
+  //   await postLocator.first().waitFor()
+  //   const postElements = await postLocator.all()
+  //   const posts = []
+  //   for await (const element of postElements) {
+  //     await sleep(randomBetween(200, 500)) // try to mess up instagram bot identifiers.
+  //     const href = await element.getAttribute('href')
+  //     if (!href) { return }
+  //     const id = href.replace(/.*\/(reel|p)\/([^/]+).*/, '$2')
+  //     if (postIds.includes(id!)) { return }
+  //     const img = element.locator(LOCATORS.IMAGE)
+  //     const src = await img.getAttribute('src')
+  //     const alt = await img.getAttribute('alt')
+  //     const rect = await element.evaluate(el => el.getBoundingClientRect())
+  //     await element.click({
+  //       delay: randomBetween(34, 92),
+  //       position: {
+  //         x: randomBetween(0, rect.width),
+  //         y: randomBetween(0, rect.height),
+  //       },
+  //     })
+  //     const description = await page.locator(LOCATORS.POST_DESCRIPTION).textContent({
+  //       timeout: 500,
+  //     }).catch(_error => '')
+  //     const postQuantity = (await page.locator(LOCATORS.CAROUSEL_DOTS).all()).length || 1
+  //     const timestamp = await page.locator(LOCATORS.TIMESTAMP).first().getAttribute('datetime')
+  //     await sleep(randomBetween(200, 300)) // slow down so it can close.
+  //     await page.keyboard.press('Escape')
+  //     const post = {
+  //       id,
+  //       href: `${INSTAGRAM_BASE_URL}${href}`,
+  //       alt,
+  //       timestamp: new Date(timestamp!),
+  //       postQuantity,
+  //       description,
+  //       instagramProfileId: profileId,
+  //       rhymeBattleId: battleId,
+  //     }
+  //     posts.push(post)
+  //     await crawler.addRequests([{
+  //       url: src!,
+  //       skipNavigation: true,
+  //       userData: {
+  //         id,
+  //         battleId,
+  //       },
+  //       label: DOWNLOAD_ASSET_HANDLER_LABEL,
+  //     }])
+  //   }
+  //   await db.insert(instagramPostsTable).values(posts)
+  // })
+
   router.addHandler(DOWNLOAD_ASSET_HANDLER_LABEL, async ({ request, sendRequest }) => {
     if (request.skipNavigation) {
       const response = await sendRequest()
