@@ -42,6 +42,7 @@ export default defineNuxtConfig({
     openRouterAuthToken: process.env.NUXT_OPEN_ROUTER_AUTH_TOKEN,
     instagramAccount: process.env.NUXT_INSTAGRAM_ACCOUNT,
     instagramPassword: process.env.NUXT_INSTAGRAM_PASSWORD,
+    apifyToken: process.env.NUXT_APIFY_TOKEN,
     public: {
       maptilerToken: process.env.NUXT_PUBLIC_MAPTILER_TOKEN, // Maybe create a proxy endpoint in /server since this key is needed in frontend and will be exposed
     },
