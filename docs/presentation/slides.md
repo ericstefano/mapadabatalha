@@ -12,9 +12,11 @@ fonts:
 
 # Extração de Texto de Panfletos Digitais em Mídias Sociais Utilizando Modelo Multimodal
 
-#### Eric Stefano dos Santos Lima
+### Autor: Eric Stefano dos Santos Lima
 
-#### Orientador: Felipe Augusto Lima Reis
+### Orientador: Felipe Augusto Lima Reis
+
+<p>Pontíficia Universidade Católica de Minas Gerais - Belo Horizonte - 2024</p>
 
 ---
 
@@ -22,26 +24,50 @@ fonts:
 
 ## Contexto
 
-- Ascensão das mídias sociais na disseminação de informações
-- Batalhas de rima e eventos culturais
-
-## Motivação
-
-- Popularização do uso de redes sociais
-- Dados disponíveis exclusivamente nestas plataformas
-- Dados em formatos não estruturados
-- Preservação e visibilidade
+-	O crescente uso de mídias sociais para disseminação de informações.
+- O uso de mídias sociais para busca de informações em detrimento de meios tradicionais.
+- A publicidade de eventos culturais.
 
 ---
 
 # Introdução
-<div class="grid grid-cols-2 min-h-full">
-<div>
+
+## Motivação
+
+- O impacto das batalhas de rima e a cultura urbana.
+- A importância da visibilidade e preservação de manifestações culturais.
+- O interesse em analisar os dados presentes nas postagens relacionadas às batalhas de rima.
+
+## Justificativa
+- A exclusividade dos dados encontrados em mídias sociais.
+- A dificuldade de extrair dados presentes em formatos não estruturados.
+
+
+---
+
+# Introdução
+
+<div class="grid grid-cols-2 gap-4 min-h-full">
+<div class="flex flex-col justify-start items-center">
+<img src="./assets/google.png" class="h-100 mx-auto rounded-lg" />
+<Author class="mt-2">Fonte: Próprio autor.</Author>
+</div>
+<div class="flex flex-col justify-start items-center">
 <img src="./assets/flyer.jpg" class="aspect-square h-100 rounded-lg" />
 <Author class="mt-2">Fonte: @_batalhadocoreto_ via <em>Instagram</em>.</Author>
 </div>
-<div>
+</div>
+
+---
+
+# Introdução
+<div class="grid grid-cols-2 gap-4 min-h-full">
+<div class="flex flex-col justify-start items-center">
 <img src="./assets/nacional.jpg" class="aspect-square h-100 arounded-lg object-cover" />
+<Author class="mt-2">Fonte: @duelonacional e @familia_de_rua via <em>Instagram</em>.</Author>
+</div>
+<div class="flex flex-col justify-start items-center">
+<img src="./assets/vencedor.jpg" class="aspect-square h-100 rounded-lg object-cover object-top" />
 <Author class="mt-2">Fonte: @duelonacional e @familia_de_rua via <em>Instagram</em>.</Author>
 </div>
 </div>
@@ -52,14 +78,14 @@ fonts:
 
 ## Objetivo Geral
 
-- Desenvolver um sistema para extração de informações sobre batalhas de rima no <em>Instagram</em>
+- Desenvolver um sistema para extração, gerenciamento e visualização de informações sobre batalhas de rima no <em>Instagram</em>.
 
 ## Objetivos Específicos
 
-- Cadastro e gerenciamento de batalhas de rima
-- Mapa interativo
-- <em>Web scraping</em> de postagens do <em>Instagram</em>
-- Identificação e extração de informações com <em>LLM</em> multimodal
+- Cadastro e gerenciamento de batalhas de rima.
+- Visualização das batalhas de rima - Mapa Interativo.
+- <em>Web scraping</em> de postagens do <em>Instagram</em>.
+- Identificação e extração de informações com <em>Large Language Model</em> (LLM) multimodal.
 
 ---
 
@@ -67,17 +93,17 @@ fonts:
 
 ## Arquitetura do Sistema
 
-- Monolito
-- Módulo de Extração de Postagens
-- Módulo de Análise de Postagens
-- Módulo de Exibição
+- Monolito <em>full-stack</em>.
+- Módulo de Extração de Postagens.
+- Módulo de Análise de Postagens.
+- Módulo de Exibição.
 
 ## Tecnologias Utilizadas
 
-- <em>Node.js</em> e <em>TypeScript</em>
-- <em>Vue.js</em> e <em>Nuxt.js</em>
-- <em>Crawlee</em> e <em>Playwright</em>
-- <em>OpenRouter</em> e <em>Llama 3.2 90B Vision</em>
+- <em>Node.js</em> e <em>TypeScript</em>.
+- <em>Vue.js</em> e <em>Nuxt.js</em>.
+- <em>Crawlee</em> e <em>Playwright</em>.
+- <em>OpenRouter</em> e <em>Llama 3.2 90B Vision</em>.
 
 ---
 
@@ -129,7 +155,7 @@ for await (const element of postElements) { // Para todas as âncoras de postage
 
 ```mermaid
 flowchart LR
-  id1[Recuperar três postagens mais recentes do perfil da batalha no <em>Instagram</em>] --> id2[Enviar cada imagem junto a um <em>prompt</em> para o <em>Llama 3.2 90B Vision</em> através do <em>OpenRouter</em>] --> id3[Salvar identificações de postagens no banco de dados]
+  id1[Recuperar três postagens mais recentes do perfil da batalha no <em>Instagram</em>] --> id2[Enviar cada imagem junto a um <em>prompt</em> para o <em>Llama 3.2 90B Vision</em> por meio do <em>OpenRouter</em>] --> id3[Salvar identificações de postagens no banco de dados]
 ```
 <v-click>
 <div class="grid grid-cols-2 gap-4">
@@ -250,7 +276,7 @@ null;null
 # Resultados
 
 ## Análise Qualitativa - Identificação
-- Identificações manuais comparadas com as identificações feitas pelo <em>MLLM</em>
+- Identificações manuais comparadas com as identificações feitas pelo <em>Multimodal Large Language Model</em> (MLLM)
 - Critério:
   - A resposta do modelo identifica corretamente a postagem como <em>flyer</em>.
   
@@ -263,7 +289,7 @@ null;null
 
 - Análises manuais comparadas com as extrações feitas pelo <em>MLLM</em>
 - Critérios:
-  - A resposta do modelo está no formato <em>Comma Separated Values</em> (CSV) correto, com
+  - A resposta do modelo está no formato <em>Comma Separated Values</em> (CSV) correto (<em>YYYY-MM-DDTHH:mm;location</em>), com
   apenas um separador “ponto-e-vírgula”;
   - A resposta do modelo contém data, hora e localização;
   - A localização da resposta é um nome próprio que identifica exclusivamente uma localização geográfica, como o nome de uma cidade, bairro, viaduto, rua ou outro lugar específico;
@@ -338,15 +364,24 @@ url: http://localhost:3000
 
 # Conclusão
 
-- Sistema implementado atingiu os objetivos propostos
-- Integração bem-sucedida de diferentes tecnologias
-- Sistema apresenta possível aleatoriedade na identificação de <em>flyers</em> com uma taxa de 52,4%
-- Sistema apresenta 73,3% de taxa de acerto na extração de datas e locais de <em>flyers</em> 
-- Oportunidades de melhorias e trabalhos futuros
+- Sistema implementado atingiu os objetivos propostos.
+- Integração bem-sucedida de diferentes tecnologias.
+- Sistema apresenta 52,4% de taxa de acerto na identificação de <em>flyers</em>, indicando possível aleatoriedade.
+- Sistema apresenta 73,3% de taxa de acerto na extração de datas e locais de <em>flyers</em>.
+- Oportunidades de melhorias e trabalhos futuros.
 
 ---
 
+# Trabalhos futuros
 
-<div class="min-h-full min-w-full flex flex-col items-center justify-center">
- <h1>Obrigado!</h1>
+---
+
+# Referências
+
+---
+
+<div class="min-h-full min-w-full flex flex-col items-center justify-center space-y-2">
+ <h1><span class="text-#078930">Obrigado </span> <span class="text-#fcdd09">pela</span> <span class="text-#da121a">Atenção!</span></h1>
+ <h5>E-mail: <a href="mailto:eric.lima.1330475@sga.pucminas.br">eric.lima.1330475@sga.pucminas.br</a></h5>
+ <h5>Código Fonte: <a href="https://github.com/ericstefano/mapadabatalha">github.com/ericstefano/mapadabatalha</a></h5>
 </div>
