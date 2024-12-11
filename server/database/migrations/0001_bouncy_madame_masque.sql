@@ -1,1 +1,0 @@
-ALTER TABLE `instagram_posts` ADD `alt` text;

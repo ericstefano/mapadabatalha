@@ -57,6 +57,9 @@ export const theme = {
       md: 'calc(var(--radius) - 2px)',
       sm: 'calc(var(--radius) - 4px)',
     },
+    boxShadow: {
+      maplibre: '0 0 0 2px rgba(0, 0, 0, 0.1)',
+    },
     keyframes: {
       'accordion-down': {
         from: { height: 0 },

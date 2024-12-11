@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "640a89a6-8588-4fca-9bbd-8b50d7ab3b68",
+  "id": "7958dcf7-bd08-41b1-b682-f5beb97e2809",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "instagram_posts": {
@@ -35,6 +35,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "alt": {
+          "name": "alt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "timestamp": {
           "name": "timestamp",
           "type": "integer",
@@ -58,7 +65,34 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "instagram_posts_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "instagram_posts_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "instagram_posts",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "instagram_posts_instagram_profile_id_instagram_profiles_id_fk": {
+          "name": "instagram_posts_instagram_profile_id_instagram_profiles_id_fk",
+          "tableFrom": "instagram_posts",
+          "tableTo": "instagram_profiles",
+          "columnsFrom": [
+            "instagram_profile_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -111,7 +145,21 @@
           "isUnique": true
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "instagram_profiles_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "instagram_profiles_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "instagram_profiles",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -234,7 +282,34 @@
           "isUnique": true
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "post_analyses_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "post_analyses_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "post_analyses",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "post_analyses_instagram_post_id_instagram_posts_id_fk": {
+          "name": "post_analyses_instagram_post_id_instagram_posts_id_fk",
+          "tableFrom": "post_analyses",
+          "tableTo": "instagram_posts",
+          "columnsFrom": [
+            "instagram_post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -357,7 +432,34 @@
           "isUnique": true
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "post_identifications_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "post_identifications_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "post_identifications",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "post_identifications_instagram_post_id_instagram_posts_id_fk": {
+          "name": "post_identifications_instagram_post_id_instagram_posts_id_fk",
+          "tableFrom": "post_identifications",
+          "tableTo": "instagram_posts",
+          "columnsFrom": [
+            "instagram_post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

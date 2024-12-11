@@ -1,205 +1,342 @@
 <script setup lang="ts">
-import { useToast } from '@/components/Shadcn/Toast/use-toast'
-import { toTypedSchema } from '@vee-validate/valibot'
-import { parseURL, withoutLeadingSlash, withoutTrailingSlash } from 'ufo'
-import * as v from 'valibot'
-import { configure, useForm } from 'vee-validate'
-import { ACCEPTED_IMAGE_FILE_EXTENSIONS, ACCEPTED_IMAGE_MIME_TYPES, MAX_IMAGE_FILE_SIZE } from '~/constants'
+import type { ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/vue-table'
+import { Icon } from '#components'
 
-function withoutSlashes(url: string) {
-  return withoutLeadingSlash(withoutTrailingSlash(url))
+import {
+  FlexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useVueTable,
+} from '@tanstack/vue-table'
+
+import { parseISO } from 'date-fns'
+import { ref } from 'vue'
+import Button from '~/components/Shadcn/Button/Button.vue'
+import { useToast } from '~/components/Shadcn/Toast'
+
+interface DataItem {
+  id: string
+  name: string
+  lat: number
+  lon: number
+  createdAt: Date
+  deletedAt: Date
 }
 
-const profileStringSchema = v.pipe(
-  v.string('Por favor, preencha o campo de Instagram.'),
-  v.startsWith('@', 'Por favor, insira uma URL válida ou um perfil válido.'),
-  v.transform(value => value.replaceAll('@', '')),
-)
-const profileUrlSchema = v.pipe(
-  v.string('Por favor, preencha o campo de Instagram.'),
-  v.includes('.instagram.com', 'Por favor, insira uma URL válida ou um perfil válido.'),
-  v.custom((check) => {
-    if (typeof check !== 'string')
-      return false
-    const pathname = withoutSlashes(parseURL(check).pathname)
-    return Boolean(pathname) && pathname.split('/').length === 1
-  }, 'Por favor, insira uma URL válida ou um perfil válido.'),
-  v.transform((value) => {
-    return withoutSlashes(parseURL(value).pathname)
-  }),
-)
-const profileSchema = v.pipe(v.union([profileStringSchema, profileUrlSchema], 'Por favor, preencha o campo de Instagram.'), v.trim())
-
-const coordinatesStringSchema = v.pipe(
-  v.string('Por favor, preencha o campo de coordenadas.'),
-  v.custom((check) => {
-    if (typeof check !== 'string')
-      return false
-    const split = check.split(',')
-    if (split.length !== 2)
-      return false
-    if (Number.isNaN(Number.parseFloat(split[0])) || Number.isNaN(Number.parseFloat(split[1])))
-      return false
-    return true
-  }, 'Por favor, insira a URL com coordenadas ou as coordenadas no formato válido latitude,longitude.'),
-  v.transform((value) => {
-    const split = value.trim().split(',')
-    return { lat: Number.parseFloat(split[0]), lon: Number.parseFloat(split[1]) }
-  }),
-)
-const coordinatesUrlSchema = v.pipe(
-  v.string('Por favor, preencha o campo de coordenadas.'),
-  v.includes('google.com', 'Por favor, insira a URL com coordenadas ou as coordenadas no formato válido latitude,longitude.'),
-  v.includes('/maps', 'Por favor, insira a URL com coordenadas ou as coordenadas no formato válido latitude,longitude.'),
-  v.custom((check) => {
-    if (typeof check !== 'string')
-      return false
-    const pathname = withoutSlashes(parseURL(check.trim()).pathname)
-    if (!pathname)
-      return false
-    const split = pathname.trim().replaceAll('@', '').split('/')
-    const latLon = split[1]
-    const splitLatLon = latLon.split(',')
-    if (splitLatLon.length < 2)
-      return false
-    if (Number.isNaN(Number.parseFloat(splitLatLon[0])) || Number.isNaN(Number.parseFloat(splitLatLon[1])))
-      return false
-    return true
-  }, 'Por favor, insira a URL com coordenadas ou as coordenadas no formato válido latitude,longitude.'),
-  v.transform((value) => {
-    const pathname = withoutSlashes(parseURL(value.trim().replaceAll('@', '')).pathname)
-    const splitPathname = pathname.split('/')
-    const latLon = splitPathname[1]
-    const splitLatLon = latLon.split(',')
-    return { lat: Number.parseFloat(splitLatLon[0]), lon: Number.parseFloat(splitLatLon[1]) }
-  }),
-)
-
-const imageSchema = v.pipe(
-  v.instance(File, 'Por favor, insira uma imagem.'),
-  v.mimeType(
-    ACCEPTED_IMAGE_MIME_TYPES,
-    'Por favor, selecione um arquivo de imagem.',
-  ),
-  v.maxSize(
-    MAX_IMAGE_FILE_SIZE,
-    'Por favor, selecione uma imagem menor que 5 MB.',
-  ),
-  v.check((file) => {
-    return ACCEPTED_IMAGE_FILE_EXTENSIONS.includes(
-      getFileExtension(file.name),
-    )
-  }, 'Por favor, selecione um arquivo de imagem.'),
-)
-
-const latLonSchema = v.union([coordinatesStringSchema, coordinatesUrlSchema], 'Por favor, insira a URL com coordenadas ou as coordenadas no formato válido latitude,longitude.')
-
-const fields = {
-  name: v.pipe(v.string('Por favor, preencha o campo de nome.'), v.trim()),
-  instagram: profileSchema,
-  coordinates: latLonSchema,
-  image: imageSchema,
+function handleSortingArrow(order: string | boolean) {
+  if (order === 'asc')
+    return 'lucide:arrow-up'
+  if (order === 'desc')
+    return 'lucide:arrow-down'
+  return 'lucide:arrow-up-down'
 }
 
-const schema = v.object(fields)
-const formSchema = toTypedSchema(schema)
+const columns: ColumnDef<DataItem>[] = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+  },
+  {
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return h('div', { class: 'flex items-center' }, [
+        h('span', {}, 'Nome'),
+        h(Button, {
+          variant: 'ghost',
+          class: 'ml-2 h-8 w-8 p-0',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+        }, () => h(Icon, { name: handleSortingArrow(column.getIsSorted()), class: 'h-4 w-4' })),
+      ])
+    },
+  },
+  {
+    accessorKey: 'lat',
+    header: ({ column }) => {
+      return h('div', { class: 'flex items-center' }, [
+        h('span', {}, 'Latitude'),
+        h(Button, {
+          variant: 'ghost',
+          class: 'ml-2 h-8 w-8 p-0',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+        }, () => h(Icon, { name: handleSortingArrow(column.getIsSorted()), class: 'h-4 w-4' })),
+      ])
+    },
+  },
+  {
+    accessorKey: 'lon',
+    header: ({ column }) => {
+      return h('div', { class: 'flex items-center' }, [
+        h('span', {}, 'Longitude'),
+        h(Button, {
+          variant: 'ghost',
+          class: 'ml-2 h-8 w-8 p-0',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+        }, () => h(Icon, { name: handleSortingArrow(column.getIsSorted()), class: 'h-4 w-4' })),
+      ])
+    },
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => {
+      return h('div', { class: 'flex items-center' }, [
+        h('span', {}, 'Criado em'),
+        h(Button, {
+          variant: 'ghost',
+          class: 'ml-2 h-8 w-8 p-0',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+        }, () => h(Icon, { name: handleSortingArrow(column.getIsSorted()), class: 'h-4 w-4' })),
+      ])
+    },
+    cell: ({ row }) => {
+      return formatDateLong(parseISO(row.getValue('createdAt')))
+    },
+  },
+  {
+    accessorKey: 'updatedAt',
+    header: ({ column }) => {
+      return h('div', { class: 'flex items-center' }, [
+        h('span', {}, 'Atualizado em'),
+        h(Button, {
+          variant: 'ghost',
+          class: 'ml-2 h-8 w-8 p-0',
+          onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+        }, () => h(Icon, { name: handleSortingArrow(column.getIsSorted()), class: 'h-4 w-4' })),
+      ])
+    },
+    cell: ({ row }) => {
+      return formatDateLong(parseISO(row.getValue('updatedAt')))
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      return h('div', { class: 'flex gap-2' }, [
+        h(Button, {
+          variant: 'destructive',
+          size: 'sm',
+          onClick: () => handleDelete(row.original.id),
+        }, () => 'Deletar'),
+      ])
+    },
+  },
+]
 
-configure({
-  bails: true,
-})
+const data = ref<DataItem[]>([])
+const selectedId = ref<string | null>(null)
+const selectedData = computed(() => data.value.find(item => item.id === selectedId.value))
 
-const { handleSubmit } = useForm({
-  validationSchema: formSchema,
-})
+// const isEditing = ref(false)
+const isCreating = ref(false)
+const isDeleting = ref(false)
+const sorting = ref<SortingState>([])
+const columnFilters = ref<ColumnFiltersState>([])
 
 const { toast } = useToast()
 
-const onSubmit = handleSubmit(async (values) => {
-  const payload = {
-    name: values.name,
-    instagram: values.instagram,
-    lat: values.coordinates.lat,
-    lon: values.coordinates.lon,
-    // weekDay: values.weekDay,
-    // startTime: values.startTime,
-    image: await fileToBase64(values.image),
-  }
-  // console.log(payload)
+const table = useVueTable({
+  get data() { return data.value },
+  get columns() { return columns },
+  getCoreRowModel: getCoreRowModel(),
+  getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
+  onSortingChange: (updaterOrValue) => {
+    sorting.value = typeof updaterOrValue === 'function'
+      ? updaterOrValue(sorting.value)
+      : updaterOrValue
+  },
+  onColumnFiltersChange: (updaterOrValue) => {
+    columnFilters.value = typeof updaterOrValue === 'function'
+      ? updaterOrValue(columnFilters.value)
+      : updaterOrValue
+  },
+  state: {
+    get sorting() { return sorting.value },
+    get columnFilters() { return columnFilters.value },
+  },
+})
+
+function toggleCreating() {
+  isCreating.value = !isCreating.value
+}
+
+function closeCreating() {
+  isCreating.value = false
+}
+
+// function toggleEditing() {
+//   isEditing.value = !isEditing.value
+// }
+
+function toggleDeleting() {
+  isDeleting.value = !isDeleting.value
+}
+
+function closeDeleting() {
+  isDeleting.value = false
+}
+
+function handleDelete(id: string) {
+  selectedId.value = id
+  toggleDeleting()
+}
+
+async function confirmDelete(id: string) {
   try {
-    await $fetch('/api/rhyme-battles', {
-      method: 'POST',
-      body: payload,
+    await $fetch(`/api/rhyme-battles/${id}`, {
+      method: 'DELETE',
     })
+    data.value = data.value.filter(item => item.id !== id)
     toast({
-      title: 'Batalha criada com sucesso!',
-      duration: 4000,
+      title: 'Batalha deletada com sucesso!',
     })
   }
   catch {
     toast({
-      title: 'Erro ao criar a batalha, por favor tente novamente!',
-      variant: 'destructive',
-      duration: 4000,
+      title: 'Erro ao deletar a batalha, por favor tente novamente!',
     })
   }
+  finally {
+    toggleDeleting()
+    selectedId.value = null
+  }
+}
+
+async function confirmCreate() {
+  data.value = await getData()
+  toggleCreating()
+}
+
+// function handleEdit(item: DataItem) {
+//   isEditing.value = true
+// }
+
+async function getData() {
+  const response = await $fetch('/api/rhyme-battles')
+  return response.data
+}
+
+onMounted(async () => {
+  data.value = await getData()
 })
 </script>
 
 <template>
-  <div class="min-h-screen w-screen flex flex-col justify-center items-center">
-    <Toaster />
-    <Card class="w-full max-w-[32rem]">
-      <CardHeader>
-        <CardTitle>
-          Adicionar Nova Batalha de Rima
-        </CardTitle>
-        <CardDescription>Preencha as informações para colocar a batalha no Mapa</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form class="space-y-4" @submit="onSubmit">
-          <FormField v-slot="{ componentField, errorMessage }" name="name">
-            <FormItem>
-              <FormLabel>Nome</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite o nome da batalha." :error="!!errorMessage" v-bind="componentField" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-          <FormField v-slot="{ componentField, errorMessage }" name="instagram">
-            <FormItem>
-              <FormLabel>Instagram</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite o perfil do Instagram da batalha." :error="!!errorMessage" v-bind="componentField" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-          <FormField v-slot="{ componentField, errorMessage }" name="coordinates">
-            <FormItem>
-              <FormLabel>Coordenadas</FormLabel>
-              <FormControl>
-                <Input placeholder="Digite as coordenadas da batalha." :error="!!errorMessage" v-bind="componentField" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-          <FormField v-slot="{ errorMessage, field }" name="image" type="file">
-            <FormItem>
-              <FormLabel>Imagem</FormLabel>
-              <FormControl>
-                <Input type="file" v-bind="field" :error="!!errorMessage" :accept="ACCEPTED_IMAGE_MIME_TYPES.join(',')" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-          <div class="flex justify-end">
-            <Button type="submit">
-              Enviar
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+  <div class="p-10">
+    <NuxtLink custom to="/" external>
+      <template #default="{ navigate }">
+        <Button variant="outline" class="mb-4 grow-0 mr-auto px-3" @click="navigate">
+          <Icon name="lucide:arrow-left" class="mr-1.5 h-4 w-4" /> <span>Voltar</span>
+        </Button>
+      </template>
+    </NuxtLink>
+
+    <h1>Gerenciar Batalhas</h1>
+    <div class="flex items-center py-4 gap-4">
+      <Input
+        placeholder="Buscar por nome"
+        class="max-w-xs"
+        :model-value="table.getColumn('name')?.getFilterValue() as string"
+        @update:model-value="table.getColumn('name')?.setFilterValue($event)"
+      />
+      <Button variant="secondary" @click="toggleCreating">
+        Inserir batalha
+      </Button>
+    </div>
+
+    <Dialog :open="isCreating" @update:open="closeCreating">
+      <DialogContent @open-auto-focus.prevent>
+        <DialogHeader>
+          <DialogTitle>Inserir batalha</DialogTitle>
+        </DialogHeader>
+        <CreateBattleForm @submit="confirmCreate" />
+      </DialogContent>
+    </Dialog>
+
+    <!-- <Dialog :open="isEditing">
+      <DialogContent @open-auto-focus.prevent>
+        <DialogHeader>
+          <DialogTitle>Inserir batalha</DialogTitle>
+
+        <CreateBattleForm />
+      </DialogContent>
+    </Dialog> -->
+
+    <Dialog :open="isDeleting" @update:open="closeDeleting">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Deletar batalha</DialogTitle>
+        </DialogHeader>
+        <span>Tem certeza que deseja deletar <b>"{{ selectedData?.name }}"</b> ?</span> <span class="font-bold">Essa ação não poderá ser desfeita!</span>
+        <DialogFooter class="gap-2">
+          <Button type="button" variant="outline" @click="toggleDeleting">
+            Cancelar
+          </Button>
+          <Button type="button" variant="destructive" @click="() => confirmDelete(selectedId!)">
+            Deletar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
+    <div class="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+            <TableHead v-for="header in headerGroup.headers" :key="header.id">
+              <FlexRender
+                v-if="!header.isPlaceholder"
+                :render="header.column.columnDef.header"
+                :props="header.getContext()"
+              />
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <template v-if="table.getRowModel().rows?.length">
+            <TableRow
+              v-for="row in table.getRowModel().rows"
+              :key="row.id"
+              :data-state="row.getIsSelected() ? 'selected' : undefined"
+            >
+              <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <FlexRender
+                  :render="cell.column.columnDef.cell"
+                  :props="cell.getContext()"
+                />
+              </TableCell>
+            </TableRow>
+          </template>
+          <template v-else>
+            <TableRow>
+              <TableCell :colspan="columns.length" class="h-24 text-center">
+                Nenhum resultado.
+              </TableCell>
+            </TableRow>
+          </template>
+        </TableBody>
+      </Table>
+    </div>
+
+    <div class="flex items-center justify-end space-x-2 py-4">
+      <Button
+        variant="outline"
+        size="icon"
+        :disabled="!table.getCanPreviousPage()"
+        @click="table.previousPage()"
+      >
+        <Icon name="lucide:arrow-big-left-dash" class="w-6 h-6" />
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        :disabled="!table.getCanNextPage()"
+        @click="table.nextPage()"
+      >
+        <Icon name="lucide:arrow-big-right-dash" class="w-6 h-6" />
+      </Button>
+    </div>
   </div>
 </template>

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
   ],
 
-  ssr: true,
+  ssr: false,
 
   shadcn: {
     prefix: '',
@@ -82,6 +82,12 @@ export default defineNuxtConfig({
       },
     },
     storage: {
+      images: {
+        driver: 'fs',
+        base: './.output/public',
+      },
+    },
+    devStorage: {
       images: {
         driver: 'fs',
         base: './public/',

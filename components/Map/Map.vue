@@ -18,6 +18,19 @@ onUnmounted(() => {
 
 <template>
   <div class="relative h-full w-full" :class="{ invisible: !loaded }">
+    <div class="absolute flex flex-col right-[10px] top-[146px] z-30">
+      <NuxtLink to="/manage" custom>
+        <template #default="{ navigate }">
+          <Button
+            variant="default"
+            size="icon" class="w-[29px] h-[29px] p-[5px] shadow-maplibre text-[30px] leading-[36px]"
+            @click="navigate"
+          >
+            <Icon class="text-primary-foreground" name="lucide:table-properties" />
+          </Button>
+        </template>
+      </NuxtLink>
+    </div>
     <div ref="mapRef" class="absolute h-full w-full" />
     <slot />
   </div>

@@ -44,7 +44,7 @@ export default defineEventHandler(
       id: randomUUID(),
       username: parsed.output.instagram,
       rhymeBattleId: battle.id,
-    }).returning()
+    })
 
     await storage.setItemRaw(`${battle.id}:profile.jpeg`, base64ToBuffer(parsed.output.image))
     return battle
