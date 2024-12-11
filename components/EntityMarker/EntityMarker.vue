@@ -88,11 +88,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img
-    v-show="loaded && coordinates" ref="markerRef"
-    :src="imageUrl"
-    class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
-    @click="handleClick"
-    @error.prevent
-  >
+  <div ref="markerRef">
+    <Base64Image
+      v-show="loaded && coordinates"
+      :path="`${props.id}:profile`"
+      extension=".jpeg"
+      class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
+      @click="handleClick"
+    />
+  </div>
 </template>

@@ -361,12 +361,11 @@ onMounted(() => {
       <CarouselContent>
         <CarouselItem v-for="post in storedPosts" :key="post.id" class="max-h-[300px] md:max-h-max">
           <NuxtLink draggable="false" class="w-full h-full rounded-md aspect-square" :href="post.href" target="blank">
-            <NuxtImg v-if="false" />
-            <img
-              v-if="active" draggable="false"
-              class="flex-1 aspect-square select-none object-cover object-top h-full w-full rounded-md overflow-hidden text-ellipsis flex flex-col items-center justify-center"
-              :src="`/${post.rhymeBattleId}/${sanitizeId(post.id)}.jpeg`" :alt="post.alt ? post.alt : ''"
-            >
+            <Base64Image
+              v-if="active"
+              :path="`${post.rhymeBattleId}:${sanitizeId(post.id)}`" extension=".jpeg" draggable="false"
+              class="flex-1 aspect-square select-none object-cover object-top h-full w-full rounded-md overflow-hidden text-ellipsis flex flex-col items-center justify-center" :alt="post.alt ? post.alt : ''"
+            />
           </NuxtLink>
         </CarouselItem>
         <template v-if="hasPostsLoading">
