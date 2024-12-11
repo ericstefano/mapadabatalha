@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 404,
       statusMessage: 'Not Found',
-      message: `File path ${parsedRouterParams.output.path} not found.`,
+      message: `File "${parsedRouterParams.output.path}" not found.`,
     })
   }
   setResponseHeader(event, 'Content-Type', 'application/json')

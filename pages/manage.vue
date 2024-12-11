@@ -269,7 +269,7 @@ onMounted(async () => {
         <DialogHeader>
           <DialogTitle>Deletar batalha</DialogTitle>
         </DialogHeader>
-        <span>Tem certeza que deseja deletar <b>"{{ selectedData?.name }}"</b> ?</span> <span class="font-bold">Essa ação não poderá ser desfeita!</span>
+        <span>Tem certeza que deseja deletar <b>"{{ selectedData?.name }}"</b> ?</span> <span class="font-bold">Esta ação não poderá ser desfeita!</span>
         <DialogFooter class="gap-2">
           <Button type="button" variant="outline" @click="toggleDeleting">
             Cancelar

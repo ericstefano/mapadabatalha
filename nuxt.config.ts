@@ -97,7 +97,8 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '* * * * *': ['scheduled:test'],
+      '* * * * *': ['scheduled:health-check'],
+      '25 17 * * *': ['scheduled:scrape-identify-analyse'],
     },
   },
 
