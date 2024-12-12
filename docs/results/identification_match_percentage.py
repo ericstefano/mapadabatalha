@@ -25,7 +25,7 @@ print(f"Taxa de Erro: {error_rate:.2%}")
 
 labels = ['Acertos', 'Erros']
 sizes = [accuracy_rate * 100, error_rate * 100]
-colors = ['#4CAF50', '#F44336']
+colors = ['#4169E1', '#FF7F50']
 explode = (0.1, 0)
 
 plt.figure(figsize=(10, 8))

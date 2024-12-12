@@ -50,7 +50,7 @@ fonts:
 <div class="grid grid-cols-2 gap-4 min-h-full">
 <div class="flex flex-col justify-start items-center">
 <img src="./assets/google.png" class="h-100 mx-auto rounded-lg" />
-<Author class="mt-2">Fonte: Próprio autor.</Author>
+<Author class="mt-2">Fonte: Próprio autor e <em>Alphabet</em> via <em>Google</em>.</Author>
 </div>
 <div class="flex flex-col justify-start items-center">
 <img src="./assets/flyer.jpg" class="aspect-square h-100 rounded-lg" />
@@ -78,7 +78,9 @@ fonts:
 
 ## Objetivo Geral
 
-- Desenvolver um sistema para extração, gerenciamento e visualização de informações sobre batalhas de rima no <em>Instagram</em>.
+<!-- - Desenvolver um sistema para extração, gerenciamento e visualização de informações sobre batalhas de rima no <em>Instagram</em>. -->
+- Desenvolver um sistema para extração, gerenciamento e visualização de informações sobre batalhas de rima a partir de imagens de panfletos digitais no <em>Instagram</em>.
+
 
 ## Objetivos Específicos
 
@@ -101,9 +103,10 @@ fonts:
 ## Tecnologias Utilizadas
 
 - <em>Node.js</em> e <em>TypeScript</em>.
-- <em>Vue.js</em> e <em>Nuxt.js</em>.
 - <em>Crawlee</em> e <em>Playwright</em>.
 - <em>OpenRouter</em> e <em>Llama 3.2 90B Vision</em>.
+- <em>Vue.js</em> e <em>Nuxt.js</em>.
+- <em>MapLibre</em>, <em>Maptiler</em> e <em>OpenStreetMap</em>.
 
 ---
 
@@ -125,7 +128,7 @@ fonts:
 
 ```mermaid
 flowchart LR
-  id1[Abrir perfil da Batalha no <em>Instagram</em>] --> id2[Aguardar carregamento da página] --> id3[Clicar em cada âncora de postagem encontrada que NÃO esteja salva] --> id4[Extrair os seus dados e salvá-los no banco de dados]
+  id1[Injetar <em>fingerprints</em>, <em>headers</em>, <em>cookies</em> e bloqueador de requisições] --> id2[Abrir perfil da Batalha no <em>Instagram</em>] --> id3[Aguardar carregamento da página] --> id4[Clicar em cada âncora de postagem encontrada que NÃO esteja salva] --> id5[Extrair os dados e salvá-los no banco de dados]
 ```
 <v-click>
 ```ts {|2,3,4|8|9|11|12|13|14|15}
@@ -155,7 +158,7 @@ for await (const element of postElements) { // Para todas as âncoras de postage
 
 ```mermaid
 flowchart LR
-  id1[Recuperar três postagens mais recentes do perfil da batalha no <em>Instagram</em>] --> id2[Enviar cada imagem junto a um <em>prompt</em> para o <em>Llama 3.2 90B Vision</em> por meio do <em>OpenRouter</em>] --> id3[Salvar identificações de postagens no banco de dados]
+  id1[Recuperar do banco de dados as três postagens mais recentes do perfil da batalha no <em>Instagram</em>] --> id2[Enviar cada imagem junto a um <em>prompt</em> para o <em>Llama 3.2 90B Vision</em> por meio do <em>OpenRouter</em>] --> id3[Salvar identificações de postagens no banco de dados]
 ```
 <v-click>
 <div class="grid grid-cols-2 gap-4">
@@ -198,7 +201,7 @@ You are a flyer image identification tool.
 
 ```mermaid
 flowchart LR
-  id1[Recuperar no MÁXIMO três postagens IDENTIFICADAS como <em>flyer</em> mais recentes do perfil da batalha no <em>Instagram</em>] --> id2[Enviar cada imagem junto a um <em>prompt</em> para o <em>Llama 3.2 90B Vision</em> através do <em>OpenRouter</em>] --> id3[Salvar análises de postagens no banco de dados]
+  id1[Recuperar do banco de dados no MÁXIMO três postagens IDENTIFICADAS como <em>flyer</em> mais recentes do perfil da batalha no <em>Instagram</em>] --> id2[Enviar cada imagem junto a um <em>prompt</em> para o <em>Llama 3.2 90B Vision</em> por meio do <em>OpenRouter</em>] --> id3[Salvar análises de postagens no banco de dados]
 ```
 
 ---
@@ -267,16 +270,16 @@ null;null
 
 ## Análise Qualitativa - Geral
 
-- Cadastro de 5 batalhas de rima
-- Extração de um total de 103 postagens através do próprio sistema
-- Avaliação manual das postagens
+- Cadastro de 5 batalhas de rima.
+- Extração de um total de 103 postagens através do próprio sistema.
+- Avaliação manual das postagens.
 
 ---
 
 # Resultados
 
 ## Análise Qualitativa - Identificação
-- Identificações manuais comparadas com as identificações feitas pelo <em>Multimodal Large Language Model</em> (MLLM)
+- Identificações manuais comparadas com as identificações feitas pelo <em>Multimodal Large Language Model</em> (MLLM).
 - Critério:
   - A resposta do modelo identifica corretamente a postagem como <em>flyer</em>.
   
@@ -287,7 +290,9 @@ null;null
 
 ## Análise Qualitativa - Extração
 
-- Análises manuais comparadas com as extrações feitas pelo <em>MLLM</em>
+- Foram utilizadas somente as postagens identificadas como <em>flyer</em> na etapa anterior que continham data, hora e localização.
+- Análises manuais comparadas com as extrações feitas pelo <em>MLLM</em>.
+
 - Critérios:
   - A resposta do modelo está no formato <em>Comma Separated Values</em> (CSV) correto (<em>YYYY-MM-DDTHH:mm;location</em>), com
   apenas um separador “ponto-e-vírgula”;
@@ -301,9 +306,11 @@ null;null
 
 ## Análise Qualitativa
 
+De 103 postagens, 54 postagens foram identificadas corretamente como <em>flyer</em>. Delas, foram mantidas 45 postagens que continham data hora e localização e 33 dessas postagens foram analisadas corretamente.
+
 <div class="grid grid-cols-2 gap-8">
   <div>
-    <h3>Identificação de <em>Flyers</em></h3>
+    <h4 class="text-center -mt-1.5">Identificação de <em>Flyers</em></h4>
 ```mermaid 
 %%{
   init: {
@@ -324,12 +331,12 @@ pie
 "Incorretos" : 47.6
 
 ```
-<Author>Fonte: Próprio autor.</Author>
+<Author class="-mt-8">Fonte: Próprio autor.</Author>
 </div>
 
 
   <div>
-    <h3>Extração de Informações</h3>
+    <h4 class="text-center -mt-1.5">Extração de Informações</h4>
 ```mermaid
 %%{
   init: {
@@ -350,8 +357,8 @@ pie
 "Corretos" : 73.3
 "Incorretos" : 26.7
 ```
-<Author>Fonte: Próprio autor.</Author>
-  </div>
+<Author class="-mt-8">Fonte: Próprio autor.</Author>
+</div>
 </div>
 
 
@@ -368,15 +375,22 @@ url: http://localhost:3000
 - Integração bem-sucedida de diferentes tecnologias.
 - Sistema apresenta 52,4% de taxa de acerto na identificação de <em>flyers</em>, indicando possível aleatoriedade.
 - Sistema apresenta 73,3% de taxa de acerto na extração de datas e locais de <em>flyers</em>.
-- Oportunidades de melhorias e trabalhos futuros.
-
 ---
 
 # Trabalhos futuros
 
+- Otimização de parâmetros do <em>MLLM</em>.
+- <em>Prompts</em> mais específicos.
+- Integração de outros <em>MLLMs</em>.
+- Teste de soluções alternativas como <em>OCR</em>.
+- Suporte para múltiplas mídias sociais.
+- Suporte para outros tipos de eventos.
+- Sistema de notificações de eventos.
+- Implementação de um sistema colaborativo para validação de informação.
+
 ---
 
-# Referências
+# Principais Referências
 
 ---
 
