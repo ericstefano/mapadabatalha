@@ -18,15 +18,119 @@ fonts:
 
 <p>Pontíficia Universidade Católica de Minas Gerais - Belo Horizonte - 2024</p>
 
+<!-- Boa tarde a todos, eu me chamo Eric, o meu orientador é o professor Felipe Reis, e o título do meu trabalho é Extração de Texto de Panfletos Digitais em Mídias Sociais Utilizando Modelo Multimodal. -->
+
 ---
 
 # Introdução
 
-## Contexto
+## Contexto - Cultura Urbana
+
+<div class="grid grid-cols-2 justify-start">
+
+- Hip Hop.
+  - Rap / MCs.
+  - DJs.
+  - Breakdance.
+  - Grafite.
+
+<div class="flex flex-col items-center justify-center">
+<img src="./assets/nacional.jpg" class="aspect-square h-80 rounded-lg object-cover object-top" />
+<Author class="mt-2">Fonte: @duelonacional e @familia_de_rua via <em>Instagram</em>.</Author>
+</div>
+</div>
+
+<!-- Para contextualizar meu trabalho, é necessário abordar a cultura urbana, em particular o Hip-Hop, movimento periférico que surgiu na década de setenta no Bronx, em Nova York nos Estados Unidos, composto majoritariamente por negros e latinos.
+
+Ele é dividido em quatro grandes expressões artísticas:
+
+O Rap, sigla para "ritmo e poesia", um estilo musical com letras rimadas criadas pelos mestres de cerimônia, que são cantadas sobre um ritmo de batidas.
+
+Os DJs, que compõem ou remixam as músicas.
+
+O Breakdance, que é a dança característica voltada pra esse ritmo.
+
+E o grafite, que expressa a realidade periférica através da pintura. -->
+
+---
+
+# Introdução
+
+## Contexto - Cultura Urbana
+
+<div class="grid grid-cols-2">
+
+- Chegada no Brasil.
+- Batalhas de Rima:
+  - Rodadas em turnos.
+  - Votação pela platéia e jurados.
+  - Critérios de voto são flexíveis.
+  - Vence quem é o mais votado em três rodadas.
+- Duelo Nacional de MCs:
+  - Viaduto Santa Tereza - Belo Horizonte.
+
+<div class="flex flex-col justify-start items-center">
+<img src="./assets/vencedor.jpg" class="aspect-square h-80 rounded-lg object-cover object-top" />
+<Author class="mt-2">Fonte: @duelonacional e @familia_de_rua via <em>Instagram</em>.</Author>
+</div>
+</div>
+
+<!-- Essa cultura chegou ao Brasil trazendo consigo as batalhas de rima. Essas batalhas funcionam de forma semelhante a uma debate argumentativo cronometrado, onde um MC apresenta um argumento direcionado ao seu rival, que, por sua vez, responde com uma réplica.
+
+Após as rodadas, uma votação é realizada pela plateia e pelo júri, e os critérios avaliados podem variar, como a melhor rima, o argumento mais impactante, presença de palco ou simplesmente entretenimento. Vence a partida o MC mais votado pela plateia e pelo júri.
+
+O Duelo de MCs Nacional é um evento deste tipo e ele acontece anualmente desde 2007, onde 27 MCs de todos os estados mais o Distrito Federal disputam pelo título de campeão nacional no Viaduto Santa Tereza, aqui em BH. Para competir, é preciso estar no ranking das batalhas da região e vencer o estadual. -->
+
+---
+
+# Introdução
+
+## Contexto - Informação e Mídias Sociais
 
 -	O crescente uso de mídias sociais para disseminação de informações.
 - O uso de mídias sociais para busca de informações em detrimento de meios tradicionais.
-- A publicidade de eventos culturais.
+
+
+<div class="flex flex-col">
+<img src="./assets/forbes-gen-z.png"  class=" aspect-square h-60 mt-4 rounded-lg object-contain">
+<Author class="mt-2">Fonte: Forbes - <a href="https://forbes.com.br/forbes-tech/2023/05/geracao-z-adota-redes-sociais-como-principal-ferramenta-de-busca/">https://forbes.com.br/forbes-tech/2023/05/geracao-z-adota-redes-sociais-como-principal-ferramenta-de-busca/</a></Author>
+</div>
+
+<!-- Outro contexto importante é a popularização das mídias sociais na disseminação e obtenção de informações. Essa matéria do Forbes destaca que a Geração Z já adota redes sociais para busca de informações ao invés de meios tradicionais como o Google. -->
+
+---
+
+# Introdução
+
+## Contexto - Instagram
+
+<div class="flex flex-col ">
+<img src="./assets/forbes-instagram.png"  class=" aspect-square h-60 mt-4 rounded-lg object-contain">
+<Author class="mt-2">Fonte: Forbes - 
+<a href="https://forbes.com.br/forbes-tech/2023/03/instagram-segue-na-lideranca-no-brasil-mas-declinio-das-redes-preocupa-big-techs/">https://forbes.com.br/forbes-tech/2023/03/instagram-segue-na-lideranca-no-brasil-mas-declinio-das-redes-preocupa-big-techs/</a>
+</Author>
+</div>
+
+<!--E essa outra matéria, também do Forbes, destaca que o Instagram é a rede social mais consumida no Brasil. -->
+
+---
+
+# Introdução
+
+<div class="grid grid-cols-2 gap-4 min-h-full">
+<div class="flex flex-col justify-center items-center">
+<img src="./assets/google.png" class="h-90 mx-auto rounded-lg object-contain" />
+<Author class="mt-3">Fonte: Próprio autor e <em>Alphabet</em> via <em>Google</em>.</Author>
+</div>
+<div class="flex flex-col justify-start items-center">
+<img src="./assets/coreto-perfil.png" class="object-contain h-100 rounded-lg" />
+<Author class="-mt-8">Fonte: @_batalhadocoreto_ via <em>Instagram</em>.</Author>
+</div>
+</div>
+
+<!-- Na imagem a esquerda, é possível ver uma pesquisa no Google por "batalha do côreto" em uma aba anônima, e o primeiro resultado é de uma página no Instagram.
+
+Na imagem a direita já é possível ver o perfil dessa batalha que acontece em Justinópolis. -->
 
 ---
 
@@ -35,43 +139,25 @@ fonts:
 ## Motivação
 
 - O impacto das batalhas de rima e a cultura urbana.
-- A importância da visibilidade e preservação de manifestações culturais.
+- A importância da visibilidade e preservação dessas manifestações culturais.
 - O interesse em analisar os dados presentes nas postagens relacionadas às batalhas de rima.
 
 ## Justificativa
 - A exclusividade dos dados encontrados em mídias sociais.
 - A dificuldade de extrair dados presentes em formatos não estruturados.
 
+<!-- Com isso, a motivação do meu trabalho é o impacto das batalhas de rima e a cultura urbana, a importância da visibilidade e preservação dessas manifestações culturais e o interesse em analisar os dados presentes nas postagens relacionadas às batalhas de rima.
+
+O trabalho se justifica devido exclusividade desses dados, que só podem ser encontrados em mídias sociais, e na natureza desses dados, que, em sua maioria, estão presentes no formato de vídeos e imagens, se tratando então de DADOS NÃO ESTRUTURADOS.
+ -->
 
 ---
 
-# Introdução
-
-<div class="grid grid-cols-2 gap-4 min-h-full">
-<div class="flex flex-col justify-start items-center">
-<img src="./assets/google.png" class="h-100 mx-auto rounded-lg" />
-<Author class="mt-2">Fonte: Próprio autor e <em>Alphabet</em> via <em>Google</em>.</Author>
-</div>
-<div class="flex flex-col justify-start items-center">
-<img src="./assets/flyer.jpg" class="aspect-square h-100 rounded-lg" />
-<Author class="mt-2">Fonte: @_batalhadocoreto_ via <em>Instagram</em>.</Author>
-</div>
-</div>
+# Revisão Bibliográfica
 
 ---
 
-# Introdução
-<div class="grid grid-cols-2 gap-4 min-h-full">
-<div class="flex flex-col justify-start items-center">
-<img src="./assets/nacional.jpg" class="aspect-square h-100 arounded-lg object-cover" />
-<Author class="mt-2">Fonte: @duelonacional e @familia_de_rua via <em>Instagram</em>.</Author>
-</div>
-<div class="flex flex-col justify-start items-center">
-<img src="./assets/vencedor.jpg" class="aspect-square h-100 rounded-lg object-cover object-top" />
-<Author class="mt-2">Fonte: @duelonacional e @familia_de_rua via <em>Instagram</em>.</Author>
-</div>
-</div>
-
+# Trabalhos Relacionados
 ---
 
 # Objetivos
@@ -85,9 +171,9 @@ fonts:
 ## Objetivos Específicos
 
 - Cadastro e gerenciamento de batalhas de rima.
-- Visualização das batalhas de rima - Mapa Interativo.
+- Visualização de informações sobre batalhas de rima;
 - <em>Web scraping</em> de postagens do <em>Instagram</em>.
-- Identificação e extração de informações com <em>Large Language Model</em> (LLM) multimodal.
+- Identificação e extração de informações com <em>Multimodal Large Language Model</em> (MLLM).
 
 ---
 
@@ -95,10 +181,10 @@ fonts:
 
 ## Arquitetura do Sistema
 
-- Monolito <em>full-stack</em>.
-- Módulo de Extração de Postagens.
-- Módulo de Análise de Postagens.
-- Módulo de Exibição.
+- Monolito <em>full-stack</em> com três módulos principais:
+  - Módulo de Extração de Postagens.
+  - Módulo de Análise de Postagens.
+  - Módulo de Exibição.
 
 ## Tecnologias Utilizadas
 
@@ -108,11 +194,12 @@ fonts:
 - <em>Vue.js</em> e <em>Nuxt.js</em>.
 - <em>MapLibre</em>, <em>Maptiler</em> e <em>OpenStreetMap</em>.
 
+
 ---
 
-# Arquitetura
+# Metodologia
 
-<h2 class="mb-4">Visão Geral</h2>
+<h2 class="mb-4">Arquitetura</h2>
 
 <div class="flex flex-col">
   <img src="./assets/arquitetura.png" class="h-90" />
@@ -121,7 +208,22 @@ fonts:
 
 ---
 
-# Módulos
+# Metodologia
+
+## Considerações sobre <em>Web Scraping</em>
+
+- Página dinâmica com <em>JavaScript:</em>
+  - Utilização de um navegador real.
+- <em>Anti-Bot / Anti-Scraping:</em>
+  - Injeção de <em>cookies</em>, <em>browser fingerprints</em> e <em>headers</em>.
+- Custo de rede:
+  - Bloqueamento de requisições de recursos estáticos.
+- Manutenção e Robustez:
+  - Utilização de seletores <em>CSS</em> de <em> tags HTML</em>.
+
+---
+
+# Metodologia
 
 <h2 class="mb-4">Extração de Postagens</h2>
 
@@ -131,7 +233,7 @@ flowchart LR
   id1[Injetar <em>fingerprints</em>, <em>headers</em>, <em>cookies</em> e bloqueador de requisições] --> id2[Abrir perfil da Batalha no <em>Instagram</em>] --> id3[Aguardar carregamento da página] --> id4[Clicar em cada âncora de postagem encontrada que NÃO esteja salva] --> id5[Extrair os dados e salvá-los no banco de dados]
 ```
 <v-click>
-```ts {|2,3,4|8|9|11|12|13|14|15}
+```ts {|2,3|8,9|11,12|13,14,15}
 const LOCATORS = {
   IMAGE_POST_ANCHOR: 'a[href*="/p/"]',
   IMAGE: 'img',
@@ -152,7 +254,27 @@ for await (const element of postElements) { // Para todas as âncoras de postage
 
 ---
 
-# Módulos
+# Metodologia
+
+## Considerações sobre Postagens
+
+<div class="grid grid-cols-2"> 
+
+- Pode não ser um <em>flyer</em>.
+- Pode conter fontes incomuns.
+- Posicionamento aleatório de elementos.
+- Muito texto ou informações irrelevantes.
+
+<div class="flex flex-col justify-start items-center">
+<img src="./assets/flyer-bp7.jpg" class="aspect-square h-80 rounded-lg object-cover object-top" />
+<Author class="mt-2">Fonte: @bp7_bh via <em>Instagram</em>.</Author>
+</div>
+
+</div>
+
+---
+
+# Metodologia
 
 <h2 class="mb-4">Análise de Postagens - Identificação</h2>
 
@@ -195,7 +317,7 @@ You are a flyer image identification tool.
 
 ---
 
-# Módulos
+# Metodologia
 
 <h2 class="mb-4">Análise de Postagens - Extração</h2>
 
@@ -206,7 +328,7 @@ flowchart LR
 
 ---
 
-# Módulos
+# Metodologia
 
 <h2 class="mb-4">Análise de Postagens - Extração</h2>
 
@@ -239,7 +361,7 @@ null;null
 
 ---
 
-# Módulos
+# Metodologia
 
 <h2 class="mb-4">Análise de Postagens - Extração</h2>
 
@@ -298,7 +420,8 @@ null;null
   apenas um separador “ponto-e-vírgula”;
   - A resposta do modelo contém data, hora e localização;
   - A localização da resposta é um nome próprio que identifica exclusivamente uma localização geográfica, como o nome de uma cidade, bairro, viaduto, rua ou outro lugar específico;
-  - A data e a hora são as mesmas escritas na postagem, e a localização é a mesma ou equivalente a que está escrita na postagem, como, por exemplo, um endereço.
+  - A data e a hora são as mesmas escritas na postagem.
+  - A localização é a mesma ou equivalente a que está escrita na postagem, como, por exemplo, um endereço.
 
 ---
 
