@@ -615,8 +615,52 @@ pie
 ---
 layout: iframe
 url: http://localhost:3000
+---
 
 ---
+
+# Resultados
+
+<div class="flex flex-col items-center justify-center">
+<img src="./assets/sistema-marcadores.png" class="rounded-lg" />
+<Author class="mt-2">Fonte: próprio Autor</Author>
+</div>
+
+---
+
+# Resultados
+
+<div class="flex flex-col items-center justify-center">
+<img src="./assets/sistema-marcadores-zoom.png" class="rounded-lg" />
+<Author class="mt-2">Fonte: próprio Autor</Author>
+</div>
+
+---
+
+# Resultados
+<div class="flex flex-col items-center justify-center">
+<img src="./assets/sistema-carregando.png" class="rounded-lg" />
+<Author class="mt-2">Fonte: próprio Autor</Author>
+</div>
+
+---
+
+# Resultados
+<div class="flex flex-col items-center justify-center">
+<img src="./assets/sistema-detalhes.png" class="rounded-lg" />
+<Author class="mt-2">Fonte: próprio Autor</Author>
+</div>
+
+---
+
+# Resultados
+<div class="flex flex-col items-center justify-center">
+<img src="./assets/sistema-gerenciamento.png" class="rounded-lg" />
+<Author class="mt-2">Fonte: próprio Autor</Author>
+</div>
+
+---
+
 
 # Conclusão
 
