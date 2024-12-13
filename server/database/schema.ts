@@ -1,44 +1,38 @@
+import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
 import { relations } from 'drizzle-orm'
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import type { POST_ANALYSIS_ERRORS } from '~/constants/errors'
-import type { Time } from '~/types'
 
 export const rhymeBattlesTable = sqliteTable('rhyme_battles', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   lat: real('lat').notNull(),
   lon: real('lon').notNull(),
-  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
-  weekDay: text('week_day', { enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] }).notNull(),
-  startTime: text('start_time', { length: 5 }).$type<Time>().notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
 export const instagramProfilesTable = sqliteTable('instagram_profiles', {
   id: text('id').primaryKey(),
-  rhymeBattleId: text('rhyme_battle_id').notNull(),
-  username: text('username').notNull(),
+  rhymeBattleId: text('rhyme_battle_id').notNull().references(() => rhymeBattlesTable.id, { onDelete: 'cascade' }),
+  username: text('username').notNull().unique(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
 export const instagramPostsTable = sqliteTable('instagram_posts', {
   id: text('id').primaryKey(),
-  rhymeBattleId: text('rhyme_battle_id').notNull(),
-  instagramProfileId: text('instagram_profile_id').notNull(),
+  rhymeBattleId: text('rhyme_battle_id').notNull().references(() => rhymeBattlesTable.id, { onDelete: 'cascade' }),
+  instagramProfileId: text('instagram_profile_id').notNull().references(() => instagramProfilesTable.id, { onDelete: 'cascade' }),
   href: text('href').notNull(),
   alt: text('alt'),
   timestamp: integer('timestamp', { mode: 'timestamp' }).notNull(),
-  postQuantity: integer('post_quantity').notNull(),
-  description: text('description'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
 export const postAnalysesTable = sqliteTable('post_analyses', {
   id: text('id').primaryKey(),
-  rhymeBattleId: text('rhyme_battle_id').notNull(),
+  rhymeBattleId: text('rhyme_battle_id').notNull().references(() => rhymeBattlesTable.id, { onDelete: 'cascade' }),
   instagramPostId: text('instagram_post_id').unique().notNull(),
   model: text('model').notNull(),
   provider: text('provider').notNull(),
@@ -56,7 +50,7 @@ export const postAnalysesTable = sqliteTable('post_analyses', {
 
 export const postIndentificationsTable = sqliteTable('post_identifications', {
   id: text('id').primaryKey(),
-  rhymeBattleId: text('rhyme_battle_id').notNull(),
+  rhymeBattleId: text('rhyme_battle_id').notNull().references(() => rhymeBattlesTable.id, { onDelete: 'cascade' }),
   instagramPostId: text('instagram_post_id').unique().notNull(),
   model: text('model').notNull(),
   provider: text('provider').notNull(),

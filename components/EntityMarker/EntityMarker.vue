@@ -55,6 +55,21 @@ function handleMount() {
   }
 }
 
+const imageUrl = ref<string>('')
+async function fetchImageFromApi() {
+  try {
+    const response = await $fetch<{ base64: string }>(`/api/image/${props.id}:profile`, {
+      params: {
+        extension: '.jpeg',
+      },
+    })
+    imageUrl.value = response.base64
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
 watch(active, () => {
   if (active.value !== props.id) {
     stopRotateAround()
@@ -64,6 +79,7 @@ watch(active, () => {
 
 onMounted(() => {
   handleMount()
+  fetchImageFromApi()
 })
 
 onUnmounted(() => {
@@ -72,11 +88,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img
-    v-show="loaded && coordinates" ref="markerRef"
-    :src="`/${id}/profile.jpeg`"
-    class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
-    @click="handleClick"
-    @error.prevent
-  >
+  <div ref="markerRef">
+    <Base64Image
+      v-show="loaded && coordinates"
+      :path="`${props.id}:profile`"
+      extension=".jpeg"
+      class="z-10 h-12 w-12 flex cursor-pointer items-center justify-center rounded-full text-lg shadow-xl drop-shadow-xl bg-blue-600"
+      @click="handleClick"
+    />
+  </div>
 </template>

@@ -1,12 +1,15 @@
 import { randomUUID } from 'node:crypto'
 import * as v from 'valibot'
 import { instagramProfilesTable, rhymeBattlesTable } from '~/server/database/schema'
+import { useDatabase } from '~/server/utils/useDatabase'
+import { base64ToBuffer } from '~/utils/file'
 
 const rhymeBattleBodySchema = v.object({
   name: v.string('name is required'),
   instagram: v.string('instagram is required'),
   lat: v.number('lat is required'),
   lon: v.number('lon is required'),
+  image: v.string('image is required'),
 })
 
 function validateBody(data: unknown) {
@@ -24,6 +27,7 @@ export default defineEventHandler(
       })
     }
     const db = await useDatabase(event)
+    const storage = useStorage('images')
     const [battle] = await db.insert(rhymeBattlesTable)
       .values({
         id: randomUUID(),
@@ -40,8 +44,9 @@ export default defineEventHandler(
       id: randomUUID(),
       username: parsed.output.instagram,
       rhymeBattleId: battle.id,
-    }).returning()
+    })
 
+    await storage.setItemRaw(`${battle.id}:profile.jpeg`, base64ToBuffer(parsed.output.image))
     return battle
   },
 )

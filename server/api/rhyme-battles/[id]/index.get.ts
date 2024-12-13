@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 import * as v from 'valibot'
 import { rhymeBattlesTable } from '~/server/database/schema'
+import { useDatabase } from '~/server/utils/useDatabase'
 
 const rhymeBattleRouterParams = v.object({
   id: v.string('id is required'),

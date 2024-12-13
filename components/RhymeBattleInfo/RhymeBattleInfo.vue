@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { EngineType } from 'embla-carousel'
 import type { UnwrapRefCarouselApi } from '../Shadcn/Carousel/interface'
-import type { GetInstagramPostsResponse } from './~types'
+import type { GetInstagramPostsResponse } from '~/types'
 import { isFuture, isPast, parseISO } from 'date-fns'
-import { INSTAGRAM_BASE_URL, LLM_INFO_MAP } from '~/constants'
+import { INSTAGRAM_BASE_URL } from '~/constants'
+import { LLM_INFO_MAP } from '~/constants/llm'
 import Divider from './Divider.vue'
 import Header from './Header.vue'
 import Subtitle from './Subtitle.vue'
@@ -178,10 +179,14 @@ function handleScrollEnd(api: UnwrapRefCarouselApi) {
   }
 }
 
-const tries = ref(0)
 watch([postAnalyses.data, instagramPosts.data], async () => {
-  if (instagramPosts.status.value === 'error' || postAnalyses.status.value === 'error')
+  if (
+    instagramPosts.status.value === 'error'
+    || postAnalyses.status.value === 'error'
+    || scrapePosts.status.value === 'error'
+    || analysePosts.status.value === 'error') {
     return
+  }
 
   if (instagramPosts.status.value === 'pending')
     return
@@ -198,11 +203,10 @@ watch([postAnalyses.data, instagramPosts.data], async () => {
     return
 
   const hasAnalyses = postAnalyses.data.value && postAnalyses.data.value.data.length
-  if (!hasAnalyses && tries.value < 2) {
+  if (!hasAnalyses) {
     postAnalyses.clear()
     await analysePosts.execute()
     await postAnalyses.execute()
-    tries.value++
   }
 })
 
@@ -216,7 +220,7 @@ onMounted(() => {
 <template>
   <Header :id="active" :name="battle?.name" :status="battleStatus" />
   <div class="w-full flex flex-col">
-    <Subtitle class="gap-0.5">
+    <Subtitle class="gap-1.5">
       <Icon v-if="page === 1 && hasNoPostAnalyses && (hasPostsLoading || hasPostAnalysesLoading)" name="svg-spinners:bars-scale-middle" />
       <Icon v-else name="lucide:lightbulb" />
       Análises
@@ -336,7 +340,7 @@ onMounted(() => {
             Erro ao buscar as análises. Por favor, tente novamente.
           </TryAgain>
         </CarouselItem>
-        <CarouselItem v-else-if="hasNoPostAnalyses" class="h-full w-full flex justify-center items-center">
+        <CarouselItem v-else-if="hasNoPostAnalyses && !hasPostAnalysesLoading" class="h-full w-full flex justify-center items-center">
           <p class="text-sm select-none">
             Nenhuma análise encontrada.
           </p>
@@ -357,12 +361,11 @@ onMounted(() => {
       <CarouselContent>
         <CarouselItem v-for="post in storedPosts" :key="post.id" class="max-h-[300px] md:max-h-max">
           <NuxtLink draggable="false" class="w-full h-full rounded-md aspect-square" :href="post.href" target="blank">
-            <NuxtImg v-if="false" />
-            <img
-              v-if="active" draggable="false"
-              class="flex-1 aspect-square select-none object-cover object-top h-full w-full rounded-md overflow-hidden text-ellipsis flex flex-col items-center justify-center"
-              :src="`/${post.rhymeBattleId}/${sanitizeId(post.id)}.jpeg`" :alt="post.alt ? post.alt : ''"
-            >
+            <Base64Image
+              v-if="active"
+              :path="`${post.rhymeBattleId}:${sanitizeId(post.id)}`" extension=".jpeg" draggable="false"
+              class="flex-1 aspect-square select-none object-cover object-top h-full w-full rounded-md overflow-hidden text-ellipsis flex flex-col items-center justify-center" :alt="post.alt ? post.alt : ''"
+            />
           </NuxtLink>
         </CarouselItem>
         <template v-if="hasPostsLoading">

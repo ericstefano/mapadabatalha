@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm'
 import { createError } from 'h3'
 import * as v from 'valibot'
 import { rhymeBattlesTable } from '~/server/database/schema'
+import { useDatabase } from '~/server/utils/useDatabase'
 
 const scrapePostsRouterParams = v.object({
   id: v.string('id is required'),

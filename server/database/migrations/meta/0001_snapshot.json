@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "d065d925-787d-437a-8d01-35c15c910601",
-  "prevId": "535188a5-4146-4f6c-9900-bc3c3f17891b",
+  "id": "c492ac9e-00ad-438c-82cf-1322e97c3594",
+  "prevId": "7958dcf7-bd08-41b1-b682-f5beb97e2809",
   "tables": {
     "instagram_posts": {
       "name": "instagram_posts",
@@ -49,20 +49,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "post_quantity": {
-          "name": "post_quantity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "integer",
@@ -79,7 +65,34 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "instagram_posts_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "instagram_posts_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "instagram_posts",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "instagram_posts_instagram_profile_id_instagram_profiles_id_fk": {
+          "name": "instagram_posts_instagram_profile_id_instagram_profiles_id_fk",
+          "tableFrom": "instagram_posts",
+          "tableTo": "instagram_profiles",
+          "columnsFrom": [
+            "instagram_profile_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -123,8 +136,30 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "instagram_profiles_username_unique": {
+          "name": "instagram_profiles_username_unique",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "instagram_profiles_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "instagram_profiles_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "instagram_profiles",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -238,8 +273,30 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "post_analyses_instagram_post_id_unique": {
+          "name": "post_analyses_instagram_post_id_unique",
+          "columns": [
+            "instagram_post_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "post_analyses_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "post_analyses_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "post_analyses",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -353,8 +410,30 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "post_identifications_instagram_post_id_unique": {
+          "name": "post_identifications_instagram_post_id_unique",
+          "columns": [
+            "instagram_post_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "post_identifications_rhyme_battle_id_rhyme_battles_id_fk": {
+          "name": "post_identifications_rhyme_battle_id_rhyme_battles_id_fk",
+          "tableFrom": "post_identifications",
+          "tableTo": "rhyme_battles",
+          "columnsFrom": [
+            "rhyme_battle_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -386,28 +465,6 @@
         "lon": {
           "name": "lon",
           "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": true
-        },
-        "week_day": {
-          "name": "week_day",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "start_time": {
-          "name": "start_time",
-          "type": "text(5)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

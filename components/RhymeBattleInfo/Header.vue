@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+
 const props = defineProps<{
   id: string | null
   status: 'pending' | 'idle' | 'error' | 'success'
@@ -8,12 +9,12 @@ const props = defineProps<{
 
 <template>
   <div class="flex flex-row items-center gap-2 rounded-lg py-2">
-    <img
-      v-if="props.id && props.status === 'success'" :src="`/${props.id}/profile.jpeg`"
+    <Base64Image
+      v-if="props.id && props.status === 'success'" :path="`${props.id}:profile`" extension=".jpeg"
       class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal
       text-primary select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 text-xs rounded-full"
       alt="profile" @error.prevent
-    >
+    />
     <Skeleton
       v-else class="shadow-xl drop-shadow-xl inline-flex items-center justify-center font-normal text-primary
        select-none shrink-0 bg-secondary overflow-hidden h-10 w-10 rounded-full"

@@ -2,8 +2,8 @@ import type { H3Event } from 'h3'
 import { drizzle } from 'drizzle-orm/libsql'
 import * as schema from '../database/schema'
 
-async function createSQLiteDatabase() {
-  const { tursoConnectionUrl, tursoAuthToken } = useRuntimeConfig()
+async function createSQLiteDatabase(event: H3Event) {
+  const { tursoConnectionUrl, tursoAuthToken } = useRuntimeConfig(event)
   if (!tursoConnectionUrl)
     throw new Error('Missing \'NUXT_TURSO_CONNECTION_URL\' in .env')
   if (!tursoAuthToken)
@@ -21,7 +21,7 @@ async function createSQLiteDatabase() {
 export async function useDatabase(event: H3Event) {
   if (event.context.db)
     return event.context.db
-  const db = await createSQLiteDatabase()
+  const db = await createSQLiteDatabase(event)
   event.context.db = db
   return db
 }
